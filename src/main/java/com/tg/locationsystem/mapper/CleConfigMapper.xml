@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.CleConfigMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.CleConfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="channel" jdbcType="VARCHAR" property="channel" />
+    <result column="ask_time" jdbcType="VARCHAR" property="askTime" />
+    <result column="send_time" jdbcType="VARCHAR" property="sendTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, map_key, channel, ask_time, send_time
+  </sql>
+
+  <!--根据地图key得到cle配置-->
+  <select id="getConfigByMapKey"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cle_config
+    where map_key = #{mapKey}
+  </select>
+
+  <!--删除cle配置表-->
+  <delete id="deletecofigByMapKey" parameterType="java.lang.String">
+    delete from cle_config
+    where map_key = #{mapKey,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cle_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cle_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.CleConfig">
+    insert into cle_config (id, map_key, channel, 
+      ask_time, send_time)
+    values (#{id,jdbcType=INTEGER}, #{mapKey,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, 
+      #{askTime,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.CleConfig">
+    insert into cle_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="channel != null">
+        channel,
+      </if>
+      <if test="askTime != null">
+        ask_time,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="askTime != null">
+        #{askTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.CleConfig">
+    update cle_config
+    <set>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null">
+        channel = #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="askTime != null">
+        ask_time = #{askTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.CleConfig">
+    update cle_config
+    set map_key = #{mapKey,jdbcType=VARCHAR},
+      channel = #{channel,jdbcType=VARCHAR},
+      ask_time = #{askTime,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.TagStatusMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.TagStatus">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_idcard" jdbcType="VARCHAR" property="personIdcard" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
+    <result column="alert_type" jdbcType="VARCHAR" property="alertType" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="isDeal" jdbcType="VARCHAR" property="isdeal" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="x" jdbcType="DOUBLE" property="x" />
+    <result column="y" jdbcType="DOUBLE" property="y" />
+    <result column="z" jdbcType="DOUBLE" property="z" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, person_idcard, data, alert_type, add_time, user_id, isDeal, map_key, x, y, z
+  </sql>
+
+
+    <!--根据类型id得到相关报警集合-->
+    <select id="getTagStatusByTypeId"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tag_status
+        WHERE    user_id=#{userid}
+        AND  alert_type=#{typeid}
+        ORDER BY add_time DESC
+    </select>
+
+
+    <!--得到所有已处理的报警集合-->
+    <select id="getAllTagStatusByDeal"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tag_status
+        WHERE    user_id=#{userid}
+        AND  alert_type=#{typeid} AND isDeal=#{isdeal}
+        ORDER BY add_time DESC
+    </select>
+
+
+  <!--删除人员,与之对应的报警记录也要删除-->
+  <delete id="deletetagStatus" parameterType="String">
+    delete from ${tableName}
+    where person_idcard = '${address}'
+  </delete>
+
+  <!--关键字搜索报警记录-->
+  <select id="getTagStatusByCondition"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag_status
+    WHERE    user_id=#{userid}
+    AND  person_idcard LIKE CONCAT(CONCAT('%',#{msg},'%'))
+    AND  alert_type=#{typeid}
+    ORDER BY add_time DESC
+  </select>
+
+  <!--根据标签add得到报警记录-->
+  <select id="getTagStatusByAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag_status
+    WHERE    person_idcard=#{tagAdd}
+  </select>
+
+  <!--根据类型查看报警记录-->
+  <select id="getTagStatusByType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag_status
+    WHERE   user_id=#{userid} AND alert_type=#{typeid} ORDER BY add_time DESC
+  </select>
+
+  <!--得到用户下所有的报警记录-->
+  <select id="getTagStatusByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag_status
+    WHERE   user_id=#{userid}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tag_status
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tag_status
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.TagStatus">
+    insert into tag_status (id, person_idcard, data, 
+      alert_type, add_time, user_id, 
+      isDeal, map_key, x, y, 
+      z)
+    values (#{id,jdbcType=INTEGER}, #{personIdcard,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, 
+      #{alertType,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 
+      #{isdeal,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, 
+      #{z,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.TagStatus">
+    insert into tag_status
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personIdcard != null">
+        person_idcard,
+      </if>
+      <if test="data != null">
+        data,
+      </if>
+      <if test="alertType != null">
+        alert_type,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isdeal != null">
+        isDeal,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="z != null">
+        z,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="personIdcard != null">
+        #{personIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null">
+        #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="alertType != null">
+        #{alertType,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isdeal != null">
+        #{isdeal,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="z != null">
+        #{z,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.TagStatus">
+    update tag_status
+    <set>
+      <if test="personIdcard != null">
+        person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null">
+        data = #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="alertType != null">
+        alert_type = #{alertType,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isdeal != null">
+        isDeal = #{isdeal,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        x = #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="z != null">
+        z = #{z,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.TagStatus">
+    update tag_status
+    set person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      data = #{data,jdbcType=VARCHAR},
+      alert_type = #{alertType,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      isDeal = #{isdeal,jdbcType=VARCHAR},
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      x = #{x,jdbcType=DOUBLE},
+      y = #{y,jdbcType=DOUBLE},
+      z = #{z,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

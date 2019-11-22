@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.StationMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.Station">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="x" jdbcType="REAL" property="x" />
+    <result column="y" jdbcType="REAL" property="y" />
+    <result column="z" jdbcType="REAL" property="z" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="master_lag_delay" jdbcType="VARCHAR" property="masterLagDelay" />
+    <result column="ant_delay_rx" jdbcType="VARCHAR" property="antDelayRx" />
+    <result column="ant_delay_tx" jdbcType="VARCHAR" property="antDelayTx" />
+    <result column="ismaster" jdbcType="VARCHAR" property="ismaster" />
+    <result column="master_addr" jdbcType="VARCHAR" property="masterAddr" />
+    <result column="masteranchorAddress" jdbcType="VARCHAR" property="masteranchoraddress" />
+    <result column="masteranchor_address" jdbcType="VARCHAR" property="masteranchorAddress" />
+    <result column="station_status" jdbcType="INTEGER" property="stationStatus" />
+    <result column="dimension" jdbcType="VARCHAR" property="dimension" />
+    <result column="map_id" jdbcType="INTEGER" property="mapId" />
+    <result column="rfdistance" jdbcType="VARCHAR" property="rfdistance" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sid, x, y, z, addr, reserved2_date, user_id, master_lag_delay, ant_delay_rx, 
+    ant_delay_tx, ismaster, master_addr, masteranchorAddress, masteranchor_address, station_status, 
+    dimension, map_id, rfdistance
+  </sql>
+
+  <!--根据地图id得到该地图下的所有在线基站-->
+  <select id="getOnlineStationsByMapKey"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from station
+    WHERE map_id=#{id} AND station_status=1
+  </select>
+
+
+  <!--根据地图id得到该地图下的所有基站-->
+  <select id="getStationByMapId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from station
+    WHERE map_id=#{id}
+  </select>
+
+  <!--根据address查询基站是否存在-->
+  <select id="getStationByAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from station
+    WHERE addr=#{address} AND  user_id=#{id}
+  </select>
+
+  <!--得到用户下所有的基站-->
+  <select id="getStationsByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from station
+    WHERE  user_id=#{id}
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from station
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from station
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.Station">
+    insert into station (id, sid, x, y, 
+      z, addr, reserved2_date, 
+      user_id, master_lag_delay, ant_delay_rx, 
+      ant_delay_tx, ismaster, master_addr, 
+      masteranchorAddress, masteranchor_address, 
+      station_status, dimension, map_id, 
+      rfdistance)
+    values (#{id,jdbcType=INTEGER}, #{sid,jdbcType=INTEGER}, #{x,jdbcType=REAL}, #{y,jdbcType=REAL}, 
+      #{z,jdbcType=REAL}, #{addr,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, 
+      #{userId,jdbcType=INTEGER}, #{masterLagDelay,jdbcType=VARCHAR}, #{antDelayRx,jdbcType=VARCHAR}, 
+      #{antDelayTx,jdbcType=VARCHAR}, #{ismaster,jdbcType=VARCHAR}, #{masterAddr,jdbcType=VARCHAR}, 
+      #{masteranchoraddress,jdbcType=VARCHAR}, #{masteranchorAddress,jdbcType=VARCHAR}, 
+      #{stationStatus,jdbcType=INTEGER}, #{dimension,jdbcType=VARCHAR}, #{mapId,jdbcType=INTEGER}, 
+      #{rfdistance,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Station">
+    insert into station
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sid != null">
+        sid,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="z != null">
+        z,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+      <if test="reserved2Date != null">
+        reserved2_date,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="masterLagDelay != null">
+        master_lag_delay,
+      </if>
+      <if test="antDelayRx != null">
+        ant_delay_rx,
+      </if>
+      <if test="antDelayTx != null">
+        ant_delay_tx,
+      </if>
+      <if test="ismaster != null">
+        ismaster,
+      </if>
+      <if test="masterAddr != null">
+        master_addr,
+      </if>
+      <if test="masteranchoraddress != null">
+        masteranchorAddress,
+      </if>
+      <if test="masteranchorAddress != null">
+        masteranchor_address,
+      </if>
+      <if test="stationStatus != null">
+        station_status,
+      </if>
+      <if test="dimension != null">
+        dimension,
+      </if>
+      <if test="mapId != null">
+        map_id,
+      </if>
+      <if test="rfdistance != null">
+        rfdistance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sid != null">
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=REAL},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=REAL},
+      </if>
+      <if test="z != null">
+        #{z,jdbcType=REAL},
+      </if>
+      <if test="addr != null">
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2Date != null">
+        #{reserved2Date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="masterLagDelay != null">
+        #{masterLagDelay,jdbcType=VARCHAR},
+      </if>
+      <if test="antDelayRx != null">
+        #{antDelayRx,jdbcType=VARCHAR},
+      </if>
+      <if test="antDelayTx != null">
+        #{antDelayTx,jdbcType=VARCHAR},
+      </if>
+      <if test="ismaster != null">
+        #{ismaster,jdbcType=VARCHAR},
+      </if>
+      <if test="masterAddr != null">
+        #{masterAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="masteranchoraddress != null">
+        #{masteranchoraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="masteranchorAddress != null">
+        #{masteranchorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="stationStatus != null">
+        #{stationStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dimension != null">
+        #{dimension,jdbcType=VARCHAR},
+      </if>
+      <if test="mapId != null">
+        #{mapId,jdbcType=INTEGER},
+      </if>
+      <if test="rfdistance != null">
+        #{rfdistance,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Station">
+    update station
+    <set>
+      <if test="sid != null">
+        sid = #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="x != null">
+        x = #{x,jdbcType=REAL},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=REAL},
+      </if>
+      <if test="z != null">
+        z = #{z,jdbcType=REAL},
+      </if>
+      <if test="addr != null">
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2Date != null">
+        reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="masterLagDelay != null">
+        master_lag_delay = #{masterLagDelay,jdbcType=VARCHAR},
+      </if>
+      <if test="antDelayRx != null">
+        ant_delay_rx = #{antDelayRx,jdbcType=VARCHAR},
+      </if>
+      <if test="antDelayTx != null">
+        ant_delay_tx = #{antDelayTx,jdbcType=VARCHAR},
+      </if>
+      <if test="ismaster != null">
+        ismaster = #{ismaster,jdbcType=VARCHAR},
+      </if>
+      <if test="masterAddr != null">
+        master_addr = #{masterAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="masteranchoraddress != null">
+        masteranchorAddress = #{masteranchoraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="masteranchorAddress != null">
+        masteranchor_address = #{masteranchorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="stationStatus != null">
+        station_status = #{stationStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dimension != null">
+        dimension = #{dimension,jdbcType=VARCHAR},
+      </if>
+      <if test="mapId != null">
+        map_id = #{mapId,jdbcType=INTEGER},
+      </if>
+      <if test="rfdistance != null">
+        rfdistance = #{rfdistance,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.Station">
+    update station
+    set sid = #{sid,jdbcType=INTEGER},
+      x = #{x,jdbcType=REAL},
+      y = #{y,jdbcType=REAL},
+      z = #{z,jdbcType=REAL},
+      addr = #{addr,jdbcType=VARCHAR},
+      reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      master_lag_delay = #{masterLagDelay,jdbcType=VARCHAR},
+      ant_delay_rx = #{antDelayRx,jdbcType=VARCHAR},
+      ant_delay_tx = #{antDelayTx,jdbcType=VARCHAR},
+      ismaster = #{ismaster,jdbcType=VARCHAR},
+      master_addr = #{masterAddr,jdbcType=VARCHAR},
+      masteranchorAddress = #{masteranchoraddress,jdbcType=VARCHAR},
+      masteranchor_address = #{masteranchorAddress,jdbcType=VARCHAR},
+      station_status = #{stationStatus,jdbcType=INTEGER},
+      dimension = #{dimension,jdbcType=VARCHAR},
+      map_id = #{mapId,jdbcType=INTEGER},
+      rfdistance = #{rfdistance,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

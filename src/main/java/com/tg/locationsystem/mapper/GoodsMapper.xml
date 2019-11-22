@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.Goods">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="goods_typeId" jdbcType="INTEGER" property="goodsTypeid" />
+    <result column="tag_address" jdbcType="VARCHAR" property="tagAddress" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="goods_idCard" jdbcType="VARCHAR" property="goodsIdcard" />
+    <result column="reserved2_string" jdbcType="VARCHAR" property="reserved2String" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, goods_name, user_id, goods_typeId, tag_address, img, add_time, goods_idCard, 
+    reserved2_string
+  </sql>
+
+  <!--根据物品类型id得到物品对象集合-->
+  <select id="getGoodsByGoodsTypeId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE     user_id=#{userid} AND goods_typeId=#{typeid}
+  </select>
+
+  <!--模糊查询,搜索物品-->
+  <select id="getGoodsByMsg"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE    user_id=#{userid}
+    AND (goods_name LIKE CONCAT(CONCAT('%',#{msg},'%'))
+    OR tag_address LIKE CONCAT(CONCAT('%',#{msg},'%'))
+    OR goods_idCard LIKE CONCAT(CONCAT('%',#{msg},'%'))
+    )
+
+  </select>
+
+  <!--根据物品唯一标识得到物品对象-->
+  <select id="getGoodsByByIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE    goods_idCard=#{personIdcard}
+  </select>
+
+  <!--根据img得到物品-->
+  <select id="getGoodsByImg"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE    img=#{img}
+  </select>
+
+  <!--根据物品add得到物品对象-->
+  <select id="getGoodsByOnlyAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE    tag_address=#{address}
+  </select>
+
+  <!--根据物品add得到物品对象-->
+  <select id="getGoodsByAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE   user_id=#{userid} AND tag_address=#{address}
+  </select>
+
+  <!--根据物品唯一识别码得到物品对象-->
+  <select id="getGoodsByIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE   goods_idCard=#{reserved1String} AND user_id=#{id}
+  </select>
+
+  <!--得到用户下所有的物品-->
+  <select id="getGoodsByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE   user_id=#{id}
+  </select>
+
+  <!--根据类型得到物品对象-->
+  <select id="getGoodsByteType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE   user_id=#{userid} AND goods_typeId=#{typeid}
+  </select>
+
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.Goods">
+    insert into goods (id, goods_name, user_id, 
+      goods_typeId, tag_address, img, 
+      add_time, goods_idCard, reserved2_string
+      )
+    values (#{id,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{goodsTypeid,jdbcType=INTEGER}, #{tagAddress,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{goodsIdcard,jdbcType=VARCHAR}, #{reserved2String,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Goods">
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsName != null">
+        goods_name,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="goodsTypeid != null">
+        goods_typeId,
+      </if>
+      <if test="tagAddress != null">
+        tag_address,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="goodsIdcard != null">
+        goods_idCard,
+      </if>
+      <if test="reserved2String != null">
+        reserved2_string,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTypeid != null">
+        #{goodsTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="tagAddress != null">
+        #{tagAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsIdcard != null">
+        #{goodsIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2String != null">
+        #{reserved2String,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Goods">
+    update goods
+    <set>
+      <if test="goodsName != null">
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTypeid != null">
+        goods_typeId = #{goodsTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="tagAddress != null">
+        tag_address = #{tagAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsIdcard != null">
+        goods_idCard = #{goodsIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2String != null">
+        reserved2_string = #{reserved2String,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.Goods">
+    update goods
+    set goods_name = #{goodsName,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      goods_typeId = #{goodsTypeid,jdbcType=INTEGER},
+      tag_address = #{tagAddress,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      goods_idCard = #{goodsIdcard,jdbcType=VARCHAR},
+      reserved2_string = #{reserved2String,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

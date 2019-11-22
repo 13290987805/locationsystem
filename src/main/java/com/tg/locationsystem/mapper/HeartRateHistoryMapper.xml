@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.HeartRateHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.HeartRateHistory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="tag_data" jdbcType="INTEGER" property="tagData" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="person_idcard" jdbcType="VARCHAR" property="personIdcard" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, tag_data, add_time, person_idcard
+  </sql>
+
+  <!--删除人员时,删除心率记录-->
+  <delete id="deleteHistory" parameterType="String">
+    delete from ${tableName}
+    where person_idcard='${address}'
+  </delete>
+
+  <!--测试心率-->
+  <select id="getSomeheartRateHistory"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from heart_rate_history
+    WHERE person_idcard=#{s}  ORDER BY add_time DESC
+  </select>
+
+  <!--根据人员唯一标识,起始时间,结束时间得到心率历史记录-->
+  <select id="getheartRateHistoryByCondition"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from heart_rate_history
+    WHERE person_idcard=#{address} AND add_time BETWEEN #{startTime} AND #{endTime}
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from heart_rate_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from heart_rate_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.HeartRateHistory">
+    insert into heart_rate_history (id, user_id, tag_data, 
+      add_time, person_idcard)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{tagData,jdbcType=INTEGER}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{personIdcard,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.HeartRateHistory">
+    insert into heart_rate_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="tagData != null">
+        tag_data,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="personIdcard != null">
+        person_idcard,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="tagData != null">
+        #{tagData,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="personIdcard != null">
+        #{personIdcard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.HeartRateHistory">
+    update heart_rate_history
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="tagData != null">
+        tag_data = #{tagData,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="personIdcard != null">
+        person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.HeartRateHistory">
+    update heart_rate_history
+    set user_id = #{userId,jdbcType=INTEGER},
+      tag_data = #{tagData,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      person_idcard = #{personIdcard,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

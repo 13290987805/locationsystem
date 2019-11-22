@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.MapRuleMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.MapRule">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tg.locationsystem.entity.MapRule">
+    <result column="map_rule" jdbcType="LONGVARCHAR" property="mapRule" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, map_key
+  </sql>
+  <sql id="Blob_Column_List">
+    map_rule
+  </sql>
+
+  <!--得到所有的地图规则-->
+  <select id="getAllRule"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from map_rule
+  </select>
+
+  <!--删除规则-->
+  <delete id="deleteByMapKey" parameterType="java.lang.String">
+    delete from map_rule
+    where map_key = #{mapKey,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from map_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from map_rule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.MapRule">
+    insert into map_rule (id, map_key, map_rule
+      )
+    values (#{id,jdbcType=INTEGER}, #{mapKey,jdbcType=VARCHAR}, #{mapRule,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.MapRule">
+    insert into map_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="mapRule != null">
+        map_rule,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="mapRule != null">
+        #{mapRule,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.MapRule">
+    update map_rule
+    <set>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="mapRule != null">
+        map_rule = #{mapRule,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tg.locationsystem.entity.MapRule">
+    update map_rule
+    set map_key = #{mapKey,jdbcType=VARCHAR},
+      map_rule = #{mapRule,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.MapRule">
+    update map_rule
+    set map_key = #{mapKey,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

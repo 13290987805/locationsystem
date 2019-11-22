@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.PersonMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.Person">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="person_sex" jdbcType="VARCHAR" property="personSex" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="person_typeId" jdbcType="INTEGER" property="personTypeid" />
+    <result column="person_height" jdbcType="VARCHAR" property="personHeight" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="tag_address" jdbcType="VARCHAR" property="tagAddress" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="person_type" jdbcType="VARCHAR" property="personType" />
+    <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
+    <result column="person_phone" jdbcType="VARCHAR" property="personPhone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, person_name, person_sex, user_id, person_typeId, person_height, id_card, tag_address, 
+    img, person_type, reserved2_date, person_phone
+  </sql>
+
+  <!--根据图片url得到人员对象-->
+  <select id="getPersonByImg"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE     img=#{img}
+  </select>
+
+  <!--根据人员类型id得到人员对象-->
+  <select id="getPersonsBypersonTypeId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE     user_id=#{userid} AND person_typeId=#{typeid}
+  </select>
+
+  <!--模糊查询-->
+  <select id="getPersonsByMsg"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE    user_id=#{userid}
+      AND (person_name LIKE CONCAT(CONCAT('%',#{msg},'%'))
+      OR person_sex LIKE CONCAT(CONCAT('%',#{msg},'%'))
+      OR person_phone LIKE CONCAT(CONCAT('%',#{msg},'%'))
+      OR id_card LIKE CONCAT(CONCAT('%',#{msg},'%'))
+      OR tag_address LIKE CONCAT(CONCAT('%',#{msg},'%'))
+      )
+
+  </select>
+
+  <!--根据标签add得到人员-->
+  <select id="getPersonByOnlyAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE    tag_address=#{address}
+  </select>
+
+  <!--根据标签add得到人员-->
+  <select id="getPersonByAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE   user_id=#{userid} AND tag_address=#{address}
+  </select>
+
+
+  <!--根据idcard得到person对象-->
+  <select id="getPersonByIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE   id_card=#{idCard}
+  </select>
+
+  <!--得到该管理员下的所有人员-->
+  <select id="getPersonsByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE   user_id=#{user_id} ORDER BY id
+  </select>
+
+  <!--根据类型得到人员对象-->
+  <select id="getPersonsByteType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE   user_id=#{userid} AND person_typeId=#{typeid}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from person
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from person
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.Person">
+    insert into person (id, person_name, person_sex, 
+      user_id, person_typeId, person_height, 
+      id_card, tag_address, img, 
+      person_type, reserved2_date, person_phone
+      )
+    values (#{id,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR}, #{personSex,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{personTypeid,jdbcType=INTEGER}, #{personHeight,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{tagAddress,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+      #{personType,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, #{personPhone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Person" useGeneratedKeys="true" keyProperty="id">
+    insert into person
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personName != null">
+        person_name,
+      </if>
+      <if test="personSex != null">
+        person_sex,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="personTypeid != null">
+        person_typeId,
+      </if>
+      <if test="personHeight != null">
+        person_height,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="tagAddress != null">
+        tag_address,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="personType != null">
+        person_type,
+      </if>
+      <if test="reserved2Date != null">
+        reserved2_date,
+      </if>
+      <if test="personPhone != null">
+        person_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="personName != null">
+        #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="personSex != null">
+        #{personSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="personTypeid != null">
+        #{personTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="personHeight != null">
+        #{personHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="tagAddress != null">
+        #{tagAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="personType != null">
+        #{personType,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2Date != null">
+        #{reserved2Date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="personPhone != null">
+        #{personPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Person">
+    update person
+    <set>
+      <if test="personName != null">
+        person_name = #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="personSex != null">
+        person_sex = #{personSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="personTypeid != null">
+        person_typeId = #{personTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="personHeight != null">
+        person_height = #{personHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="tagAddress != null">
+        tag_address = #{tagAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="personType != null">
+        person_type = #{personType,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2Date != null">
+        reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="personPhone != null">
+        person_phone = #{personPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.Person">
+    update person
+    set person_name = #{personName,jdbcType=VARCHAR},
+      person_sex = #{personSex,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      person_typeId = #{personTypeid,jdbcType=INTEGER},
+      person_height = #{personHeight,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      tag_address = #{tagAddress,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      person_type = #{personType,jdbcType=VARCHAR},
+      reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      person_phone = #{personPhone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

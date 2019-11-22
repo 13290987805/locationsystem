@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.FrenceHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.FrenceHistory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_idcard" jdbcType="VARCHAR" property="personIdcard" />
+    <result column="x" jdbcType="DOUBLE" property="x" />
+    <result column="y" jdbcType="DOUBLE" property="y" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="frence_id" jdbcType="INTEGER" property="frenceId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, person_idcard, x, y, status, time, map_key, user_id, frence_id
+  </sql>
+
+  <!--删除围栏时删除围栏报警记录-->
+  <delete id="deleteHistoryByFrenceId" parameterType="java.lang.Integer">
+    delete from frence_history
+    where frence_id = #{frenceid,jdbcType=INTEGER}
+  </delete>
+
+  <!--删除人员时,删除围栏报警记录-->
+  <delete id="deleteHistory" parameterType="String">
+    delete from ${tableName}
+    where person_idcard='${address}'
+  </delete>
+
+  <!--得到用户下所有的报警记录-->
+  <select id="getFrenceHistoryList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE   user_id=#{userid} ORDER BY TIME DESC
+  </select>
+
+  <!--获取某个围栏的所有报警记录-->
+  <select id="getFrenceHistory"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE   user_id=#{userid} AND frence_id=#{frenceid}
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from frence_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from frence_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.FrenceHistory">
+    insert into frence_history (id, person_idcard, x, 
+      y, status, time, map_key, 
+      user_id, frence_id)
+    values (#{id,jdbcType=INTEGER}, #{personIdcard,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, 
+      #{y,jdbcType=DOUBLE}, #{status,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, #{mapKey,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{frenceId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.FrenceHistory">
+    insert into frence_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personIdcard != null">
+        person_idcard,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="frenceId != null">
+        frence_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="personIdcard != null">
+        #{personIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="frenceId != null">
+        #{frenceId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.FrenceHistory">
+    update frence_history
+    <set>
+      <if test="personIdcard != null">
+        person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        x = #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="frenceId != null">
+        frence_id = #{frenceId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.FrenceHistory">
+    update frence_history
+    set person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      x = #{x,jdbcType=DOUBLE},
+      y = #{y,jdbcType=DOUBLE},
+      status = #{status,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      frence_id = #{frenceId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

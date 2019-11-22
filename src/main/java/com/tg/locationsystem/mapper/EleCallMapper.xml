@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.EleCallMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.EleCall">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="x" jdbcType="DOUBLE" property="x" />
+    <result column="y" jdbcType="DOUBLE" property="y" />
+    <result column="z" jdbcType="DOUBLE" property="z" />
+    <result column="isOnline" jdbcType="VARCHAR" property="isonline" />
+    <result column="last_Time" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="time_userid" jdbcType="VARCHAR" property="timeUserid" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="person_phone" jdbcType="VARCHAR" property="personPhone" />
+    <result column="person_log" jdbcType="VARCHAR" property="personLog" />
+    <result column="person_idcard" jdbcType="VARCHAR" property="personIdcard" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, address, x, y, z, isOnline, last_Time, time_userid, person_name, map_key, 
+    person_phone, person_log, person_idcard
+  </sql>
+
+  <!--根据唯一标识查看相关点名记录-->
+  <select id="geteleCallByKey"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ele_call
+    WHERE   time_userid=#{timeuser}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ele_call
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ele_call
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.EleCall">
+    insert into ele_call (id, user_id, address, 
+      x, y, z, isOnline, 
+      last_Time, time_userid, person_name, 
+      map_key, person_phone, person_log, 
+      person_idcard)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, #{z,jdbcType=DOUBLE}, #{isonline,jdbcType=VARCHAR}, 
+      #{lastTime,jdbcType=TIMESTAMP}, #{timeUserid,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, 
+      #{mapKey,jdbcType=VARCHAR}, #{personPhone,jdbcType=VARCHAR}, #{personLog,jdbcType=VARCHAR}, 
+      #{personIdcard,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.EleCall">
+    insert into ele_call
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="z != null">
+        z,
+      </if>
+      <if test="isonline != null">
+        isOnline,
+      </if>
+      <if test="lastTime != null">
+        last_Time,
+      </if>
+      <if test="timeUserid != null">
+        time_userid,
+      </if>
+      <if test="personName != null">
+        person_name,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="personPhone != null">
+        person_phone,
+      </if>
+      <if test="personLog != null">
+        person_log,
+      </if>
+      <if test="personIdcard != null">
+        person_idcard,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="z != null">
+        #{z,jdbcType=DOUBLE},
+      </if>
+      <if test="isonline != null">
+        #{isonline,jdbcType=VARCHAR},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeUserid != null">
+        #{timeUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="personName != null">
+        #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="personPhone != null">
+        #{personPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="personLog != null">
+        #{personLog,jdbcType=VARCHAR},
+      </if>
+      <if test="personIdcard != null">
+        #{personIdcard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.EleCall">
+    update ele_call
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        x = #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="z != null">
+        z = #{z,jdbcType=DOUBLE},
+      </if>
+      <if test="isonline != null">
+        isOnline = #{isonline,jdbcType=VARCHAR},
+      </if>
+      <if test="lastTime != null">
+        last_Time = #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeUserid != null">
+        time_userid = #{timeUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="personName != null">
+        person_name = #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="personPhone != null">
+        person_phone = #{personPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="personLog != null">
+        person_log = #{personLog,jdbcType=VARCHAR},
+      </if>
+      <if test="personIdcard != null">
+        person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.EleCall">
+    update ele_call
+    set user_id = #{userId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      x = #{x,jdbcType=DOUBLE},
+      y = #{y,jdbcType=DOUBLE},
+      z = #{z,jdbcType=DOUBLE},
+      isOnline = #{isonline,jdbcType=VARCHAR},
+      last_Time = #{lastTime,jdbcType=TIMESTAMP},
+      time_userid = #{timeUserid,jdbcType=VARCHAR},
+      person_name = #{personName,jdbcType=VARCHAR},
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      person_phone = #{personPhone,jdbcType=VARCHAR},
+      person_log = #{personLog,jdbcType=VARCHAR},
+      person_idcard = #{personIdcard,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

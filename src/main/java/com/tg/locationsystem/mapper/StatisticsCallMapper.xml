@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.StatisticsCallMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.StatisticsCall">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="online" jdbcType="INTEGER" property="online" />
+    <result column="not_online" jdbcType="INTEGER" property="notOnline" />
+    <result column="time_user" jdbcType="VARCHAR" property="timeUser" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="record_time" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="time_interval" jdbcType="INTEGER" property="timeInterval" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, total, online, not_online, time_user, user_id, record_time, time_interval
+  </sql>
+  <!--查看某个用户的所有统计数据-->
+  <select id="getStatisticsCallByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from statistics_call
+    WHERE   user_id=#{id}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from statistics_call
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from statistics_call
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.StatisticsCall">
+    insert into statistics_call (id, total, online, 
+      not_online, time_user, user_id, 
+      record_time, time_interval)
+    values (#{id,jdbcType=INTEGER}, #{total,jdbcType=INTEGER}, #{online,jdbcType=INTEGER}, 
+      #{notOnline,jdbcType=INTEGER}, #{timeUser,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{recordTime,jdbcType=TIMESTAMP}, #{timeInterval,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.StatisticsCall">
+    insert into statistics_call
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="total != null">
+        total,
+      </if>
+      <if test="online != null">
+        online,
+      </if>
+      <if test="notOnline != null">
+        not_online,
+      </if>
+      <if test="timeUser != null">
+        time_user,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="recordTime != null">
+        record_time,
+      </if>
+      <if test="timeInterval != null">
+        time_interval,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="online != null">
+        #{online,jdbcType=INTEGER},
+      </if>
+      <if test="notOnline != null">
+        #{notOnline,jdbcType=INTEGER},
+      </if>
+      <if test="timeUser != null">
+        #{timeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeInterval != null">
+        #{timeInterval,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.StatisticsCall">
+    update statistics_call
+    <set>
+      <if test="total != null">
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="online != null">
+        online = #{online,jdbcType=INTEGER},
+      </if>
+      <if test="notOnline != null">
+        not_online = #{notOnline,jdbcType=INTEGER},
+      </if>
+      <if test="timeUser != null">
+        time_user = #{timeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        record_time = #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeInterval != null">
+        time_interval = #{timeInterval,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.StatisticsCall">
+    update statistics_call
+    set total = #{total,jdbcType=INTEGER},
+      online = #{online,jdbcType=INTEGER},
+      not_online = #{notOnline,jdbcType=INTEGER},
+      time_user = #{timeUser,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      record_time = #{recordTime,jdbcType=TIMESTAMP},
+      time_interval = #{timeInterval,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

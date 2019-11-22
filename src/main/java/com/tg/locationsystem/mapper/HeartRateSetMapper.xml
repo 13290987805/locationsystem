@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.HeartRateSetMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.HeartRateSet">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="max_data" jdbcType="INTEGER" property="maxData" />
+    <result column="min_data" jdbcType="INTEGER" property="minData" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, max_data, min_data, update_time, user_id
+  </sql>
+
+  <!--得到所有的设置心率数据-->
+  <select id="getAllHeartRateSet"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from heart_rate_set
+  </select>
+
+  <!--查看用户设置的心率-->
+  <select id="getHeartRateSet"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from heart_rate_set
+    WHERE user_id=#{id}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from heart_rate_set
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from heart_rate_set
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.HeartRateSet">
+    insert into heart_rate_set (id, max_data, min_data, 
+      update_time, user_id)
+    values (#{id,jdbcType=INTEGER}, #{maxData,jdbcType=INTEGER}, #{minData,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.HeartRateSet">
+    insert into heart_rate_set
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="maxData != null">
+        max_data,
+      </if>
+      <if test="minData != null">
+        min_data,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="maxData != null">
+        #{maxData,jdbcType=INTEGER},
+      </if>
+      <if test="minData != null">
+        #{minData,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.HeartRateSet">
+    update heart_rate_set
+    <set>
+      <if test="maxData != null">
+        max_data = #{maxData,jdbcType=INTEGER},
+      </if>
+      <if test="minData != null">
+        min_data = #{minData,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.HeartRateSet">
+    update heart_rate_set
+    set max_data = #{maxData,jdbcType=INTEGER},
+      min_data = #{minData,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

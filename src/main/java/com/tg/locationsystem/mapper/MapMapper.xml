@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.MapMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.Map">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="map_data" jdbcType="VARCHAR" property="mapData" />
+    <result column="map_name" jdbcType="VARCHAR" property="mapName" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="pixel_x" jdbcType="VARCHAR" property="pixelX" />
+    <result column="pixel_y" jdbcType="VARCHAR" property="pixelY" />
+    <result column="reality_x" jdbcType="VARCHAR" property="realityX" />
+    <result column="reality_y" jdbcType="VARCHAR" property="realityY" />
+    <result column="proportion" jdbcType="VARCHAR" property="proportion" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, map_data, map_name, map_key, remark, pixel_x, pixel_y, reality_x, reality_y, 
+    proportion
+  </sql>
+
+  <!--根据地图key删除地图-->
+  <delete id="deleteMapByKey" parameterType="java.lang.String">
+    delete from map
+    where map_key = #{mapKey,jdbcType=VARCHAR}
+  </delete>
+
+
+  <!--根据map_key得到地图对象-->
+  <select id="getMapByUuid"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from map
+    WHERE  map_key=#{uuid}
+  </select>
+
+  <!--查看用户下的所有地图-->
+  <select id="getMapsByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from map
+    WHERE  user_id=#{id}
+  </select>
+
+  <!--根据地图名称得到地图对象-->
+  <select id="getMapByName"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from map
+    WHERE map_name=#{name} AND user_id=#{userid}
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from map
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from map
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.Map">
+    insert into map (id, user_id, map_data, 
+      map_name, map_key, remark, 
+      pixel_x, pixel_y, reality_x, 
+      reality_y, proportion)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{mapData,jdbcType=VARCHAR}, 
+      #{mapName,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{pixelX,jdbcType=VARCHAR}, #{pixelY,jdbcType=VARCHAR}, #{realityX,jdbcType=VARCHAR}, 
+      #{realityY,jdbcType=VARCHAR}, #{proportion,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Map">
+    insert into map
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="mapData != null">
+        map_data,
+      </if>
+      <if test="mapName != null">
+        map_name,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="pixelX != null">
+        pixel_x,
+      </if>
+      <if test="pixelY != null">
+        pixel_y,
+      </if>
+      <if test="realityX != null">
+        reality_x,
+      </if>
+      <if test="realityY != null">
+        reality_y,
+      </if>
+      <if test="proportion != null">
+        proportion,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="mapData != null">
+        #{mapData,jdbcType=VARCHAR},
+      </if>
+      <if test="mapName != null">
+        #{mapName,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="pixelX != null">
+        #{pixelX,jdbcType=VARCHAR},
+      </if>
+      <if test="pixelY != null">
+        #{pixelY,jdbcType=VARCHAR},
+      </if>
+      <if test="realityX != null">
+        #{realityX,jdbcType=VARCHAR},
+      </if>
+      <if test="realityY != null">
+        #{realityY,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null">
+        #{proportion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Map">
+    update map
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="mapData != null">
+        map_data = #{mapData,jdbcType=VARCHAR},
+      </if>
+      <if test="mapName != null">
+        map_name = #{mapName,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="pixelX != null">
+        pixel_x = #{pixelX,jdbcType=VARCHAR},
+      </if>
+      <if test="pixelY != null">
+        pixel_y = #{pixelY,jdbcType=VARCHAR},
+      </if>
+      <if test="realityX != null">
+        reality_x = #{realityX,jdbcType=VARCHAR},
+      </if>
+      <if test="realityY != null">
+        reality_y = #{realityY,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null">
+        proportion = #{proportion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.Map">
+    update map
+    set user_id = #{userId,jdbcType=INTEGER},
+      map_data = #{mapData,jdbcType=VARCHAR},
+      map_name = #{mapName,jdbcType=VARCHAR},
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      pixel_x = #{pixelX,jdbcType=VARCHAR},
+      pixel_y = #{pixelY,jdbcType=VARCHAR},
+      reality_x = #{realityX,jdbcType=VARCHAR},
+      reality_y = #{realityY,jdbcType=VARCHAR},
+      proportion = #{proportion,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.TagMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.Tag">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="x" jdbcType="DOUBLE" property="x" />
+    <result column="y" jdbcType="DOUBLE" property="y" />
+    <result column="used" jdbcType="VARCHAR" property="used" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="tag_typeId" jdbcType="INTEGER" property="tagTypeid" />
+    <result column="lastOnline" jdbcType="TIMESTAMP" property="lastonline" />
+    <result column="isOnline" jdbcType="VARCHAR" property="isonline" />
+    <result column="z" jdbcType="DOUBLE" property="z" />
+    <result column="electric" jdbcType="VARCHAR" property="electric" />
+    <result column="address_broadcast" jdbcType="VARCHAR" property="addressBroadcast" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, address, x, y, used, user_id, tag_typeId, lastOnline, isOnline, z, electric, 
+    address_broadcast, map_key
+  </sql>
+
+  <!--得到地图下所有的标签-->
+  <select id="getTagsByMapUUID"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   map_key=#{mapUUID}
+  </select>
+
+  <!--得到用户所有已使用的标签-->
+  <select id="getTagsByUsed"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{userId} AND used='1'
+  </select>
+
+  <!--得到所有的标签-->
+  <select id="getTagList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE  used='1'
+  </select>
+
+  <!--根据标签add查询该标签-->
+  <select id="getTagByOnlyAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE  address=#{aAddress}
+  </select>
+
+  <!--根据标签add查询该标签在数据库是否有记录-->
+  <select id="getUseTagByAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE  address=#{add}  AND used='1'
+  </select>
+
+  <!--根据标签add模糊查询-->
+  <select id="getTagByCondition"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    <where>
+      <if test="queryTagCondition.address!=null and queryTagCondition.address!='' ">
+        AND address LIKE CONCAT(CONCAT('%',#{queryTagCondition.address},'%'))
+      </if>
+      AND user_id=#{userid}
+    </where>
+  </select>
+
+  <!--得到用户所有的标签-->
+  <select id="getUserTags"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{id} AND used='1'
+  </select>
+
+  <!--得到用户下的所有离线标签-->
+  <select id="getOfflineTag"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{id} AND isOnline='0'
+  </select>
+
+  <!--得到用户下的所有在线标签-->
+  <select id="getOnlineTag"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{id} AND isOnline='1'
+  </select>
+
+  <!--根据标签address得到标签对象-->
+  <select id="getTagByAddress"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE address=#{address} AND  user_id=#{id}
+  </select>
+
+  <!--得到对象下所有的标签-->
+  <select id="getTagsByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{id}
+  </select>
+
+  <!--得到该用户下所有已使用的标签-->
+  <select id="getUsedTagsPage"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{id} AND used='1'
+  </select>
+
+  <!--得到该用户下所有未使用的标签-->
+  <select id="getNoUsedTagsList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{id} AND used='0'
+  </select>
+
+
+  <!--根据类型得到标签对象-->
+  <select id="getTagsByType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   user_id=#{userid} AND tag_typeId=#{typeid}
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tag
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tag
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.Tag">
+    insert into tag (id, address, x, 
+      y, used, user_id, tag_typeId, 
+      lastOnline, isOnline, z, 
+      electric, address_broadcast, map_key
+      )
+    values (#{id,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, 
+      #{y,jdbcType=DOUBLE}, #{used,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{tagTypeid,jdbcType=INTEGER}, 
+      #{lastonline,jdbcType=TIMESTAMP}, #{isonline,jdbcType=VARCHAR}, #{z,jdbcType=DOUBLE}, 
+      #{electric,jdbcType=VARCHAR}, #{addressBroadcast,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Tag">
+    insert into tag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="used != null">
+        used,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="tagTypeid != null">
+        tag_typeId,
+      </if>
+      <if test="lastonline != null">
+        lastOnline,
+      </if>
+      <if test="isonline != null">
+        isOnline,
+      </if>
+      <if test="z != null">
+        z,
+      </if>
+      <if test="electric != null">
+        electric,
+      </if>
+      <if test="addressBroadcast != null">
+        address_broadcast,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="used != null">
+        #{used,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="tagTypeid != null">
+        #{tagTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="lastonline != null">
+        #{lastonline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isonline != null">
+        #{isonline,jdbcType=VARCHAR},
+      </if>
+      <if test="z != null">
+        #{z,jdbcType=DOUBLE},
+      </if>
+      <if test="electric != null">
+        #{electric,jdbcType=VARCHAR},
+      </if>
+      <if test="addressBroadcast != null">
+        #{addressBroadcast,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Tag">
+    update tag
+    <set>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        x = #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="used != null">
+        used = #{used,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="tagTypeid != null">
+        tag_typeId = #{tagTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="lastonline != null">
+        lastOnline = #{lastonline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isonline != null">
+        isOnline = #{isonline,jdbcType=VARCHAR},
+      </if>
+      <if test="z != null">
+        z = #{z,jdbcType=DOUBLE},
+      </if>
+      <if test="electric != null">
+        electric = #{electric,jdbcType=VARCHAR},
+      </if>
+      <if test="addressBroadcast != null">
+        address_broadcast = #{addressBroadcast,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.Tag">
+    update tag
+    set address = #{address,jdbcType=VARCHAR},
+      x = #{x,jdbcType=DOUBLE},
+      y = #{y,jdbcType=DOUBLE},
+      used = #{used,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      tag_typeId = #{tagTypeid,jdbcType=INTEGER},
+      lastOnline = #{lastonline,jdbcType=TIMESTAMP},
+      isOnline = #{isonline,jdbcType=VARCHAR},
+      z = #{z,jdbcType=DOUBLE},
+      electric = #{electric,jdbcType=VARCHAR},
+      address_broadcast = #{addressBroadcast,jdbcType=VARCHAR},
+      map_key = #{mapKey,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

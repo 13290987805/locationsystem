@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.TagHistoryMapper">
+    <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.TagHistory">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="person_idcard" jdbcType="VARCHAR" property="personIdcard"/>
+        <result column="x" jdbcType="DOUBLE" property="x"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="map_key" jdbcType="VARCHAR" property="mapKey"/>
+        <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date"/>
+        <result column="y" jdbcType="DOUBLE" property="y"/>
+        <result column="z" jdbcType="DOUBLE" property="z"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, person_idcard, x, time, map_key, reserved2_date, y, z
+  </sql>
+
+
+    <!--删除人员时,删除轨迹记录-->
+    <delete id="deleteHistory" parameterType="String">
+    delete from ${tableName}
+    where person_idcard='${address}'
+  </delete>
+
+    <!--根据人员唯一标识,时间,地图key得到标签记录集合-->
+    <select id="getHistoryByAddAndTimeAndMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${format}
+        WHERE person_idcard='${tagAddress}' AND map_key='${mapkey}'
+        AND time BETWEEN '${startTime}' AND '${endTime}'
+    </select>
+
+    <!--根据标签add和地图key得到标签历史对象集合-->
+    <select id="getTagHistoryByAddAndMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${format}
+        WHERE person_idcard='${tagAddress}' AND map_key='${mapkey}'
+    </select>
+
+    <!--插入数据-->
+    <insert id="inserttagHistory" parameterType="com.tg.locationsystem.entity.TagHistory">
+        insert into ${format}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tagHistory.id != null">
+                id,
+            </if>
+            <if test="tagHistory.personIdcard != null">
+                person_idcard,
+            </if>
+            <if test="tagHistory.x != null">
+                x,
+            </if>
+            <if test="tagHistory.time != null">
+                time,
+            </if>
+            <if test="tagHistory.mapKey != null">
+                map_key,
+            </if>
+            <if test="tagHistory.reserved2Date != null">
+                reserved2_date,
+            </if>
+            <if test="tagHistory.y != null">
+                y,
+            </if>
+            <if test="tagHistory.z != null">
+                z,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tagHistory.id != null">
+                ${tagHistory.id,jdbcType=INTEGER},
+            </if>
+            <if test="tagHistory.personIdcard != null">
+                #{tagHistory.personIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="tagHistory.x != null">
+                #{tagHistory.x,jdbcType=DOUBLE},
+            </if>
+            <if test="tagHistory.time != null">
+                #{tagHistory.time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="tagHistory.mapKey != null">
+                #{tagHistory.mapKey,jdbcType=VARCHAR},
+            </if>
+            <if test="tagHistory.reserved2Date != null">
+                #{tagHistory.reserved2Date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="tagHistory.y != null">
+                #{tagHistory.y,jdbcType=DOUBLE},
+            </if>
+            <if test="tagHistory.z != null">
+                #{tagHistory.z,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--标签记录表是否存在-->
+    <select id="existTable" parameterType="String" resultType="Integer">
+    select count(*)
+    from information_schema.TABLES
+    where LCASE(table_name)=#{format}
+  </select>
+
+    <!--创建表-->
+    <update id="createNewTable" parameterType="String">
+    CREATE TABLE ${format} (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `person_idcard` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+    `x` double(16,2) DEFAULT NULL,
+    `time` datetime DEFAULT NULL,
+    `map_key` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+    `reserved2_date` datetime DEFAULT NULL,
+    `y` double(16,2) DEFAULT NULL,
+    `z` double(16,2) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `person_idcard, time` (`person_idcard`,`time`)
+    )
+  </update>
+
+    <select id="getHistoryTest" resultMap="BaseResultMap" statementType="STATEMENT">
+        select
+        <include refid="Base_Column_List"/>
+        from ${format}
+        WHERE person_idcard=${address}
+    </select>
+
+
+    <!--根据标签add得到标签历史对象集合-->
+    <select id="getTagHistoryByAdd" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${format}
+        WHERE person_idcard='${tagAddress}'
+    </select>
+
+    <!--根据标签add和时间得到标签记录集合-->
+    <select id="getHistoryByAddAndTime" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${format}
+        WHERE person_idcard='${tagAddress}' AND time BETWEEN '${startTime}' AND '${endTime}'
+    </select>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tag_history
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tag_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.tg.locationsystem.entity.TagHistory">
+    insert into tag_history (id, person_idcard, x, 
+      time, map_key, reserved2_date, 
+      y, z)
+    values (#{id,jdbcType=INTEGER}, #{personIdcard,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, 
+      #{time,jdbcType=TIMESTAMP}, #{mapKey,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, 
+      #{y,jdbcType=DOUBLE}, #{z,jdbcType=DOUBLE})
+  </insert>
+    <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.TagHistory">
+        insert into tag_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="personIdcard != null">
+                person_idcard,
+            </if>
+            <if test="x != null">
+                x,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="mapKey != null">
+                map_key,
+            </if>
+            <if test="reserved2Date != null">
+                reserved2_date,
+            </if>
+            <if test="y != null">
+                y,
+            </if>
+            <if test="z != null">
+                z,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="personIdcard != null">
+                #{personIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                #{x,jdbcType=DOUBLE},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mapKey != null">
+                #{mapKey,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2Date != null">
+                #{reserved2Date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="y != null">
+                #{y,jdbcType=DOUBLE},
+            </if>
+            <if test="z != null">
+                #{z,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.TagHistory">
+        update tag_history
+        <set>
+            <if test="personIdcard != null">
+                person_idcard = #{personIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                x = #{x,jdbcType=DOUBLE},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mapKey != null">
+                map_key = #{mapKey,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2Date != null">
+                reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="y != null">
+                y = #{y,jdbcType=DOUBLE},
+            </if>
+            <if test="z != null">
+                z = #{z,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.TagHistory">
+    update tag_history
+    set person_idcard = #{personIdcard,jdbcType=VARCHAR},
+      x = #{x,jdbcType=DOUBLE},
+      time = #{time,jdbcType=TIMESTAMP},
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      y = #{y,jdbcType=DOUBLE},
+      z = #{z,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
