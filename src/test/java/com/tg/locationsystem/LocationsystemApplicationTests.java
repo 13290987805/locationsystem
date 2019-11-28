@@ -10,8 +10,11 @@ import com.tg.locationsystem.mapper.MyuserMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
+import com.tg.locationsystem.pojo.TestVO;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.PngToSvg;
 import com.tg.locationsystem.utils.RuleUtil;
+import com.tg.locationsystem.utils.TestUtil;
 import net.sf.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,10 +78,18 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test8() {
-		List<MapRule> allRule = mapRuleService.getAllRule();
-		for (MapRule mapRule : allRule) {
-			System.out.println(mapRule.toString());
+		String photo="C:\\img\\test.png";
+		String target="C:\\img\\test.svg";
+		boolean b=false;
+		try {
+			b = PngToSvg.png2svg(photo, target);
+
+		} catch (FileNotFoundException e) {
+			System.out.println("文件路径错误");
+		} catch (IOException e) {
+			System.out.println("图片转换错误");
 		}
+		System.out.println(b);
 	}
 	@Test
 	public void test7() {

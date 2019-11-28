@@ -1,8 +1,10 @@
 package com.tg.locationsystem.controller;
 
+import com.mchange.v2.c3p0.util.TestUtils;
 import com.tg.locationsystem.config.KalmanFilter;
 import com.tg.locationsystem.pojo.HeartRateHistoryVO;
 import com.tg.locationsystem.service.IHeartRateHistoryService;
+import com.tg.locationsystem.utils.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,12 +33,13 @@ public class testController {
     private IHeartRateHistoryService heartRateHistoryService;
 
     /*
-    * 测试心率
+    * 得到请求者的ip
     * */
     @RequestMapping(value = "test")
     @ResponseBody
-    public String AddTag(Model model){
-       return "hello";
+    public String AddTag(HttpServletRequest request){
+        String ip = TestUtil.getIP(request);
+        return ip;
 
     }
     /*

@@ -467,8 +467,9 @@ public class MapController {
             String clekey = SystemMap.getKey(SystemMap.getCleAndKeyMap(), MapKey);
             if (clekey!=null){
                 SystemMap.getCleAndKeyMap().remove(clekey);
-                //清除規則
+                //清除规则
                 SystemMap.getMapRuleMap().remove(MapKey);
+
             }
 
 

@@ -510,14 +510,23 @@ public class StationController {
             }
 
             sdkList.add(station1);
-
         }
+        List<bean.Station> SendsdkList=new ArrayList(beans.size());
         if (sdkList.size()!=0){
-            String string=gson.toJson(sdkList);
-            System.out.println("发送cle数据:"+string);
-            //发送
-            LocationsystemApplication.skylabSDK.configStation(key,string);
-            //System.out.println("beans:"+beans.size());
+            for (bean.Station station : sdkList) {
+                if(station.getIsmaster()==null||"".equals(station.getIsmaster())){
+                    continue;
+                }
+                SendsdkList.add(station);
+            }
+            if (sdkList.size()>0){
+                String string=gson.toJson(SendsdkList);
+                System.out.println("发送cle数据:"+string);
+                //发送
+                LocationsystemApplication.skylabSDK.configStation(key,string);
+                //System.out.println("beans:"+beans.size());
+            }
+
         }
 
 

@@ -213,6 +213,17 @@
             <version>1.0</version>
         </dependency>
 
+        <!--base64编码,jpg,png转svg格式-->
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
     <build>
