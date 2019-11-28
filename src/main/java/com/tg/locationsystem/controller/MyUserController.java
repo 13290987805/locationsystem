@@ -2,15 +2,12 @@ package com.tg.locationsystem.controller;
 
 
 import com.tg.locationsystem.entity.EleCallSet;
-import com.tg.locationsystem.entity.Frence;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.pojo.UpdatePassword;
 import com.tg.locationsystem.pojo.User;
 import com.tg.locationsystem.service.IEleCallSetService;
 import com.tg.locationsystem.service.IMyUserService;
-import com.tg.locationsystem.utils.BASE64;
-import com.tg.locationsystem.utils.SystemMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -272,7 +269,8 @@ public class MyUserController {
             return resultBean;
         }
         try {
-            String pass = BASE64.encryptBASE64(myuser.getPassword().getBytes());
+
+            String pass = Base64.getEncoder().encodeToString(myuser.getPassword().getBytes());
             myuser.setPassword(pass);
             myuser.setCreateUser("1");
             int insert = myUserService.insertSelective(myuser);
