@@ -207,7 +207,7 @@ public class MapController {
         CleConfig cleConfig=new CleConfig();
         cleConfig.setMapKey(uuid);
         cleConfig.setChannel("2");
-        cleConfig.setAskTime("30");
+        cleConfig.setAskTime("10");
         cleConfig.setSendTime("10");
         int insertconfig = cleConfigService.insertSelective(cleConfig);
 

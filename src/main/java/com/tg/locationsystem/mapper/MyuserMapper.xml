@@ -10,9 +10,13 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
+    <result column="system_name" jdbcType="VARCHAR" property="systemName" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
   </resultMap>
+
   <sql id="Base_Column_List">
-    id, username, company_name, password, phoneNumber, address, create_user, reserved2_date
+    id, username, company_name, password, phoneNumber, address, create_user, reserved2_date, 
+    system_name, logo
   </sql>
 
   <!--根据登录账号得到myuser对象-->
@@ -36,12 +40,14 @@
   <insert id="insert" parameterType="com.tg.locationsystem.entity.Myuser">
     insert into myuser (id, username, company_name, 
       password, phoneNumber, address, 
-      create_user, reserved2_date)
+      create_user, reserved2_date, system_name, 
+      logo)
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{createUser,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP})
+      #{createUser,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, #{systemName,jdbcType=VARCHAR}, 
+      #{logo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Myuser" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Myuser">
     insert into myuser
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -67,6 +73,12 @@
       </if>
       <if test="reserved2Date != null">
         reserved2_date,
+      </if>
+      <if test="systemName != null">
+        system_name,
+      </if>
+      <if test="logo != null">
+        logo,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -94,6 +106,12 @@
       <if test="reserved2Date != null">
         #{reserved2Date,jdbcType=TIMESTAMP},
       </if>
+      <if test="systemName != null">
+        #{systemName,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Myuser">
@@ -120,6 +138,12 @@
       <if test="reserved2Date != null">
         reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
       </if>
+      <if test="systemName != null">
+        system_name = #{systemName,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -131,7 +155,9 @@
       phoneNumber = #{phonenumber,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=VARCHAR},
-      reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP}
+      reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      system_name = #{systemName,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

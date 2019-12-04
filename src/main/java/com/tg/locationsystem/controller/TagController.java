@@ -6,10 +6,7 @@ import com.tg.locationsystem.mapper.GoodsMapper;
 import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TagTypeMapper;
 import com.tg.locationsystem.pojo.*;
-import com.tg.locationsystem.service.IGoodsService;
-import com.tg.locationsystem.service.IPersonService;
-import com.tg.locationsystem.service.ITagService;
-import com.tg.locationsystem.service.ITagTypeService;
+import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,6 +49,8 @@ public class TagController {
     private GoodsMapper goodsMapper;
     @Autowired
     private TagTypeMapper tagTypeMapper;
+    @Autowired
+    private IMapService mapService;
     public static final int UP_TIME=15;
 
     /*
@@ -1223,6 +1222,14 @@ public class TagController {
             allTag.setMsg("该地图不存在");
             return allTag;
         }
+        com.tg.locationsystem.entity.Map sqlmap = mapService.getMapByUuid(MapUUID);
+        if (sqlmap==null){
+            allTag = new AllTagLocationResult();
+            allTag.setCode(109);
+            allTag.setMsg("该地图不存在");
+            return allTag;
+        }
+
         //得到地图下所有的标签
         List<Tag> usedTags=tagService.getTagsByMapUUID(MapUUID);
         allTag=new AllTagLocationResult();

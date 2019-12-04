@@ -1,19 +1,14 @@
 package com.tg.locationsystem.maprule;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.tg.locationsystem.maprule.Line;
-import com.tg.locationsystem.maprule.PolygonArea;
+import com.google.gson.Gson;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
 
-import com.google.gson.Gson;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

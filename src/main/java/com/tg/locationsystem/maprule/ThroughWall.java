@@ -169,10 +169,10 @@ public class ThroughWall {
 			return nowTag;
 		}else {
 			PolygonArea area2 = inWhere(nowTag, allArea);
-			System.err.println(area + "穿墙：" + area2);
+			//System.err.println(area + "穿墙：" + area2);
 			//判断区域是否可进入
 			if (area2 == null || !area2.isEnterable()) {
-				System.err.println("不可进");
+				//System.err.println("不可进");
 				return preTag;
 			}
 			int flagCount = flagCountMap.get(nowTag.getAddress());

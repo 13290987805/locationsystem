@@ -1,6 +1,7 @@
 package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.pojo.TestVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface TableMapper {
             "WHERE\n" +
             "\ttag.id = #{id}")
     TestVO TEST_VO(Integer id);
+
+
 }

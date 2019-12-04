@@ -77,6 +77,10 @@ public class LocationsystemApplicationTests {
 	private int maxPoolSize;
 
 	@Test
+	public void test9() {
+
+	}
+	@Test
 	public void test8() {
 		String photo="C:\\img\\test.png";
 		String target="C:\\img\\test.svg";

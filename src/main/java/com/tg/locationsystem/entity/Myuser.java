@@ -10,7 +10,7 @@ public class Myuser implements Serializable{
     private String username;
     @NotBlank(message = "用户公司名称不能为空")
     private String companyName;
-    @NotBlank(message = "用户密码不能为空")
+    //@NotBlank(message = "用户密码不能为空")
     private String password;
     @NotBlank(message = "用户联系方式不能为空")
     private String phonenumber;
@@ -20,6 +20,10 @@ public class Myuser implements Serializable{
     private String createUser;
 
     private Date reserved2Date;
+
+    private String systemName;
+
+    private String logo;
 
     public Integer getId() {
         return id;
@@ -85,6 +89,22 @@ public class Myuser implements Serializable{
         this.reserved2Date = reserved2Date;
     }
 
+    public String getSystemName() {
+        return systemName;
+    }
+
+    public void setSystemName(String systemName) {
+        this.systemName = systemName;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     @Override
     public String toString() {
         return "Myuser{" +
@@ -99,3 +119,13 @@ public class Myuser implements Serializable{
                 '}';
     }
 }
+
+
+
+
+
+
+
+
+
+
