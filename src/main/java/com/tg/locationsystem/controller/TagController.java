@@ -1222,8 +1222,8 @@ public class TagController {
             allTag.setMsg("该地图不存在");
             return allTag;
         }
-        com.tg.locationsystem.entity.Map sqlmap = mapService.getMapByUuid(MapUUID);
-        if (sqlmap==null){
+
+        if (!SystemMap.getCleAndKeyMap().containsKey(MapUUID)){
             allTag = new AllTagLocationResult();
             allTag.setCode(109);
             allTag.setMsg("该地图不存在");
@@ -1327,4 +1327,74 @@ public class TagController {
         allTag.setMsg("操作成功");
         return allTag;
     }
+
+    /*
+    * 删除标签
+    * */
+    @RequestMapping(value = "delTag",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean delTag(HttpServletRequest request,
+                             @RequestParam("") String tagAddress){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (tagAddress==null||"".equals(tagAddress)){
+            resultBean = new ResultBean();
+            resultBean.setCode(17);
+            resultBean.setMsg("标签address不能为空");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        Tag tag = tagService.getTagByOnlyAddress(tagAddress);
+        if (tag==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(19);
+            resultBean.setMsg("标签不存在");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if ("1".equals(tag.getUsed())){
+            resultBean = new ResultBean();
+            resultBean.setCode(20);
+            resultBean.setMsg("该标签被别人使用,请先解绑");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        int del = tagService.deleteByPrimaryKey(tag.getId());
+        if (del>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List<Tag> list=new ArrayList<>();
+            list.add(tag);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(23);
+            resultBean.setMsg("添加绑定失败");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+    }
+
 }

@@ -8,10 +8,7 @@ import com.tg.locationsystem.utils.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,9 +34,12 @@ public class testController {
     * */
     @RequestMapping(value = "test")
     @ResponseBody
-    public String AddTag(HttpServletRequest request){
-        String ip = TestUtil.getIP(request);
-        return ip;
+    public String AddTag(HttpServletRequest request,
+                         @RequestParam(defaultValue = "")String data ){
+        /*String ip = TestUtil.getIP(request);
+        return ip;*/
+        System.out.println(data);
+        return data;
 
     }
     /*

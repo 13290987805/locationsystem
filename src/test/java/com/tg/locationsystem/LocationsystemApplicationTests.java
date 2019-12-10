@@ -77,8 +77,22 @@ public class LocationsystemApplicationTests {
 	private int maxPoolSize;
 
 	@Test
+	public void test10() {
+		String msg="@@\"data\":@@\"content\":**@@\"pk_accessrule\":\"1132709103561700513\",\"pk_fun\":\"10101\",\"ruledesc\":\"按用户规则访问\",\"authsql\":\"1=1\",\"useflag\":\"1\",\"iscore\":\"0\",\"sortseq\":\"1\",\"memo\":\"\",\"creator\":\"1\",\"createtime\":\"2011-11-23 01:10:35.0\",\"updator\":\"1\",\"updatetime\":\"2011-12-02 01:39:07.0\",\"dr\":\"0\"##,@@\"pk_accessrule\":\"1231714420462439444\",\"pk_fun\":\"7202\",\"ruledesc\":\"只显示本人制单\",\"authsql\":\"pk_user=$@@userId##\",\"useflag\":\"0\",\"iscore\":\"0\",\"sortseq\":\"0\",\"memo\":\"\",\"creator\":\"1\",\"createtime\":\"2012-11-12 14:42:04.0\",\"updator\":\"1\",\"updatetime\":\"2012-11-12 14:45:51.0\",\"dr\":\"0\"##,@@";
+	}
+	@Test
 	public void test9() {
-
+		String path="C:\\img\\e2bd977e-aac0-45b8-96ac-759b339b4bb5.svg";
+		String[] split = path.split("\\.");
+		System.out.println(split.length);
+		StringBuffer sb=new StringBuffer();
+		for (int i = 0; i < split.length-1; i++) {
+			System.out.println("分割:"+split[i]);
+			sb.append(split[i]);
+			sb.append(".");
+		}
+		sb.append("svg");
+		System.out.println("拼接:"+sb.toString());
 	}
 	@Test
 	public void test8() {

@@ -29,7 +29,8 @@ public class UrlFilter implements Filter {
         String requestURI = req.getRequestURI();
         //System.out.println("--------------------->过滤器：请求地址"+requestURI);
         Object user = req.getSession().getAttribute("user");
-        if (user!=null||requestURI.contains("Login")||requestURI.contains("toLogin")){
+        if (user!=null||requestURI.contains("Login")||
+                requestURI.contains("toLogin")||requestURI.contains("Login2")){
             filterChain.doFilter(servletRequest, servletResponse);
         }else {
             servletRequest.getRequestDispatcher("/myuser/toLogin").forward(servletRequest, servletResponse);

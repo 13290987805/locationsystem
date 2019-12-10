@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -141,7 +138,7 @@ public class MyUserController {
     @RequestMapping(value = "updateUser",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResultBean updateUser(@Valid Myuser myuser, BindingResult result,
-                                     HttpServletRequest request,@RequestParam(value="user",required=false)MultipartFile file){
+                                     HttpServletRequest request,@RequestParam(value="logo",required=false)MultipartFile file){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
@@ -439,6 +436,39 @@ public class MyUserController {
         resultBean.setData(list);
         resultBean.setSize(list.size());
         return resultBean;
+    }
+
+    /*
+     * 测试在别的项目用URL网络资源请求该接口
+     *
+     * */
+    @RequestMapping(value = "Login2",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResultBean shopuser(@RequestBody User user,
+                               HttpServletRequest request){
+        System.out.println("原始"+user.toString());
+        Myuser myuser = myUserService.getUserByName(user.getUsername());
+
+        if (myuser!=null){
+            ResultBean resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("ok");
+            List<Myuser> list = new ArrayList<>();
+            list.add(myuser);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            ResultBean resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("ok");
+            List<User> list = new ArrayList<>();
+            list.add(user);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
     }
 }
 

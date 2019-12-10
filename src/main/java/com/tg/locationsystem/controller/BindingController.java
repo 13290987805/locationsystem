@@ -489,8 +489,8 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
         }
     }
     resultBean = new ResultBean();
-    resultBean.setCode(76);
-    resultBean.setMsg("解绑失败");
+    resultBean.setCode(118);
+    resultBean.setMsg("标签删除失败");
     List list = new ArrayList<>();
     resultBean.setData(list);
     resultBean.setSize(list.size());
