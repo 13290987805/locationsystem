@@ -1,6 +1,5 @@
 package com.tg.locationsystem.controller;
 
-import boot.SkylabSDK;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
 import com.tg.locationsystem.entity.*;

@@ -73,7 +73,7 @@ public class StationController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -84,7 +84,7 @@ public class StationController {
         Station mystation=stationService.getStationByAddress(station.getAddr(),user.getId());
         if(mystation!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(6);
+            resultBean.setCode(-1);
             resultBean.setMsg("该网关已经存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -146,7 +146,7 @@ public class StationController {
             }
 
             resultBean = new ResultBean();
-            resultBean.setCode(7);
+            resultBean.setCode(1);
             resultBean.setMsg("添加网关成功");
             List<StationVO> list = new ArrayList<>();
             list.add(stationVO);
@@ -155,7 +155,7 @@ public class StationController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(8);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加网关失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -269,7 +269,7 @@ public class StationController {
        }
        if (StationIds==null||"".equals(StationIds)){
            resultBean = new ResultBean();
-           resultBean.setCode(107);
+           resultBean.setCode(-1);
            resultBean.setMsg("基站不能为空");
            List<Myuser> list = new ArrayList<>();
            resultBean.setData(list);

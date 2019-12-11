@@ -52,7 +52,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -62,7 +62,7 @@ public class MyUserController {
         Myuser myuser=myUserService.getUserByName(user.getUsername());
         if (null==myuser){
             resultBean = new ResultBean();
-            resultBean.setCode(3);
+            resultBean.setCode(-1);
             resultBean.setMsg("该账户不存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -75,7 +75,7 @@ public class MyUserController {
             //System.out.println(myuser.getPassword()+":"+myuser.getPassword().length());
             if (!myuser.getPassword().equals(pass)){
                 resultBean = new ResultBean();
-                resultBean.setCode(4);
+                resultBean.setCode(-1);
                 resultBean.setMsg("密码错误");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
