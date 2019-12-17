@@ -1329,6 +1329,7 @@ public class TagController {
     }
 
     /*
+    *
     * 删除标签
     * */
     @RequestMapping(value = "delTag",method = RequestMethod.POST)
@@ -1387,8 +1388,8 @@ public class TagController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(23);
-            resultBean.setMsg("添加绑定失败");
+            resultBean.setCode(118);
+            resultBean.setMsg("标签删除失败");
             List list = new ArrayList<>();
             resultBean.setData(list);
             resultBean.setSize(list.size());

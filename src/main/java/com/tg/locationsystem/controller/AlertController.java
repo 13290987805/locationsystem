@@ -9,6 +9,7 @@ import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.pojo.TagStatusVO;
 import com.tg.locationsystem.service.IHeartRateHistoryService;
 import com.tg.locationsystem.service.IHeartRateSetService;
+import com.tg.locationsystem.service.IMapService;
 import com.tg.locationsystem.service.ITagStatusService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,8 @@ private GoodsMapper goodsMapper;
 private PersonTypeMapper personTypeMapper;
 @Autowired
 private TagMapper tagMapper;
+@Autowired
+private IMapService mapService;
     DateFormat sdf
             = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -601,6 +604,8 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
             tagStatusVO.setAlertType(tagStatus.getAlertType());
             tagStatusVO.setAddTime(tagStatus.getAddTime());
             tagStatusVO.setUserId(tagStatus.getUserId());
+            tagStatusVO.setMapkey(tagStatus.getMapKey());
+            tagStatusVO.setIsdeal(tagStatus.getIsdeal());
             //type name
             Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
             if (person!=null){
@@ -670,6 +675,8 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
         tagStatusVO.setAlertType(tagStatus.getAlertType());
         tagStatusVO.setAddTime(tagStatus.getAddTime());
         tagStatusVO.setUserId(tagStatus.getUserId());
+        tagStatusVO.setMapkey(tagStatus.getMapKey());
+        tagStatusVO.setIsdeal(tagStatus.getIsdeal());
         //type name
         Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
         if (person!=null){

@@ -16,6 +16,51 @@
     id, person_idcard, x, y, status, time, map_key, user_id, frence_id
   </sql>
 
+
+    <select id="getFrenceHistoryByFrenceIdAndPersonName"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from frence_history
+        WHERE   frence_id=#{frenceId}
+        AND person_idcard IN
+        <foreach collection="list" item="idcard" open="(" close=")" separator=",">
+            #{idcard}
+        </foreach>
+    </select>
+
+    <select id="getFrenceHistoryByPersonIdCardss"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from frence_history
+        WHERE    person_idcard IN
+        <foreach collection="list" item="idcard" open="(" close=")" separator=",">
+          #{idcard}
+        </foreach>
+    </select>
+
+
+  <select id="getFrenceHistorysByPersonIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE   user_id=#{userid} AND person_idcard=#{idCard}
+  </select>
+
+  <select id="getFrenceHistoryByPersonIdCards"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE   user_id=#{userid} AND person_idcard=#{idCard}
+  </select>
+
+  <!--根据人员idcard查询围栏记录-->
+  <select id="getFrenceHistoryByPersonIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE   user_id=#{userid} AND person_idcard=#{idCard}
+  </select>
+
   <!--删除围栏时删除围栏报警记录-->
   <delete id="deleteHistoryByFrenceId" parameterType="java.lang.Integer">
     delete from frence_history

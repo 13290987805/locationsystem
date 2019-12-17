@@ -2,6 +2,7 @@ package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.MapRule;
+import com.tg.locationsystem.entity.Myuser;
 
 import java.util.List;
 
@@ -24,3 +25,19 @@ public interface MapRuleMapper extends IBaseDao<MapRule>{
 
     List<MapRule> getAllRule();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

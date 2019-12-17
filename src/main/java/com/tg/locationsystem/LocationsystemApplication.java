@@ -77,6 +77,10 @@ public class LocationsystemApplication  {
 	public static final int MAX_COUNT=50;
 	//报警时间
 	public static final int ALERT_TIME=3;
+
+	//最低电量
+	public static final int MAX_BATTERY=10;
+
 	//边界限定
     //public static final double boundary_MaxX=30.91;
     public static final double boundary_MaxX=65;
@@ -86,6 +90,7 @@ public class LocationsystemApplication  {
 	public static final String sos="_sos";
 	public static final String heart="_heatr";
 	public static final String cut="_cut";
+	public static final String battery="_battery";
 
 	public static  SkylabSDK skylabSDK=new SkylabSDK(3600,3601);
 
@@ -475,10 +480,105 @@ public class LocationsystemApplication  {
 				//电池电量百分比
 				int battery = tag_info.getBattery();
 				if (usermap.get(tagAdd)!=null){
+
 					Tag tag = tagService.getTagByOnlyAddress(tagAdd);
 					tag.setElectric(String.valueOf(battery));
 					//更新新数据库
 					tagService.updateByPrimaryKeySelective(tag);
+					//是否触发电量报警
+					if ((tag_info.getBattery()<MAX_BATTERY)){
+						//websocket通知前端有警告
+						Integer userid = SystemMap.getUsermap().get(tagAdd);
+						AlertVO alertVO = new AlertVO();
+						//alertVO.setId(tagStatus.getId());
+						alertVO.setTagAddress(tagAdd);
+						alertVO.setData(String.valueOf(tag_info.getBattery()));
+						alertVO.setAlertType("4");
+						alertVO.setIsdeal("0");
+						alertVO.setMapKey(mapKey);
+
+						if (tag.getX() != null) {
+							alertVO.setX(tag.getX());
+						}
+						if (tag.getY() != null) {
+							alertVO.setY(tag.getY());
+						}
+						Person person = personService.getPersonByAddress(userid, tagAdd);
+						if (person != null) {
+							alertVO.setType("person");
+							alertVO.setIdCard(person.getIdCard());
+							alertVO.setName(person.getPersonName());
+						}
+						Goods goods = goodsService.getGoodsByAddress(userid, tagAdd);
+						if (goods != null) {
+							alertVO.setType("goods");
+							alertVO.setIdCard(goods.getGoodsIdcard());
+							alertVO.setName(goods.getGoodsName());
+						}
+						alertVO.setAddTime(sdf.format(new Date()));
+						Gson gson=new Gson();
+						String jsonObject = gson.toJson(alertVO);
+
+						//报警标识
+						String alertData=tagAdd+battery;
+						Map<String, String> alertmap = SystemMap.getAlertmap();
+						String time = alertmap.get(alertData);
+
+						//最新时间
+						String format = sdf.format(new Date());
+						if (time==null||"".equals(time)){
+							alertmap.put(alertData,format);
+							// System.out.println("sos1");
+							send(userid, jsonObject.toString());
+
+							TagStatus tagStatus = new TagStatus();
+							peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
+							tagStatus.setPersonIdcard(peridcard);
+							tagStatus.setAddTime(new Date());
+							tagStatus.setAlertType("4");
+							tagStatus.setData(String.valueOf(tag_info.getBattery()));
+							tagStatus.setIsdeal("0");
+							tagStatus.setMapKey(mapkey);
+							tagStatus.setX(tag.getX());
+							tagStatus.setY(tag.getY());
+							tagStatus.setZ(tag.getZ());
+
+							if (usermap.get(tagAdd) != null) {
+								tagStatus.setUserId(usermap.get(tagAdd));
+							}
+							//插入数据库
+							tagStatusService.insertSelective(tagStatus);
+						}else {
+							try {
+								if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
+									alertmap.put(alertData,format);
+									// System.out.println("sos2");
+									send(userid, jsonObject.toString());
+
+									TagStatus tagStatus = new TagStatus();
+									peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
+									tagStatus.setPersonIdcard(peridcard);
+									tagStatus.setAddTime(new Date());
+									tagStatus.setAlertType("4");
+									tagStatus.setData(String.valueOf(tag_info.getBattery()));
+									tagStatus.setIsdeal("0");
+									tagStatus.setMapKey(mapkey);
+									tagStatus.setX(tag.getX());
+									tagStatus.setY(tag.getY());
+									tagStatus.setZ(tag.getZ());
+
+									if (usermap.get(tagAdd) != null) {
+										tagStatus.setUserId(usermap.get(tagAdd));
+									}
+									//插入数据库
+									tagStatusService.insertSelective(tagStatus);
+								}
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+
 				}
 				if (tag_info.getHeart_rate()>0){
 					//插入心率历史记录表
@@ -913,17 +1013,17 @@ public class LocationsystemApplication  {
 		Map<String, String> tagAndPersonMap = SystemMap.getTagAndPersonMap();
 		for (Tag tag : tagList) {
 			StringBuffer sb=new StringBuffer();
-			if (tag.getX()!=null){
-				sb.append(tag.getX());
-			}
+
+			sb.append(tag.getX()==null?"0":tag.getX());
+
 			sb.append(",");
-			if (tag.getY()!=null){
-				sb.append(tag.getY());
-			}
+
+			sb.append(tag.getY()==null?"0":tag.getY());
+
 			sb.append(",");
-			if (tag.getZ()!=null){
-				sb.append(tag.getZ());
-			}
+
+			sb.append(tag.getZ()==null?"0":tag.getZ());
+
 			sb.append(",");
 			sb.append(sdf1.format(tag.getLastonline()));
 			sb.append(",");

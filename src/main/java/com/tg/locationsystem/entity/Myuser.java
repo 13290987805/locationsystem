@@ -1,6 +1,7 @@
 package com.tg.locationsystem.entity;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,6 +25,8 @@ public class Myuser implements Serializable{
     private String systemName;
 
     private String logo;
+    @Pattern(regexp = "^[0-9a-z]+\\w*@([0-9a-z]+\\.)+[0-9a-z]+$",message = "邮箱格式不正确")
+    private String mail;
 
     public Integer getId() {
         return id;
@@ -47,6 +50,14 @@ public class Myuser implements Serializable{
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

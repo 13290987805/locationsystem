@@ -35,4 +35,6 @@ public interface PersonMapper extends IBaseDao<Person>{
     List<Person> getPersonsBypersonTypeId(@Param("userid")Integer id, @Param("typeid")Integer id1);
 
     Person getPersonByImg(String img);
+
+    List<Person> getPersonsByName(@Param("userid") Integer userid,@Param("personName") String personName);
 }

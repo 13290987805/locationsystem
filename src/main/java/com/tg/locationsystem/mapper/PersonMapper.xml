@@ -19,13 +19,26 @@
     id, person_name, person_sex, user_id, person_typeId, person_height, id_card, tag_address, 
     img, person_type, reserved2_date, person_phone
   </sql>
+<!--根据人员名称得到人员对象-->
+  <select id="getPersonsByName"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+
+    <where>
+      <if test="personName!=null and personName!='' ">
+        AND person_name LIKE CONCAT(CONCAT('%',#{personName},'%'))
+      </if>
+      AND user_id=#{userid}
+    </where>
+  </select>
 
   <!--根据图片url得到人员对象-->
   <select id="getPersonByImg"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from person
-    WHERE     img=#{img}
+    WHERE     (person_name LIKE CONCAT(CONCAT('%',#{personName},'%')))
   </select>
 
   <!--根据人员类型id得到人员对象-->

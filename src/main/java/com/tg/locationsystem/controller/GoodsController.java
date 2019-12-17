@@ -758,6 +758,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
         return resultBean;
     }
 
+
     //有必填项没填
     if (result.hasErrors()) {
         List<String> errorlist=new ArrayList<>();
@@ -785,6 +786,23 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
         resultBean.setData(list);
         resultBean.setSize(list.size());
         return resultBean;
+    }
+
+    Goods sqlGoods=goodsService.selectByPrimaryKey(goods.getId());
+    if (!sqlGoods.getGoodsIdcard().equals(goods.getGoodsIdcard())){
+        Goods goodsByGoodsIdCard = goodsService.getGoodsByGoodsIdCard(goods.getGoodsIdcard());
+        if (goodsByGoodsIdCard!=null){
+            if (sqlGoods!=null){
+                resultBean = new ResultBean();
+                resultBean.setCode(82);
+                resultBean.setMsg("该物品编码不唯一");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+        }
+
     }
     //设置人员所属管理者
     goods.setUserId(user.getId());
@@ -840,6 +858,22 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
                 SystemMap.getCountmap().remove(tag.getAddress());
 
                 tagService.updateByPrimaryKeySelective(tag);
+            }
+            Tag sqltag = tagService.getTagByOnlyAddress(goods.getTagAddress());
+            if (sqltag!=null){
+                if (sqltag.getAddress()!=null){
+                    //把该标签放到缓存中
+                    Map<String, Integer> usermap = SystemMap.getUsermap();
+                    usermap.put(sqltag.getAddress(),tag.getUserId());
+                    SystemMap.getTagAndPersonMap().put(sqltag.getAddress(),goods.getGoodsIdcard());
+                    //设置次数
+                    SystemMap.getCountmap().put(sqltag.getAddress(),0);
+                }
+
+
+                sqltag.setUsed("1");
+                tagService.updateByPrimaryKeySelective(sqltag);
+
             }
         }
     }

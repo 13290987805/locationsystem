@@ -260,7 +260,10 @@ public class MapController {
         cleConfig.setSendTime("10");
         int insertconfig = cleConfigService.insertSelective(cleConfig);
 
-        if (insertMap>0&&insertMapRule>0&&insertconfig>0){
+        System.out.println("上传地图规则:"+insertMapRule);
+        System.out.println("上传cle配置:"+insertconfig);
+
+        if (insertMap>0){
             resultBean = new ResultBean();
             resultBean.setCode(105);
             resultBean.setMsg("地图导入成功");

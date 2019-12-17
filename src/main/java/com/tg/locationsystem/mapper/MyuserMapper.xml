@@ -12,11 +12,11 @@
     <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
     <result column="system_name" jdbcType="VARCHAR" property="systemName" />
     <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="mail" jdbcType="VARCHAR" property="mail" />
   </resultMap>
-
   <sql id="Base_Column_List">
     id, username, company_name, password, phoneNumber, address, create_user, reserved2_date, 
-    system_name, logo
+    system_name, logo, mail
   </sql>
 
   <!--根据登录账号得到myuser对象-->
@@ -41,11 +41,11 @@
     insert into myuser (id, username, company_name, 
       password, phoneNumber, address, 
       create_user, reserved2_date, system_name, 
-      logo)
+      logo, mail)
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{createUser,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, #{systemName,jdbcType=VARCHAR}, 
-      #{logo,jdbcType=VARCHAR})
+      #{logo,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Myuser">
     insert into myuser
@@ -80,6 +80,9 @@
       <if test="logo != null">
         logo,
       </if>
+      <if test="mail != null">
+        mail,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -111,6 +114,9 @@
       </if>
       <if test="logo != null">
         #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null">
+        #{mail,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -144,6 +150,9 @@
       <if test="logo != null">
         logo = #{logo,jdbcType=VARCHAR},
       </if>
+      <if test="mail != null">
+        mail = #{mail,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -157,7 +166,8 @@
       create_user = #{createUser,jdbcType=VARCHAR},
       reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
       system_name = #{systemName,jdbcType=VARCHAR},
-      logo = #{logo,jdbcType=VARCHAR}
+      logo = #{logo,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

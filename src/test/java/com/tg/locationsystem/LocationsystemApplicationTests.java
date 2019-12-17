@@ -2,11 +2,10 @@ package com.tg.locationsystem;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tg.locationsystem.entity.MapRule;
-import com.tg.locationsystem.entity.Myuser;
-import com.tg.locationsystem.entity.Tag;
-import com.tg.locationsystem.entity.TagTest;
+import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.mapper.FrenceHistoryMapper;
 import com.tg.locationsystem.mapper.MyuserMapper;
+import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -68,6 +68,10 @@ public class LocationsystemApplicationTests {
 	private TableMapper tableMapper;
 	@Autowired
 	private IMapRuleService mapRuleService;
+	@Autowired
+	private PersonMapper personMapper;
+	@Autowired
+	private FrenceHistoryMapper frenceHistoryMapper;
 
 
 	DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -78,8 +82,14 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test10() {
-		String msg="@@\"data\":@@\"content\":**@@\"pk_accessrule\":\"1132709103561700513\",\"pk_fun\":\"10101\",\"ruledesc\":\"按用户规则访问\",\"authsql\":\"1=1\",\"useflag\":\"1\",\"iscore\":\"0\",\"sortseq\":\"1\",\"memo\":\"\",\"creator\":\"1\",\"createtime\":\"2011-11-23 01:10:35.0\",\"updator\":\"1\",\"updatetime\":\"2011-12-02 01:39:07.0\",\"dr\":\"0\"##,@@\"pk_accessrule\":\"1231714420462439444\",\"pk_fun\":\"7202\",\"ruledesc\":\"只显示本人制单\",\"authsql\":\"pk_user=$@@userId##\",\"useflag\":\"0\",\"iscore\":\"0\",\"sortseq\":\"0\",\"memo\":\"\",\"creator\":\"1\",\"createtime\":\"2012-11-12 14:42:04.0\",\"updator\":\"1\",\"updatetime\":\"2012-11-12 14:45:51.0\",\"dr\":\"0\"##,@@";
-	}
+		List<String> list=new ArrayList<>();
+		list.add("253s16q4561");
+		List<FrenceHistory> frenceHistoryList=frenceHistoryMapper.getFrenceHistoryByPersonIdCardss(list);
+		System.out.println(frenceHistoryList.size());
+
+    }
+
+
 	@Test
 	public void test9() {
 		String path="C:\\img\\e2bd977e-aac0-45b8-96ac-759b339b4bb5.svg";
