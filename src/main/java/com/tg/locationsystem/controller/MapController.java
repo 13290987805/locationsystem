@@ -95,7 +95,7 @@ public class MapController {
             resultBean = new ResultBean();
             resultBean.setCode(102);
             resultBean.setMsg("该地图已经存在");
-            List<Person> list = new ArrayList<>();
+            List list = new ArrayList<>();
             resultBean.setData(list);
             resultBean.setSize(list.size());
             return resultBean;
@@ -104,11 +104,22 @@ public class MapController {
             resultBean = new ResultBean();
             resultBean.setCode(103);
             resultBean.setMsg("地图不能为空");
-            List<Person> list = new ArrayList<>();
+            List list = new ArrayList<>();
             resultBean.setData(list);
             resultBean.setSize(list.size());
             return resultBean;
         }
+        long size=1024*10*1024;
+        if (file.getSize()>size){
+            resultBean = new ResultBean();
+            resultBean.setCode(121);
+            resultBean.setMsg("文件过大,最大限制10MB");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
         //判断输入是否正确
         if (!StringUtils.isNumeric(addMapVO.getPixelX())||!StringUtils.isNumeric(addMapVO.getPixelY())
                 ||!StringUtils.isNumeric(addMapVO.getRealityX())||!StringUtils.isNumeric(addMapVO.getRealityY())){

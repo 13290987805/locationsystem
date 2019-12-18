@@ -82,10 +82,15 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test10() {
-		List<String> list=new ArrayList<>();
-		list.add("253s16q4561");
-		List<FrenceHistory> frenceHistoryList=frenceHistoryMapper.getFrenceHistoryByPersonIdCardss(list);
-		System.out.println(frenceHistoryList.size());
+		List<Integer> list=new ArrayList<>();
+		list.add(10);
+		list.add(20);
+		list.add(30);
+		if (list.contains(1)){
+			System.out.println("有");
+		}else {
+			System.out.println("没有");
+		}
 
     }
 

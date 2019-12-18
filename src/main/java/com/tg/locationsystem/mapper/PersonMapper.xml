@@ -24,7 +24,6 @@
     select
     <include refid="Base_Column_List" />
     from person
-
     <where>
       <if test="personName!=null and personName!='' ">
         AND person_name LIKE CONCAT(CONCAT('%',#{personName},'%'))

@@ -3,10 +3,7 @@ package com.tg.locationsystem.utils;
 import com.tg.locationsystem.entity.Frence;
 import io.netty.channel.Channel;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -49,6 +46,15 @@ public class SystemMap {
 
     //缓存地图key 地图规则
     private static Map<String,String> MapRuleMap = new ConcurrentHashMap();
+
+    //缓存sos的用户id
+    private static List<Integer> sosList=new ArrayList<>();
+
+    //缓存心率报警的用户id
+    private static List<Integer> heartList=new ArrayList<>();
+
+    //缓存剪断报警的用户id
+    private static List<Integer> cutList=new ArrayList<>();
 
     public static Map<String, Integer> getCountmap() {
         return countmap;
@@ -140,6 +146,30 @@ public class SystemMap {
         }
         return key;
         //这个key肯定是最后一个满足该条件的key.
+    }
+
+    public static List<Integer> getSosList() {
+        return sosList;
+    }
+
+    public static void setSosList(List<Integer> sosList) {
+        SystemMap.sosList = sosList;
+    }
+
+    public static List<Integer> getHeartList() {
+        return heartList;
+    }
+
+    public static void setHeartList(List<Integer> heartList) {
+        SystemMap.heartList = heartList;
+    }
+
+    public static List<Integer> getCutList() {
+        return cutList;
+    }
+
+    public static void setCutList(List<Integer> cutList) {
+        SystemMap.cutList = cutList;
     }
 
     public static Map<String, String> getMapRuleMap() {

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
@@ -54,7 +55,10 @@ public class PngToSvg {
         return true;
     }
     public static void main(String[] args) {
-        String png = "E:\\Picture\\18.jpg";
+        /*Scanner scanner = new Scanner(System.in);
+        String msg = scanner.next();
+        System.out.println("输入:"+msg);*/
+        /*String png = "E:\\Picture\\18.jpg";
         String svg = "E:\\Picture\\mtt.svg";
         try {
             png2svg(png, svg);
@@ -64,6 +68,6 @@ public class PngToSvg {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
     }
 }
