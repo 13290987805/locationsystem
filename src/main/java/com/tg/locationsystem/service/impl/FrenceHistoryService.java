@@ -8,7 +8,10 @@ import com.tg.locationsystem.entity.Frence;
 import com.tg.locationsystem.entity.FrenceHistory;
 import com.tg.locationsystem.entity.Goods;
 import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.mapper.*;
+import com.tg.locationsystem.mapper.FrenceHistoryMapper;
+import com.tg.locationsystem.mapper.FrenceMapper;
+import com.tg.locationsystem.mapper.GoodsMapper;
+import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.pojo.FrenceHistoryVO;
 import com.tg.locationsystem.service.IFrenceHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,4 +118,56 @@ public class FrenceHistoryService extends BaseServiceImpl<FrenceHistory> impleme
     public int deleteHistoryByFrenceId(Integer frenceid) {
         return frenceHistoryMapper.deleteHistoryByFrenceId(frenceid);
     }
+
+    @Override
+    public PageInfo<FrenceHistory> getFrenceHistoryByFrenceId(Integer pageIndex, Integer pageSize, Integer id, Integer frenceId) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<FrenceHistory> list = frenceHistoryMapper.getFrenceHistory(frenceId, id);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<FrenceHistory> getFrenceHistoryByPersonIdCard(Integer pageIndex, Integer pageSize, Integer id, String idCard) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<FrenceHistory> list = frenceHistoryMapper.getFrenceHistoryByPersonIdCard(id,idCard);
+        return new PageInfo<>(list);
+    }
+
+
+
+
+    @Override
+    public List<FrenceHistory> getFrenceHistorysByPersonIdCard(Integer id, String idCard) {
+        return frenceHistoryMapper.getFrenceHistorysByPersonIdCard(id,idCard);
+    }
+
+    @Override
+    public PageInfo<FrenceHistory> getFrenceHistoryByPersonIdcardss(Integer pageIndex, Integer pageSize, List<String> list) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<FrenceHistory> frenceHistoryByPersonIdCardss = frenceHistoryMapper.getFrenceHistoryByPersonIdCardss(list);
+
+        return new PageInfo<>(frenceHistoryByPersonIdCardss);
+    }
+
+    @Override
+    public PageInfo<FrenceHistoryVO> getFrenceHistoryByListPage(Integer pageIndex, Integer pageSize, List<FrenceHistoryVO> frenceVOList) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+
+        return new PageInfo<>(frenceVOList);
+    }
+
+    @Override
+    public PageInfo<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(Integer pageIndex, Integer pageSize, Integer frenceId, List<String> list) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName = frenceHistoryMapper.getFrenceHistoryByFrenceIdAndPersonName(frenceId,list);
+
+        return new PageInfo<>(getFrenceHistoryByFrenceIdAndPersonName);
+    }
+
+
 }

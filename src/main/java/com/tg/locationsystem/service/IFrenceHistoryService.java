@@ -22,4 +22,16 @@ public interface IFrenceHistoryService extends IBaseService<FrenceHistory> {
 
 
     int deleteHistoryByFrenceId(Integer frenceid);
+
+    PageInfo<FrenceHistoryVO> getFrenceHistoryByListPage(Integer pageIndex, Integer pageSize, List<FrenceHistoryVO> frenceVOList);
+
+    PageInfo<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(Integer pageIndex, Integer pageSize, Integer frenceId, List<String> list);
+
+    PageInfo<FrenceHistory> getFrenceHistoryByFrenceId(Integer pageIndex, Integer pageSize, Integer id, Integer frenceId);
+
+    PageInfo<FrenceHistory> getFrenceHistoryByPersonIdCard(Integer pageIndex, Integer pageSize, Integer id, String idCard);
+
+    List<FrenceHistory> getFrenceHistorysByPersonIdCard(Integer id, String idCard);
+
+    PageInfo<FrenceHistory> getFrenceHistoryByPersonIdcardss(Integer pageIndex, Integer pageSize, List<String> list);
 }

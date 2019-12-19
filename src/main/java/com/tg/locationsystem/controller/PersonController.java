@@ -627,7 +627,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             }
         }
         resultBean = new ResultBean();
-        resultBean.setCode(61);
+        resultBean.setCode(1);
         resultBean.setMsg("成功删除人员");
         List<Person> list = new ArrayList<>();
         list.add(person);
@@ -636,7 +636,7 @@ public ResultBean deletePerson(HttpServletRequest request,
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(62);
+        resultBean.setCode(-1);
         resultBean.setMsg("删除失败");
         List<Person> list = new ArrayList<>();
         resultBean.setData(list);
@@ -784,7 +784,7 @@ public ResultBean deletePerson(HttpServletRequest request,
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -792,7 +792,7 @@ public ResultBean deletePerson(HttpServletRequest request,
         }
         if (person.getId()==null){
             resultBean = new ResultBean();
-            resultBean.setCode(78);
+            resultBean.setCode(-1);
             resultBean.setMsg("id不能为空");
             List<Myuser> list = new ArrayList<>();     
             resultBean.setData(list);
@@ -830,7 +830,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(13);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传人员头像失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -913,7 +913,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
             errorlist.add(message);
         });
         resultBean =new ResultBean();
-        resultBean.setCode(2);
+        resultBean.setCode(-1);
         resultBean.setMsg("信息未填完整");
         resultBean.setData(errorlist);
         resultBean.setSize(errorlist.size());
@@ -921,7 +921,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
     }
     if (personType.getId()==null){
         resultBean = new ResultBean();
-        resultBean.setCode(78);
+        resultBean.setCode(-1);
         resultBean.setMsg("id不能为空");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -962,7 +962,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         } catch (IOException e) {
             e.printStackTrace();
             resultBean = new ResultBean();
-            resultBean.setCode(40);
+            resultBean.setCode(-1);
             resultBean.setMsg("上传人员类型logo失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -973,7 +973,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
     int update = personTypeService.updateByPrimaryKey(personType);
     if (update>0){
         resultBean = new ResultBean();
-        resultBean.setCode(80);
+        resultBean.setCode(1);
         resultBean.setMsg("人员类型修改成功");
         List<PersonType> list = new ArrayList<>();
         list.add(personType);
@@ -982,7 +982,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(83);
+        resultBean.setCode(-1);
         resultBean.setMsg("人员类型修改失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);

@@ -39,6 +39,8 @@ public class FrenceHistoryVO implements Serializable {
 
     private String isDeal;
 
+    private String mapName;
+
     public String getImg() {
         return img;
     }
@@ -144,6 +146,14 @@ public class FrenceHistoryVO implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getMapName() {
+        return mapName;
+    }
+
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
     }
 
     public Integer getFrenceId() {

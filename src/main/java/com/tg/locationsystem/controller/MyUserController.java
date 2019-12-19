@@ -114,7 +114,7 @@ public class MyUserController {
 
         } catch (Exception e) {
             resultBean = new ResultBean();
-            resultBean.setCode(4);
+            resultBean.setCode(-1);
             resultBean.setMsg("密码错误:"+e.getMessage());
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -156,7 +156,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -166,7 +166,7 @@ public class MyUserController {
 
         if (!loginUser.getPassword().equals(updatePassword.getOldPassword())){
             resultBean =new ResultBean();
-            resultBean.setCode(66);
+            resultBean.setCode(-1);
             resultBean.setMsg("密码错误");
             List list=new ArrayList();
             resultBean.setData(list);
@@ -177,7 +177,7 @@ public class MyUserController {
         int update = myUserService.updateByPrimaryKeySelective(loginUser);
         if (update>0){
             resultBean =new ResultBean();
-            resultBean.setCode(67);
+            resultBean.setCode(1);
             resultBean.setMsg("密码修改成功");
             //设置session过期
             request.getSession().setAttribute("user",null);
@@ -189,7 +189,7 @@ public class MyUserController {
             return resultBean;
         }else {
             resultBean =new ResultBean();
-            resultBean.setCode(68);
+            resultBean.setCode(-1);
             resultBean.setMsg("密码修改失败");
             List<Myuser> list=new ArrayList();
             resultBean.setData(list);
@@ -231,7 +231,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -240,7 +240,7 @@ public class MyUserController {
 
         if (!"0".equals(user.getCreateUser())){
             resultBean =new ResultBean();
-            resultBean.setCode(69);
+            resultBean.setCode(-1);
             resultBean.setMsg("权限不足,无法添加用户");
             List<Myuser> list=new ArrayList<>();
             list.add(user);
@@ -251,7 +251,7 @@ public class MyUserController {
         Myuser userByName = myUserService.getUserByName(myuser.getUsername());
         if (userByName!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(72);
+            resultBean.setCode(-1);
             resultBean.setMsg("该用户已经存在,无法添加");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -261,7 +261,7 @@ public class MyUserController {
         boolean matches = myuser.getPhonenumber().matches("^[1][3,4,5,7,8][0-9]{9}$");
         if (!matches){
             resultBean = new ResultBean();
-            resultBean.setCode(73);
+            resultBean.setCode(-1);
             resultBean.setMsg("手机号码格式不正确");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

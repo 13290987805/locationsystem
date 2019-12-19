@@ -331,7 +331,7 @@ public class StationController {
        }
        if (mapkey==null||"".equals(mapkey)){
            resultBean = new ResultBean();
-           resultBean.setCode(108);
+           resultBean.setCode(-1);
            resultBean.setMsg("地图key不能为空");
            List<Station> list = new ArrayList<>();
            resultBean.setData(list);
@@ -341,7 +341,7 @@ public class StationController {
        Map map = mapService.getMapByUuid(mapkey);
        if (map==null){
            resultBean = new ResultBean();
-           resultBean.setCode(109);
+           resultBean.setCode(-1);
            resultBean.setMsg("该地图不存在");
            List<Station> list = new ArrayList<>();
            resultBean.setData(list);
@@ -427,7 +427,7 @@ public class StationController {
         }
         if (MapUUID==null||"".equals(MapUUID)){
             resultBean = new ResultBean();
-            resultBean.setCode(108);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图key不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -436,7 +436,7 @@ public class StationController {
         }
         if (stationJson==null||"".equals(stationJson)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("基站不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -480,7 +480,7 @@ public class StationController {
         String key = SystemMap.getCleAndKeyMap().get(MapUUID);
         if (key==null||"".equals(key)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("定位引擎未连接");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -562,7 +562,7 @@ public class StationController {
         }
         if (locationOrder==null||"".equals(locationOrder)){
             resultBean = new ResultBean();
-            resultBean.setCode(110);
+            resultBean.setCode(-1);
             resultBean.setMsg("命令不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -571,7 +571,7 @@ public class StationController {
         }
         if (MapUUID==null||"".equals(MapUUID)){
             resultBean = new ResultBean();
-            resultBean.setCode(108);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图key不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -582,7 +582,7 @@ public class StationController {
         String key = SystemMap.getCleAndKeyMap().get(MapUUID);
         if (key==null||"".equals(key)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("定位引擎未连接");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);

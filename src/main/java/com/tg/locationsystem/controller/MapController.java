@@ -11,6 +11,7 @@ import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.ICleConfigService;
 import com.tg.locationsystem.service.IMapRuleService;
 import com.tg.locationsystem.service.IMapService;
+import com.tg.locationsystem.utils.PngToSvg;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
@@ -58,7 +59,7 @@ public class MapController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -176,9 +177,57 @@ public class MapController {
             //封装上传文件位置的全路径
             File targetFile = new File(filePath,newFileName);
             //把本地文件上传到封装上传文件位置的全路径
+            boolean png2svg=false;
             try {
                 file.transferTo(targetFile);
-                map.setMapData(targetFile.getPath());
+                //判断，如果是图片，则需要将图片转换为svg格式
+                if (!targetFile.getPath().endsWith("svg")){
+                    //System.out.println("图片:"+targetFile.getPath());
+                    String[] split = targetFile.getPath().split("\\.");
+                    System.out.println(split.length);
+                    StringBuffer sb=new StringBuffer();
+                    for (int i = 0; i < split.length-1; i++) {
+                       // System.out.println("分割:"+split[i]);
+                        sb.append(split[i]);
+                        sb.append(".");
+                    }
+                    sb.append("svg");
+                    try {
+                        png2svg = PngToSvg.png2svg(targetFile.getPath(), sb.toString());
+                        if (png2svg){
+                            map.setMapData(sb.toString());
+                        }else {
+                            resultBean = new ResultBean();
+                            resultBean.setCode(106);
+                            resultBean.setMsg("内部错误,地图导入失败");
+                            List<Myuser> list = new ArrayList<>();
+                            resultBean.setData(list);
+                            resultBean.setSize(list.size());
+                            return resultBean;
+                        }
+                    } catch (FileNotFoundException e) {
+                        System.err.println("文件路径错误");
+                        resultBean = new ResultBean();
+                        resultBean.setCode(106);
+                        resultBean.setMsg("地图导入失败");
+                        List<Myuser> list = new ArrayList<>();
+                        resultBean.setData(list);
+                        resultBean.setSize(list.size());
+                        return resultBean;
+                    } catch (IOException e) {
+                        System.err.println("图片转换错误");
+                        resultBean = new ResultBean();
+                        resultBean.setCode(106);
+                        resultBean.setMsg("地图导入失败");
+                        List<Myuser> list = new ArrayList<>();
+                        resultBean.setData(list);
+                        resultBean.setSize(list.size());
+                        return resultBean;
+                    }
+                }else {
+                    map.setMapData(targetFile.getPath());
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
@@ -206,11 +255,14 @@ public class MapController {
         CleConfig cleConfig=new CleConfig();
         cleConfig.setMapKey(uuid);
         cleConfig.setChannel("2");
-        cleConfig.setAskTime("30");
+        cleConfig.setAskTime("10");
         cleConfig.setSendTime("10");
         int insertconfig = cleConfigService.insertSelective(cleConfig);
 
-        if (insertMap>0&&insertMapRule>0&&insertconfig>0){
+        System.out.println("上传地图规则:"+insertMapRule);
+        System.out.println("上传cle配置:"+insertconfig);
+
+        if (insertMap>0){
             resultBean = new ResultBean();
             resultBean.setCode(105);
             resultBean.setMsg("地图导入成功");
@@ -242,7 +294,7 @@ public class MapController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -319,7 +371,7 @@ public class MapController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -375,7 +427,7 @@ public class MapController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -432,7 +484,7 @@ public class MapController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

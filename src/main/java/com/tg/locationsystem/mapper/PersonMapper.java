@@ -24,15 +24,17 @@ public interface PersonMapper extends IBaseDao<Person>{
 
     List<Person> getPersonsByUserId(Integer id);
 
-    List<Person> getPersonsByteType(@Param("typeid") Integer typeid, @Param("userid")Integer userid);
+    List<Person> getPersonsByteType(@Param("typeid") Integer typeid, @Param("userid") Integer userid);
 
-    Person getPersonByAddress(@Param("userid")Integer id,@Param("address") String address);
+    Person getPersonByAddress(@Param("userid") Integer id, @Param("address") String address);
 
     Person getPersonByOnlyAddress(String address);
 
-    List<Person> getPersonsByMsg(@Param("userid")Integer id,@Param("msg") String msg);
+    List<Person> getPersonsByMsg(@Param("userid") Integer id, @Param("msg") String msg);
 
-    List<Person> getPersonsBypersonTypeId(@Param("userid")Integer id, @Param("typeid")Integer id1);
+    List<Person> getPersonsBypersonTypeId(@Param("userid") Integer id, @Param("typeid") Integer id1);
 
     Person getPersonByImg(String img);
+
+    List<Person> getPersonsByName(@Param("userid") Integer userid, @Param("personName") String personName);
 }
