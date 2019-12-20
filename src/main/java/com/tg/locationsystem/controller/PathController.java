@@ -145,7 +145,7 @@ public class PathController {
             if (i==0){
                 resultBean = new ResultBean();
                 resultBean.setCode(-1);
-                resultBean.setMsg("时间参数有误");
+                resultBean.setMsg("当天没有轨迹数据");
                 List<Path> list = new ArrayList<>();
                 list.add(path);
                 resultBean.setData(list);
