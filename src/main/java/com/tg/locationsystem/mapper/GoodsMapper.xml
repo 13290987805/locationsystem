@@ -16,6 +16,13 @@
     id, goods_name, user_id, goods_typeId, tag_address, img, add_time, goods_idCard, 
     reserved2_string
   </sql>
+  <!--根据物品idcard得到物品-->
+  <select id="getGoodsByGoodsIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE     goods_idCard=#{goodsIdcard}
+  </select>
 
   <!--根据物品类型id得到物品对象集合-->
   <select id="getGoodsByGoodsTypeId"  resultMap="BaseResultMap">

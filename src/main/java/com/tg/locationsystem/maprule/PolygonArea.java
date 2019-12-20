@@ -34,9 +34,9 @@ public class PolygonArea{
 		this.enterable = enterable;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "PolygonArea [walls=" + walls + ", gates=" + gates + ", enterable=" + enterable + "]";
-	}
+	}*/
 	
 }

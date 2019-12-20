@@ -2,11 +2,9 @@ package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.*;
-import com.tg.locationsystem.pojo.HeartRateHistoryCondition;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -72,7 +70,7 @@ public class CallController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -80,7 +78,7 @@ public class CallController {
         }
         if (eleCallSet.getTimeInterval()>60||eleCallSet.getTimeInterval()<1){
             resultBean = new ResultBean();
-            resultBean.setCode(101);
+            resultBean.setCode(-1);
             resultBean.setMsg("定时时间参数不正确,1-60");
             List<EleCallSet> list = new ArrayList<>();
             resultBean.setData(list);
@@ -233,7 +231,7 @@ public class CallController {
                     SystemMap.getTimermap().remove(eleCallSet.getUserId());
                 }
                 resultBean = new ResultBean();
-                resultBean.setCode(95);
+                resultBean.setCode(1);
                 resultBean.setMsg("时间设置成功");
                 List<EleCallSet> list = new ArrayList<>();
                 list.add(eleCallSet);
@@ -242,7 +240,7 @@ public class CallController {
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(96);
+                resultBean.setCode(-1);
                 resultBean.setMsg("设置定时时间失败");
                 List<EleCallSet> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -251,7 +249,7 @@ public class CallController {
             }
         }
         resultBean = new ResultBean();
-        resultBean.setCode(96);
+        resultBean.setCode(-1);
         resultBean.setMsg("设置定时时间失败");
         List<EleCallSet> list = new ArrayList<>();
         resultBean.setData(list);
@@ -280,7 +278,7 @@ public class CallController {
         }
         if (setSwitch==null||"".equals(setSwitch)){
             resultBean = new ResultBean();
-            resultBean.setCode(97);
+            resultBean.setCode(-1);
             resultBean.setMsg("开关不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -289,7 +287,7 @@ public class CallController {
         }
         if (!"0".equals(setSwitch)&&!"1".equals(setSwitch)){
             resultBean = new ResultBean();
-            resultBean.setCode(98);
+            resultBean.setCode(-1);
             resultBean.setMsg("setSwitch参数有误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -441,7 +439,7 @@ public class CallController {
                     SystemMap.getTimermap().remove(eleCallSet.getUserId());
                 }
                 resultBean = new ResultBean();
-                resultBean.setCode(99);
+                resultBean.setCode(1);
                 resultBean.setMsg("设置定时开关成功");
                 List<EleCallSet> list = new ArrayList<>();
                 list.add(eleCallSet);
@@ -450,7 +448,7 @@ public class CallController {
                 return resultBean;
             }
             resultBean = new ResultBean();
-            resultBean.setCode(100);
+            resultBean.setCode(-1);
             resultBean.setMsg("设置定时开关失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -458,7 +456,7 @@ public class CallController {
             return resultBean;
         }
         resultBean = new ResultBean();
-        resultBean.setCode(100);
+        resultBean.setCode(-1);
         resultBean.setMsg("设置定时开关失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -548,7 +546,7 @@ public class CallController {
         }
         if ("".equals(timeuser)){
             resultBean = new ResultBean();
-            resultBean.setCode(101);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数错误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -590,7 +588,7 @@ public class CallController {
         }
         if ("".equals(timeuser)){
             resultBean = new ResultBean();
-            resultBean.setCode(101);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数错误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

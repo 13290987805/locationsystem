@@ -1,16 +1,11 @@
 package com.tg.locationsystem.controller;
 
-import com.mchange.v2.c3p0.util.TestUtils;
-import com.tg.locationsystem.config.KalmanFilter;
-import com.tg.locationsystem.pojo.HeartRateHistoryVO;
 import com.tg.locationsystem.service.IHeartRateHistoryService;
-import com.tg.locationsystem.utils.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author hyy
@@ -37,9 +30,12 @@ public class testController {
     * */
     @RequestMapping(value = "test")
     @ResponseBody
-    public String AddTag(HttpServletRequest request){
-        String ip = TestUtil.getIP(request);
-        return ip;
+    public String AddTag(HttpServletRequest request,
+                         @RequestParam(defaultValue = "")String data ){
+        /*String ip = TestUtil.getIP(request);
+        return ip;*/
+        System.out.println(data);
+        return data;
 
     }
     /*

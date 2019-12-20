@@ -2,11 +2,10 @@ package com.tg.locationsystem;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tg.locationsystem.entity.MapRule;
-import com.tg.locationsystem.entity.Myuser;
-import com.tg.locationsystem.entity.Tag;
-import com.tg.locationsystem.entity.TagTest;
+import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.mapper.FrenceHistoryMapper;
 import com.tg.locationsystem.mapper.MyuserMapper;
+import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -68,6 +68,10 @@ public class LocationsystemApplicationTests {
 	private TableMapper tableMapper;
 	@Autowired
 	private IMapRuleService mapRuleService;
+	@Autowired
+	private PersonMapper personMapper;
+	@Autowired
+	private FrenceHistoryMapper frenceHistoryMapper;
 
 
 	DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -76,6 +80,35 @@ public class LocationsystemApplicationTests {
 	@Value("${async.executor.thread.max_pool_size}")
 	private int maxPoolSize;
 
+	@Test
+	public void test10() {
+		List<Integer> list=new ArrayList<>();
+		list.add(10);
+		list.add(20);
+		list.add(30);
+		if (list.contains(1)){
+			System.out.println("有");
+		}else {
+			System.out.println("没有");
+		}
+
+    }
+
+
+	@Test
+	public void test9() {
+		String path="C:\\img\\e2bd977e-aac0-45b8-96ac-759b339b4bb5.svg";
+		String[] split = path.split("\\.");
+		System.out.println(split.length);
+		StringBuffer sb=new StringBuffer();
+		for (int i = 0; i < split.length-1; i++) {
+			System.out.println("分割:"+split[i]);
+			sb.append(split[i]);
+			sb.append(".");
+		}
+		sb.append("svg");
+		System.out.println("拼接:"+sb.toString());
+	}
 	@Test
 	public void test8() {
 		String photo="C:\\img\\test.png";

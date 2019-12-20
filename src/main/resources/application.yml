@@ -25,11 +25,22 @@ spring:
       test-while-idle: true
       time-between-eviction-runs-millis: 18800
       #spring.datasource.test-on-borrow=false
-      #指明是否从池中取出连接前进行检验，如果检验失败，则从池中取出连接并尝试取出另一个
-       #spring.datasource.test-while-idle=true
-       #指明连接是否被空闲连接回收器（如果有）进行检验，如果检测失败，则连接将被从池中去除。
-       #spring.datasource.time-between-eviction-runs-millis= 18800
-       #在空闲连接回收器线程运行期间休眠的时间值，以毫秒为单位。如果设置为非整数，则不运行空闲连接回收器线程
+            #指明是否从池中取出连接前进行检验，如果检验失败，则从池中取出连接并尝试取出另一个
+             #spring.datasource.test-while-idle=true
+             #指明连接是否被空闲连接回收器（如果有）进行检验，如果检测失败，则连接将被从池中去除。
+             #spring.datasource.time-between-eviction-runs-millis= 18800
+             #在空闲连接回收器线程运行期间休眠的时间值，以毫秒为单位。如果设置为非整数，则不运行空闲连接回收器线程
+
+  servlet:
+    multipart:
+    # Single file max size  即单个文件大小
+      max-file-size: 10MB
+    # All files max size      即总上传的数据大小
+      max-request-size: 100MB
+
+
+
+
 server:
   port: 9999
   tomcat:
@@ -38,6 +49,7 @@ server:
     uri-encoding: utf-8
     max-threads: 1000
   connection-timeout: 20000
+
 
 logging:
   file: d:\log\locationlog\location.log

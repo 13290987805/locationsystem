@@ -89,4 +89,9 @@ public class GoodsService extends BaseServiceImpl<Goods> implements IGoodsServic
 
         return new PageInfo<Goods>(list,3);
     }
+
+    @Override
+    public Goods getGoodsByGoodsIdCard(String goodsIdcard) {
+        return goodsMapper.getGoodsByGoodsIdCard(goodsIdcard);
+    }
 }

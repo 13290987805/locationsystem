@@ -8,16 +8,18 @@ import com.tg.locationsystem.pojo.UpdatePassword;
 import com.tg.locationsystem.pojo.User;
 import com.tg.locationsystem.service.IEleCallSetService;
 import com.tg.locationsystem.service.IMyUserService;
+import com.tg.locationsystem.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -107,6 +109,11 @@ public class MyUserController {
             //出于安全,将密码置空
             myuser.setPassword(null);
 
+            //给系统默认名称
+            if (myuser.getSystemName()==null||"".equals(myuser.getSystemName())){
+                myuser.setSystemName("安全监护系统");
+            }
+
             list.add(myuser);
             resultBean.setData(list);
             resultBean.setSize(list.size());
@@ -124,6 +131,192 @@ public class MyUserController {
 
     }
 
+
+    /*
+    * 编辑登录用户资料
+    * */
+    @RequestMapping(value = "updateUser",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResultBean updateUser(@Valid Myuser myuser, BindingResult result,
+                                     HttpServletRequest request,@RequestParam(value="logo",required=false)MultipartFile file){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (result.hasErrors()) {
+            List<String> errorlist=new ArrayList<>();
+            result.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                // 属性
+                String field = fieldError.getField();
+                // 错误信息
+                String message = field+":"+fieldError.getDefaultMessage();
+                //System.out.println(field + ":" + message);
+                errorlist.add(message);
+            });
+            resultBean =new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("信息未填完整");
+            resultBean.setData(errorlist);
+            resultBean.setSize(errorlist.size());
+            return resultBean;
+        }
+
+        Myuser sqlUser = myUserService.selectByPrimaryKey(user.getId());
+        if (sqlUser==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该登录用户不存在");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        myuser.setId(user.getId());
+        //设置图片路径
+        //获取文件名加后缀
+        if (file!=null){
+            //保存图片的路径
+            String s = System.getProperty("user.dir");//C:\whzy\locationsystem
+            String filePath =s.split(":")[0]+":\\img";
+            UploadFileUtil.isChartPathExist(filePath);
+            //获取原始图片的拓展名
+            String originalFilename = file.getOriginalFilename();
+            //新的文件名字
+            String newFileName = UUID.randomUUID()+originalFilename;
+            //封装上传文件位置的全路径
+            File targetFile = new File(filePath,newFileName);
+            //把本地文件上传到封装上传文件位置的全路径
+            try {
+                file.transferTo(targetFile);
+                myuser.setLogo(targetFile.getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("上传logo失败");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+        }
+        int update = myUserService.updateByPrimaryKeySelective(myuser);
+        if (update>0){
+            //将登陆凭证保存到session中
+            request.getSession().setAttribute("user",myuser);
+
+
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List<Myuser> list = new ArrayList<>();
+            list.add(myuser);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("操作失败:");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+    }
+    /*
+     * 编辑登录用户资料
+     * 只上传logo
+     * */
+    @RequestMapping(value = "uploadLogo",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResultBean uploadLogo(HttpServletRequest request,
+                                 @RequestParam(value="logo",required=false)MultipartFile file){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+       // System.out.println("上传logo:"+request.getRequestURI());
+        if (file==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("logo不能为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //设置图片路径
+        //获取文件名加后缀
+        if (file!=null){
+            //保存图片的路径
+            String s = System.getProperty("user.dir");//C:\whzy\locationsystem
+            String filePath =s.split(":")[0]+":\\img";
+            UploadFileUtil.isChartPathExist(filePath);
+            //获取原始图片的拓展名
+            String originalFilename = file.getOriginalFilename();
+            //新的文件名字
+            String newFileName = UUID.randomUUID()+originalFilename;
+            //封装上传文件位置的全路径
+            File targetFile = new File(filePath,newFileName);
+            //把本地文件上传到封装上传文件位置的全路径
+            try {
+                file.transferTo(targetFile);
+                user.setLogo(targetFile.getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("上传logo失败");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+
+        }
+
+        int update = myUserService.updateByPrimaryKeySelective(user);
+        if (update>0){
+            //将登陆凭证保存到session中
+            request.getSession().setAttribute("user",user);
+
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List<Myuser> list = new ArrayList<>();
+            list.add(user);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("操作失败:");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+    }
     /*
     * 修改账号密码
     * */
@@ -163,8 +356,8 @@ public class MyUserController {
             return resultBean;
         }
         Myuser loginUser = myUserService.selectByPrimaryKey(user.getId());
-
-        if (!loginUser.getPassword().equals(updatePassword.getOldPassword())){
+        String pass = Base64.getEncoder().encodeToString(updatePassword.getOldPassword().getBytes());
+        if (!loginUser.getPassword().equals(pass)){
             resultBean =new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("密码错误");
@@ -173,7 +366,8 @@ public class MyUserController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        loginUser.setPassword(updatePassword.getNewPassword());
+        String Newpass = Base64.getEncoder().encodeToString(updatePassword.getNewPassword().getBytes());
+        loginUser.setPassword(Newpass);
         int update = myUserService.updateByPrimaryKeySelective(loginUser);
         if (update>0){
             resultBean =new ResultBean();
@@ -269,8 +463,8 @@ public class MyUserController {
             return resultBean;
         }
         try {
-
-            String pass = Base64.getEncoder().encodeToString(myuser.getPassword().getBytes());
+            //String pass = BASE64.encryptBASE64(myuser.getPassword().getBytes());
+            String pass = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
             myuser.setPassword(pass);
             myuser.setCreateUser("1");
             int insert = myUserService.insertSelective(myuser);
@@ -282,7 +476,7 @@ public class MyUserController {
             int i = eleCallSetService.insertSelective(eleCallSet);
             if (insert>0&&i>0){
                 resultBean = new ResultBean();
-                resultBean.setCode(70);
+                resultBean.setCode(1);
                 resultBean.setMsg("用户添加成功");
                 List<Myuser> list = new ArrayList<>();
                 list.add(myuser);
@@ -291,7 +485,7 @@ public class MyUserController {
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(71);
+                resultBean.setCode(-1);
                 resultBean.setMsg("用户添加失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -300,7 +494,7 @@ public class MyUserController {
             }
         } catch (Exception e) {
             resultBean = new ResultBean();
-            resultBean.setCode(71);
+            resultBean.setCode(-1);
             resultBean.setMsg("用户添加失败:"+e.getMessage());
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -321,5 +515,82 @@ public class MyUserController {
         resultBean.setSize(list.size());
         return resultBean;
     }
+
+    /*
+     * 测试在别的项目用URL网络资源请求该接口
+     *
+     * */
+    @RequestMapping(value = "Login2",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResultBean shopuser(@RequestBody User user,
+                               HttpServletRequest request){
+        System.out.println("原始"+user.toString());
+        Myuser myuser = myUserService.getUserByName(user.getUsername());
+
+        if (myuser!=null){
+            ResultBean resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("ok");
+            List<Myuser> list = new ArrayList<>();
+            list.add(myuser);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            ResultBean resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("ok");
+            List<User> list = new ArrayList<>();
+            list.add(user);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+    }
+
+    /*
+    * 退出登录
+    * */
+    @RequestMapping(value = "LoginOut",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResultBean LoginOut(HttpServletRequest request){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        request.getSession().setAttribute("user",null);
+
+
+        user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("退出登录成功,还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("退出登录失败");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+    }
+
 }
 

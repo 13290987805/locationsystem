@@ -28,4 +28,6 @@ public interface IGoodsService extends IBaseService<Goods> {
     Goods getGoodsByOnlyAddress(String address);
 
     PageInfo<Goods> getGoodsByMsg(Integer pageIndex, Integer pageSize, Integer id, String msg);
+
+    Goods getGoodsByGoodsIdCard(String goodsIdcard);
 }

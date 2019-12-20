@@ -1,6 +1,7 @@
 package com.tg.locationsystem.pojo;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -11,10 +12,13 @@ public class CleconfigVO implements Serializable {
     @NotBlank(message = "地图唯一标识不能为空")
     private String mapKey;
     @NotBlank(message = "cle信道不能为空")
+    @Pattern(regexp = "^[1-9]\\d*$")
     private String channel;
     @NotBlank(message = "问询频率不能为空")
+    @Pattern(regexp = "^[1-9]\\d*$")
     private String askTime;
     @NotBlank(message = "广播频率不能为空")
+    @Pattern(regexp = "^[1-9]\\d*$")
     private String sendTime;
 
     public String getMapKey() {

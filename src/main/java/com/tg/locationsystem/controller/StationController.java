@@ -617,4 +617,64 @@ public class StationController {
 
 
     }
+
+    /*
+     * 删除基站
+     * */
+    @RequestMapping(value = "delStation",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean delStation(HttpServletRequest request,
+                                 @RequestParam("") Integer stationId){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (stationId==null||"".equals(stationId)){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("基站id不能为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        Station station = stationService.selectByPrimaryKey(stationId);
+        if (station==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该基站不存在");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        int del = stationService.deleteByPrimaryKey(stationId);
+        if (del>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List list=new ArrayList<>();
+            list.add(station);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("操作失败");
+            List list=new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+    }
 }

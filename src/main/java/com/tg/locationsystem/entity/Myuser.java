@@ -1,6 +1,7 @@
 package com.tg.locationsystem.entity;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,7 +11,7 @@ public class Myuser implements Serializable{
     private String username;
     @NotBlank(message = "用户公司名称不能为空")
     private String companyName;
-    @NotBlank(message = "用户密码不能为空")
+    //@NotBlank(message = "用户密码不能为空")
     private String password;
     @NotBlank(message = "用户联系方式不能为空")
     private String phonenumber;
@@ -20,6 +21,12 @@ public class Myuser implements Serializable{
     private String createUser;
 
     private Date reserved2Date;
+
+    private String systemName;
+
+    private String logo;
+    @Pattern(regexp = "^[0-9a-z]+\\w*@([0-9a-z]+\\.)+[0-9a-z]+$",message = "邮箱格式不正确")
+    private String mail;
 
     public Integer getId() {
         return id;
@@ -43,6 +50,14 @@ public class Myuser implements Serializable{
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {
@@ -85,6 +100,22 @@ public class Myuser implements Serializable{
         this.reserved2Date = reserved2Date;
     }
 
+    public String getSystemName() {
+        return systemName;
+    }
+
+    public void setSystemName(String systemName) {
+        this.systemName = systemName;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     @Override
     public String toString() {
         return "Myuser{" +
@@ -99,3 +130,13 @@ public class Myuser implements Serializable{
                 '}';
     }
 }
+
+
+
+
+
+
+
+
+
+

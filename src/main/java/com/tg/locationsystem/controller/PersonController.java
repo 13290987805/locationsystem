@@ -1,10 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.tg.locationsystem.entity.Myuser;
-import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.entity.PersonType;
-import com.tg.locationsystem.entity.Tag;
+import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.PersonTypeMapper;
 import com.tg.locationsystem.mapper.TableMapper;
@@ -24,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.*;
+import java.util.Map;
 
 /**
  * @author hyy
@@ -559,7 +557,7 @@ public class PersonController {
 /*
 * 删除人员,对应的轨迹记录,报警记录,都要删除
 * */
-@RequestMapping(value = "deletePerson",method = RequestMethod.GET)
+@RequestMapping(value = "deletePerson",method = RequestMethod.POST)
 @ResponseBody
 public ResultBean deletePerson(HttpServletRequest request,
                                @RequestParam("personid") Integer personid){
@@ -799,6 +797,22 @@ public ResultBean deletePerson(HttpServletRequest request,
             resultBean.setSize(list.size());
             return resultBean;
         }
+        Person sqlPerson2=personService.selectByPrimaryKey(person.getId());
+        if (!sqlPerson2.getIdCard().equals(person.getIdCard())){
+            Person personByOnlyAddress = personService.getPersonByOnlyAddress(person.getIdCard());
+            if (personByOnlyAddress!=null){
+                if (sqlPerson2!=null){
+                    resultBean = new ResultBean();
+                    resultBean.setCode(-1);
+                    resultBean.setMsg("身份证号码有误");
+                    List<Myuser> list = new ArrayList<>();
+                    resultBean.setData(list);
+                    resultBean.setSize(list.size());
+                    return resultBean;
+                }
+            }
+
+        }
         //设置人员所属管理者
         person.setUserId(user.getId());
 
@@ -851,6 +865,22 @@ public ResultBean deletePerson(HttpServletRequest request,
 
                     tagService.updateByPrimaryKeySelective(tag);
                 }
+                Tag sqltag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                if (sqltag!=null){
+                    if (sqltag.getAddress()!=null){
+                        //把该标签放到缓存中
+                        Map<String, Integer> usermap = SystemMap.getUsermap();
+                        usermap.put(sqltag.getAddress(),tag.getUserId());
+                        SystemMap.getTagAndPersonMap().put(sqltag.getAddress(),person.getIdCard());
+                        //设置次数
+                        SystemMap.getCountmap().put(sqltag.getAddress(),0);
+                    }
+
+
+                    sqltag.setUsed("1");
+                    tagService.updateByPrimaryKeySelective(sqltag);
+
+                }
             }
         }
         int update = personService.updateByPrimaryKeySelective(person);
@@ -863,7 +893,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             SystemMap.getCountmap().put(person.getTagAddress(),0);
 
             resultBean = new ResultBean();
-            resultBean.setCode(79);
+            resultBean.setCode(1);
             resultBean.setMsg("人员修改成功");
             List<Person> list = new ArrayList<>();
             list.add(person);
@@ -872,7 +902,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(80);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员修改失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

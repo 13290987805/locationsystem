@@ -1,9 +1,7 @@
 package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.base.dao.IBaseDao;
-import com.tg.locationsystem.entity.Map;
 import com.tg.locationsystem.entity.Myuser;
-import org.apache.ibatis.annotations.Param;
 
 public interface MyuserMapper extends IBaseDao<Myuser>{
     int deleteByPrimaryKey(Integer id);
@@ -20,27 +18,3 @@ public interface MyuserMapper extends IBaseDao<Myuser>{
 
     Myuser getUserByName(String username);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
