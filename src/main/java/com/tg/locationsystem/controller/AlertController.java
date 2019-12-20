@@ -3,10 +3,7 @@ package com.tg.locationsystem.controller;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.*;
-import com.tg.locationsystem.pojo.HeartRateHistoryCondition;
-import com.tg.locationsystem.pojo.Path;
-import com.tg.locationsystem.pojo.ResultBean;
-import com.tg.locationsystem.pojo.TagStatusVO;
+import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
@@ -58,6 +55,9 @@ private IMapService mapService;
 private IAlertSetService alertSetService;
 @Autowired
 private IFrenceHistoryService frenceHistoryService;
+
+@Autowired
+private IEleCallSetService eleCallSetService;
     DateFormat sdf
             = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -955,17 +955,18 @@ public ResultBean setSoS(HttpServletRequest request,
     }
 
 
-    AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
+    AlertSet alertSet=null;
+            alertSet=alertSetService.getAlertSetByUserId(user.getId());
     //若该开关不存在,生成一个开关,默认全部开启
     if (alertSet==null){
-        AlertSet insertalertSet=new AlertSet();
-        insertalertSet.setUserId(user.getId());
-        insertalertSet.setUpdateTime(new Date());
-        insertalertSet.setSosAlert("1");
-        insertalertSet.setHeartAlert("1");
-        insertalertSet.setCutAlert("1");
+        alertSet=new AlertSet();
+        alertSet.setUserId(user.getId());
+        alertSet.setUpdateTime(new Date());
+        alertSet.setSosAlert("1");
+        alertSet.setHeartAlert("1");
+        alertSet.setCutAlert("1");
         //生成开关
-        alertSetService.insertSelective(insertalertSet);
+        alertSetService.insertSelective(alertSet);
         //将开关放到缓存
         if (!SystemMap.getSosList().contains(alertSet.getUserId())){
             SystemMap.getSosList().add(alertSet.getUserId());
@@ -1064,17 +1065,18 @@ public ResultBean setSoS(HttpServletRequest request,
             resultBean.setSize(list.size());
             return resultBean;
         }
-        AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
+        AlertSet alertSet=null;
+        alertSet=alertSetService.getAlertSetByUserId(user.getId());
         //若该开关不存在,生成一个开关,默认全部开启
         if (alertSet==null){
-            AlertSet insertalertSet=new AlertSet();
-            insertalertSet.setUserId(user.getId());
-            insertalertSet.setUpdateTime(new Date());
-            insertalertSet.setSosAlert("1");
-            insertalertSet.setHeartAlert("1");
-            insertalertSet.setCutAlert("1");
+            alertSet=new AlertSet();
+            alertSet.setUserId(user.getId());
+            alertSet.setUpdateTime(new Date());
+            alertSet.setSosAlert("1");
+            alertSet.setHeartAlert("1");
+            alertSet.setCutAlert("1");
             //生成开关
-            alertSetService.insertSelective(insertalertSet);
+            alertSetService.insertSelective(alertSet);
             //将开关放到缓存
             if (!SystemMap.getSosList().contains(alertSet.getUserId())){
                 SystemMap.getSosList().add(alertSet.getUserId());
@@ -1173,17 +1175,18 @@ public ResultBean setSoS(HttpServletRequest request,
             resultBean.setSize(list.size());
             return resultBean;
         }
-        AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
+        AlertSet alertSet=null;
+                alertSet=alertSetService.getAlertSetByUserId(user.getId());
         //若该开关不存在,生成一个开关,默认全部开启
         if (alertSet==null){
-            AlertSet insertalertSet=new AlertSet();
-            insertalertSet.setUserId(user.getId());
-            insertalertSet.setUpdateTime(new Date());
-            insertalertSet.setSosAlert("1");
-            insertalertSet.setHeartAlert("1");
-            insertalertSet.setCutAlert("1");
+            alertSet=new AlertSet();
+            alertSet.setUserId(user.getId());
+            alertSet.setUpdateTime(new Date());
+            alertSet.setSosAlert("1");
+            alertSet.setHeartAlert("1");
+            alertSet.setCutAlert("1");
             //生成开关
-            alertSetService.insertSelective(insertalertSet);
+            alertSetService.insertSelective(alertSet);
             //将开关放到缓存
             if (!SystemMap.getSosList().contains(alertSet.getUserId())){
                 SystemMap.getSosList().add(alertSet.getUserId());
@@ -1283,17 +1286,18 @@ public ResultBean setSoS(HttpServletRequest request,
             resultBean.setSize(list.size());
             return resultBean;
         }
-        AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
+        AlertSet alertSet=null;
+        alertSet=alertSetService.getAlertSetByUserId(user.getId());
         //若该开关不存在,生成一个开关,默认全部开启
         if (alertSet==null){
-            AlertSet insertalertSet=new AlertSet();
-            insertalertSet.setUserId(user.getId());
-            insertalertSet.setUpdateTime(new Date());
-            insertalertSet.setSosAlert("1");
-            insertalertSet.setHeartAlert("1");
-            insertalertSet.setCutAlert("1");
+            alertSet=new AlertSet();
+            alertSet.setUserId(user.getId());
+            alertSet.setUpdateTime(new Date());
+            alertSet.setSosAlert("1");
+            alertSet.setHeartAlert("1");
+            alertSet.setCutAlert("1");
             //生成开关
-            alertSetService.insertSelective(insertalertSet);
+            alertSetService.insertSelective(alertSet);
             //将开关放到缓存
             if (!SystemMap.getBatteryList().contains(alertSet.getUserId())){
                 SystemMap.getBatteryList().add(alertSet.getUserId());
@@ -1415,5 +1419,86 @@ public ResultBean setSoS(HttpServletRequest request,
         resultBean.setSize(size);
         return resultBean;
     }
+/*
+* 查看所有的开关信息
+* */
+@RequestMapping(value = "getAllAlertSet",method = RequestMethod.GET)
+@ResponseBody
+public ResultBean getAllAlertSet(HttpServletRequest request) {
+    ResultBean resultBean;
+    Myuser user = (Myuser) request.getSession().getAttribute("user");
+    //未登录
+    if (user==null){
+        resultBean = new ResultBean();
+        resultBean.setCode(5);
+        resultBean.setMsg("还未登录");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    AlertSet alertSet=null;
+    alertSet = alertSetService.getAlertSetByUserId(user.getId());
+    if (alertSet==null){
+        alertSet=new AlertSet();
+        alertSet.setUserId(user.getId());
+        alertSet.setUpdateTime(new Date());
+        alertSet.setSosAlert("1");
+        alertSet.setHeartAlert("1");
+        alertSet.setCutAlert("1");
+        //生成开关
+        alertSetService.insertSelective(alertSet);
+        //将开关放到缓存
+        if (!SystemMap.getSosList().contains(user.getId())){
+            SystemMap.getSosList().add(user.getId());
+        }
+        if (!SystemMap.getBatteryList().contains(user.getId())){
+            SystemMap.getBatteryList().add(user.getId());
+        }
+        if (!SystemMap.getHeartList().contains(user.getId())){
+            SystemMap.getHeartList().add(user.getId());
+        }
+        if (!SystemMap.getCutList().contains(user.getId())){
+            SystemMap.getCutList().add(user.getId());
+        }
+    }
+    HeartRateSet heartRateSet=null;
+    heartRateSet = heartRateSetService.getHeartRateSet(user.getId());
+    if (heartRateSet==null){
+        heartRateSet =new HeartRateSet();
+        heartRateSet.setMaxData(90);
+        heartRateSet.setMinData(60);
+        heartRateSet.setUpdateTime(new Date());
+        heartRateSet.setUserId(user.getId());
+        heartRateSetService.insertSelective(heartRateSet);
+    }
+    EleCallSet eleCallSet=null;
+    eleCallSet= eleCallSetService.getEleCallSetByUserid(user.getId());
+    if (eleCallSet==null){
+        eleCallSet=new EleCallSet();
+        eleCallSet.setTimeInterval(30);
+        eleCallSet.setSetSwitch("0");
+        eleCallSet.setUserId(user.getId());
+        eleCallSet.setUpdateTime(new Date());
+        eleCallSetService.insertSelective(eleCallSet);
+    }
+   AlertSetVO alertSetVO=new AlertSetVO();
+    alertSetVO.setSosAlert(alertSet.getSosAlert());
+    alertSetVO.setHeartAlert(alertSet.getHeartAlert());
+    alertSetVO.setCutAlert(alertSet.getCutAlert());
+    alertSetVO.setBatteryAlert(alertSet.getBatteryAlert());
+    alertSetVO.setHeart_maxData(heartRateSet.getMaxData());
+    alertSetVO.setHeart_minData(heartRateSet.getMinData());
+    alertSetVO.setTimeInterval(eleCallSet.getTimeInterval());
+    alertSetVO.setEleCallSwitch(eleCallSet.getSetSwitch());
 
+    resultBean = new ResultBean();
+    resultBean.setCode(1);
+    List<AlertSetVO> alertSetVOList=new ArrayList<>();
+    alertSetVOList.add(alertSetVO);
+    resultBean.setData(alertSetVOList);
+    resultBean.setMsg("操作成功");
+    resultBean.setSize(alertSetVOList.size());
+    return resultBean;
+}
 }

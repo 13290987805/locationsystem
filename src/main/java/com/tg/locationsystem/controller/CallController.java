@@ -262,6 +262,8 @@ public class CallController {
 
     /*
     * 设置开关,打开关闭
+    * 1 打开
+    * 0 关闭
     * */
     @RequestMapping(value = "setSwitch",method = RequestMethod.POST)
     @ResponseBody
@@ -371,7 +373,7 @@ public class CallController {
                                 statisticsCallService.insertSelective(statisticsCall);
                             }
                             // 表示在3秒之后开始执行，并且每2秒执行一次
-                        }, 3000, eleCallSet.getTimeInterval()*1000);
+                        }, 3000, eleCallSet.getTimeInterval()*1000*60);
                         SystemMap.getTimermap().put(eleCallSet.getUserId(),timer);
                     }else {
                         // 创建定时器
@@ -429,7 +431,7 @@ public class CallController {
                                 statisticsCallService.insertSelective(statisticsCall);
                             }
                             // 表示在3秒之后开始执行，并且每2秒执行一次
-                        }, 3000, eleCallSet.getTimeInterval()*1000);
+                        }, 3000, eleCallSet.getTimeInterval()*1000*60);
                         SystemMap.getTimermap().put(eleCallSet.getUserId(),timer);
                     }
 

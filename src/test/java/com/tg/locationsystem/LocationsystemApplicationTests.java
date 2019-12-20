@@ -82,7 +82,11 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test10() {
-		List<Integer> list=new ArrayList<>();
+		List<Person> persons = personMapper.getPersonsByUserId(1);
+		for (Person person : persons) {
+			System.out.println(person.getPersonName());
+		}
+		/*List<Integer> list=new ArrayList<>();
 		list.add(10);
 		list.add(20);
 		list.add(30);
@@ -90,7 +94,7 @@ public class LocationsystemApplicationTests {
 			System.out.println("有");
 		}else {
 			System.out.println("没有");
-		}
+		}*/
 
     }
 

@@ -1217,7 +1217,7 @@ public class LocationsystemApplication  {
 					statisticsCallService.insertSelective(statisticsCall);
 				}
 				// 表示在3秒之后开始执行，并且每2秒执行一次
-			}, 3000, eleCallSet.getTimeInterval()*1000);
+			}, 3000, eleCallSet.getTimeInterval()*1000*60);
 			timermap.put(eleCallSet.getUserId(),timer);
 		}
 
