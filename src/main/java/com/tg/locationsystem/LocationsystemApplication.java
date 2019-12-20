@@ -385,7 +385,7 @@ public class LocationsystemApplication  {
                 //sos报警
 				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				//如果该标签的用户开启了sos开关
-				if (SystemMap.getSosList().contains(SystemMap.getUsermap().get(tagAdd))){
+
 					if (tag_info.getSos()==1){
 						//websocket通知前端有警告
 						Integer userid = SystemMap.getUsermap().get(tagAdd);
@@ -418,7 +418,7 @@ public class LocationsystemApplication  {
 						}
 						alertVO.setAddTime(sdf.format(new Date()));
 						Gson gson=new Gson();
-						String jsonObject = gson.toJson(alertVO);
+
 						//net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(alertVO);
 					/*JsonConfig jsonConfig = new JsonConfig();
 					jsonConfig.registerJsonValueProcessor(java.util.Date.class, new DateJsonValueProcessor());
@@ -432,9 +432,6 @@ public class LocationsystemApplication  {
 						String format = sdf.format(new Date());
 						if (time==null||"".equals(time)){
 							alertmap.put(alertData,format);
-							// System.out.println("sos1");
-							send(userid, jsonObject.toString());
-
 							TagStatus tagStatus = new TagStatus();
 							peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 							tagStatus.setPersonIdcard(peridcard);
@@ -452,13 +449,21 @@ public class LocationsystemApplication  {
 							}
 							//插入数据库
 							tagStatusService.insertSelective(tagStatus);
+
+							alertVO.setId(tagStatus.getId());
+							String jsonObject = gson.toJson(alertVO);
+
+							if (SystemMap.getSosList().contains(SystemMap.getUsermap().get(tagAdd))){
+								//推送
+								send(userid, jsonObject.toString());
+							}
+
+
+
 						}else {
 							try {
 								if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
 									alertmap.put(alertData,format);
-									// System.out.println("sos2");
-									send(userid, jsonObject.toString());
-
 									TagStatus tagStatus = new TagStatus();
 									peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 									tagStatus.setPersonIdcard(peridcard);
@@ -476,13 +481,22 @@ public class LocationsystemApplication  {
 									}
 									//插入数据库
 									tagStatusService.insertSelective(tagStatus);
+									alertVO.setId(tagStatus.getId());
+									String jsonObject = gson.toJson(alertVO);
+
+									if (SystemMap.getSosList().contains(SystemMap.getUsermap().get(tagAdd))){
+										//推送
+										send(userid, jsonObject.toString());
+									}
+
+
 								}
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
 						}
 					}
-				}
+
 
 
 				//电池电量百分比
@@ -525,7 +539,7 @@ public class LocationsystemApplication  {
 						}
 						alertVO.setAddTime(sdf.format(new Date()));
 						Gson gson=new Gson();
-						String jsonObject = gson.toJson(alertVO);
+
 
 						//报警标识
 						String alertData=tagAdd+battery;
@@ -536,9 +550,6 @@ public class LocationsystemApplication  {
 						String format = sdf.format(new Date());
 						if (time==null||"".equals(time)){
 							alertmap.put(alertData,format);
-							// System.out.println("sos1");
-							send(userid, jsonObject.toString());
-
 							TagStatus tagStatus = new TagStatus();
 							peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 							tagStatus.setPersonIdcard(peridcard);
@@ -556,13 +567,21 @@ public class LocationsystemApplication  {
 							}
 							//插入数据库
 							tagStatusService.insertSelective(tagStatus);
+
+							alertVO.setId(tagStatus.getId());
+							String jsonObject = gson.toJson(alertVO);
+
+							if (SystemMap.getBatteryList().contains(SystemMap.getUsermap().get(tagAdd))){
+								//推送
+								send(userid, jsonObject.toString());
+							}
+
+
+
 						}else {
 							try {
 								if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
 									alertmap.put(alertData,format);
-									// System.out.println("sos2");
-									send(userid, jsonObject.toString());
-
 									TagStatus tagStatus = new TagStatus();
 									peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 									tagStatus.setPersonIdcard(peridcard);
@@ -580,6 +599,14 @@ public class LocationsystemApplication  {
 									}
 									//插入数据库
 									tagStatusService.insertSelective(tagStatus);
+
+									alertVO.setId(tagStatus.getId());
+									String jsonObject = gson.toJson(alertVO);
+
+									if (SystemMap.getBatteryList().contains(SystemMap.getUsermap().get(tagAdd))){
+										//推送
+										send(userid, jsonObject.toString());
+									}
 								}
 							} catch (ParseException e) {
 								e.printStackTrace();
@@ -615,8 +642,7 @@ public class LocationsystemApplication  {
 					heartRateSet.setMinData(MIN_HEART_RATE);
 					heartRateSet.setMaxData(MAX_HEART_RATE);
 				}
-				//如果该标签的用户开启了心率报警开关
-				if (SystemMap.getHeartList().contains(SystemMap.getUsermap().get(tagAdd))){
+
 					if (tag_info.getHeart_rate()>0){
 						if (tag_info.getHeart_rate() > heartRateSet.getMaxData() || tag_info.getHeart_rate() < heartRateSet.getMinData()) {
 							//websocket通知前端有警告
@@ -652,7 +678,7 @@ public class LocationsystemApplication  {
 							}
 							alertVO.setAddTime(sdf.format(new Date()));
 							Gson gson=new Gson();
-							String jsonObject = gson.toJson(alertVO);
+
 
 							//net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(alertVO);
 					/*JsonConfig jsonConfig = new JsonConfig();
@@ -667,8 +693,6 @@ public class LocationsystemApplication  {
 							String format = sdf.format(new Date());
 							if (time==null||"".equals(time)){
 								alertmap.put(alertData,format);
-								send(userid, jsonObject.toString());
-
 								TagStatus tagStatus = new TagStatus();
 								peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 								tagStatus.setPersonIdcard(peridcard);
@@ -686,12 +710,20 @@ public class LocationsystemApplication  {
 								}
 								//插入数据库
 								tagStatusService.insertSelective(tagStatus);
+
+								alertVO.setId(tagStatus.getId());
+								String jsonObject = gson.toJson(alertVO);
+								//如果该标签的用户开启了心率报警开关
+								if (SystemMap.getHeartList().contains(SystemMap.getUsermap().get(tagAdd))){
+									send(userid, jsonObject.toString());
+								}
+
+
+
 							}else {
 								try {
 									if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
 										alertmap.put(alertData,format);
-										send(userid, jsonObject.toString());
-
 										TagStatus tagStatus = new TagStatus();
 										peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 										tagStatus.setPersonIdcard(peridcard);
@@ -709,6 +741,15 @@ public class LocationsystemApplication  {
 										}
 										//插入数据库
 										tagStatusService.insertSelective(tagStatus);
+										alertVO.setId(tagStatus.getId());
+										String jsonObject = gson.toJson(alertVO);
+
+										//如果该标签的用户开启了心率报警开关
+										if (SystemMap.getHeartList().contains(SystemMap.getUsermap().get(tagAdd))){
+											send(userid, jsonObject.toString());
+										}
+
+
 									}
 								} catch (ParseException e) {
 									e.printStackTrace();
@@ -716,13 +757,12 @@ public class LocationsystemApplication  {
 							}
 						}
 					}
-				}
+
 
 
 				//步数
 				//int step = tag_info.getStep();
-			//如果该标签的用户开启了剪断报警开关
-				if (SystemMap.getCutList().contains(SystemMap.getUsermap().get(tagAdd))){
+
 					//剪断警报
 					int cut = tag_info.getCut();
 					if (cut==1){
@@ -762,7 +802,7 @@ public class LocationsystemApplication  {
 						}
 						alertVO.setAddTime(sdf.format(new Date()));
 						Gson gson=new Gson();
-						String jsonObject = gson.toJson(alertVO);
+
 						//net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(alertVO);
 					/*JsonConfig jsonConfig = new JsonConfig();
 					jsonConfig.registerJsonValueProcessor(java.util.Date.class, new DateJsonValueProcessor());
@@ -776,7 +816,6 @@ public class LocationsystemApplication  {
 						String format = sdf.format(new Date());
 						if (time==null||"".equals(time)){
 							alertmap.put(alertData,format);
-							send(userid, jsonObject.toString());
 
 							TagStatus tagStatus = new TagStatus();
 							peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
@@ -795,12 +834,19 @@ public class LocationsystemApplication  {
 							}
 							//插入数据库
 							tagStatusService.insertSelective(tagStatus);
+							alertVO.setId(tagStatus.getId());
+							String jsonObject = gson.toJson(alertVO);
+
+							//如果该标签的用户开启了剪断报警开关
+							if (SystemMap.getCutList().contains(SystemMap.getUsermap().get(tagAdd))){
+								send(userid, jsonObject.toString());
+							}
+
+
 						}else {
 							try {
 								if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
 									alertmap.put(alertData,format);
-									send(userid, jsonObject.toString());
-
 									TagStatus tagStatus = new TagStatus();
 									peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
 									tagStatus.setPersonIdcard(peridcard);
@@ -818,13 +864,22 @@ public class LocationsystemApplication  {
 									}
 									//插入数据库
 									tagStatusService.insertSelective(tagStatus);
+									alertVO.setId(tagStatus.getId());
+									String jsonObject = gson.toJson(alertVO);
+
+									//如果该标签的用户开启了剪断报警开关
+									if (SystemMap.getCutList().contains(SystemMap.getUsermap().get(tagAdd))){
+										send(userid, jsonObject.toString());
+									}
+
+
 								}
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
 						}
 					}
-				}
+
 
 
 
@@ -1079,6 +1134,7 @@ public class LocationsystemApplication  {
 		List<Integer> sosList = SystemMap.getSosList();
 		List<Integer> heartList = SystemMap.getHeartList();
 		List<Integer> cutList = SystemMap.getCutList();
+		List<Integer> batteryList = SystemMap.getBatteryList();
 		for (AlertSet alertSet : alertSetList) {
 			if ("1".equals(alertSet.getSosAlert())){
 				sosList.add(alertSet.getUserId());
@@ -1088,6 +1144,9 @@ public class LocationsystemApplication  {
 			}
 			if ("1".equals(alertSet.getCutAlert())){
 				cutList.add(alertSet.getUserId());
+			}
+			if ("1".equals(alertSet.getBatteryAlert())){
+				batteryList.add(alertSet.getUserId());
 			}
 		}
 

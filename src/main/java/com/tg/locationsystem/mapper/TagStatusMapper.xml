@@ -19,6 +19,7 @@
   </sql>
 
 
+
     <!--根据类型id得到相关报警集合-->
     <select id="getTagStatusByTypeId"  resultMap="BaseResultMap">
         select
@@ -102,7 +103,7 @@
       #{isdeal,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, 
       #{z,jdbcType=DOUBLE})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.TagStatus">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.TagStatus" useGeneratedKeys="true" keyProperty="id">
     insert into tag_status
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

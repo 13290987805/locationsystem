@@ -3,6 +3,7 @@ package com.tg.locationsystem.mapper;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.TagStatus;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -32,4 +33,7 @@ public interface TagStatusMapper extends IBaseDao<TagStatus>{
     List<TagStatus> getAllTagStatusByDeal(@Param("userid") Integer id,@Param("typeid") String typeid,@Param("isdeal") String isdeal);
 
     List<TagStatus> getTagStatusByTypeId(@Param("userid") Integer id, @Param("typeid") String typeid);
+
+
+
 }

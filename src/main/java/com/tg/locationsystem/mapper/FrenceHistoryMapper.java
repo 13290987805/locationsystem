@@ -35,4 +35,6 @@ public interface FrenceHistoryMapper extends IBaseDao<FrenceHistory>{
     List<FrenceHistory> getFrenceHistoryByPersonIdCardss(@Param("list") List<String> list);
 
     List<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(@Param("frenceId")Integer frenceId, @Param("list")List<String> list);
+
+
 }

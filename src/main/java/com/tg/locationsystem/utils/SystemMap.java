@@ -56,6 +56,9 @@ public class SystemMap {
     //缓存剪断报警的用户id
     private static List<Integer> cutList=new ArrayList<>();
 
+    //缓存低电量报警的用户id
+    private static List<Integer> batteryList=new ArrayList<>();
+
     public static Map<String, Integer> getCountmap() {
         return countmap;
     }
@@ -130,6 +133,14 @@ public class SystemMap {
 
     public static void setTagAndPersonMap(Map<String, String> tagAndPersonMap) {
         SystemMap.tagAndPersonMap = tagAndPersonMap;
+    }
+
+    public static List<Integer> getBatteryList() {
+        return batteryList;
+    }
+
+    public static void setBatteryList(List<Integer> batteryList) {
+        SystemMap.batteryList = batteryList;
     }
 
     public static void setCleAndKeyMap(Map<String, String> cleAndKeyMap) {

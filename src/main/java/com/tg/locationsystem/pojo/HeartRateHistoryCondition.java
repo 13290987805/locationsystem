@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @ Date2019/8/5
  */
 public class HeartRateHistoryCondition implements Serializable {
-    @NotBlank(message = "标签唯一标识不能为空")
+    @NotBlank(message = "人员唯一标识不能为空")
     private String personIdcard;
     @NotBlank(message = "开始时间不能为空")
     private String startTime;

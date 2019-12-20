@@ -25,4 +25,6 @@ public interface ITagStatusService extends IBaseService<TagStatus> {
     PageInfo<TagStatus> getAllTagStatusByDeal(Integer pageIndex, Integer pageSize, Integer id,String typeid,String isdeal);
 
     PageInfo<TagStatus> getTagStatusByTypeId(Integer pageIndex, Integer pageSize, Integer id, String typeid);
+
+
 }

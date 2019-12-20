@@ -37,4 +37,6 @@ public interface IFrenceHistoryService extends IBaseService<FrenceHistory> {
     PageInfo<FrenceHistoryVO> getFrenceHistoryByListPage(Integer pageIndex, Integer pageSize, List<FrenceHistoryVO> frenceVOList);
 
     PageInfo<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(Integer pageIndex, Integer pageSize, Integer frenceId, List<String> list);
+
+
 }

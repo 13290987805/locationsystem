@@ -8,11 +8,11 @@
     <result column="sos_alert" jdbcType="VARCHAR" property="sosAlert" />
     <result column="heart_alert" jdbcType="VARCHAR" property="heartAlert" />
     <result column="cut_alert" jdbcType="VARCHAR" property="cutAlert" />
+    <result column="battery_alert" jdbcType="VARCHAR" property="batteryAlert" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, update_time, sos_alert, heart_alert, cut_alert
+    id, user_id, update_time, sos_alert, heart_alert, cut_alert, battery_alert
   </sql>
-
   <!--得到某个用户的开关设置-->
   <select id="getAlertSetByUserId"  resultMap="BaseResultMap">
     select
@@ -41,13 +41,13 @@
   </delete>
   <insert id="insert" parameterType="com.tg.locationsystem.entity.AlertSet">
     insert into alert_set (id, user_id, update_time, 
-      sos_alert, heart_alert, cut_alert
-      )
+      sos_alert, heart_alert, cut_alert, 
+      battery_alert)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{sosAlert,jdbcType=VARCHAR}, #{heartAlert,jdbcType=VARCHAR}, #{cutAlert,jdbcType=VARCHAR}
-      )
+      #{sosAlert,jdbcType=VARCHAR}, #{heartAlert,jdbcType=VARCHAR}, #{cutAlert,jdbcType=VARCHAR}, 
+      #{batteryAlert,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.AlertSet">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.AlertSet" useGeneratedKeys="true" keyProperty="id">
     insert into alert_set
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -67,6 +67,9 @@
       </if>
       <if test="cutAlert != null">
         cut_alert,
+      </if>
+      <if test="batteryAlert != null">
+        battery_alert,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -88,6 +91,9 @@
       <if test="cutAlert != null">
         #{cutAlert,jdbcType=VARCHAR},
       </if>
+      <if test="batteryAlert != null">
+        #{batteryAlert,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.AlertSet">
@@ -108,6 +114,9 @@
       <if test="cutAlert != null">
         cut_alert = #{cutAlert,jdbcType=VARCHAR},
       </if>
+      <if test="batteryAlert != null">
+        battery_alert = #{batteryAlert,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -117,7 +126,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       sos_alert = #{sosAlert,jdbcType=VARCHAR},
       heart_alert = #{heartAlert,jdbcType=VARCHAR},
-      cut_alert = #{cutAlert,jdbcType=VARCHAR}
+      cut_alert = #{cutAlert,jdbcType=VARCHAR},
+      battery_alert = #{batteryAlert,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

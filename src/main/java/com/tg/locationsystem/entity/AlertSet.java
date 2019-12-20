@@ -17,6 +17,8 @@ public class AlertSet {
 
     private String cutAlert;
 
+    private String batteryAlert;
+
     public Integer getId() {
         return id;
     }
@@ -55,6 +57,14 @@ public class AlertSet {
 
     public void setHeartAlert(String heartAlert) {
         this.heartAlert = heartAlert == null ? null : heartAlert.trim();
+    }
+
+    public String getBatteryAlert() {
+        return batteryAlert;
+    }
+
+    public void setBatteryAlert(String batteryAlert) {
+        this.batteryAlert = batteryAlert;
     }
 
     public String getCutAlert() {

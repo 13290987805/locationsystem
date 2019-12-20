@@ -327,7 +327,7 @@ public class PathController {
             if (i==0){
                 resultBean = new ResultBean();
                 resultBean.setCode(51);
-                resultBean.setMsg("时间参数有误");
+                resultBean.setMsg("该时间段没有数据");
                 List<PathMap> list = new ArrayList<>();
                 list.add(pathMap);
                 resultBean.setData(list);

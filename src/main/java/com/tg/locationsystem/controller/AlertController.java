@@ -8,6 +8,7 @@ import com.tg.locationsystem.pojo.Path;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.pojo.TagStatusVO;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,8 @@ private TagMapper tagMapper;
 private IMapService mapService;
 @Autowired
 private IAlertSetService alertSetService;
+@Autowired
+private IFrenceHistoryService frenceHistoryService;
     DateFormat sdf
             = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -610,6 +613,12 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
             tagStatusVO.setUserId(tagStatus.getUserId());
             tagStatusVO.setMapkey(tagStatus.getMapKey());
             tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+            if ("0".equals(tagStatus.getIsdeal())){
+                tagStatusVO.setIsdeal("未处理");
+            }
+            if ("1".equals(tagStatus.getIsdeal())){
+                tagStatusVO.setIsdeal("已处理");
+            }
             //type name
             Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
             if (person!=null){
@@ -681,6 +690,12 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
         tagStatusVO.setUserId(tagStatus.getUserId());
         tagStatusVO.setMapkey(tagStatus.getMapKey());
         tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+        if ("0".equals(tagStatus.getIsdeal())){
+            tagStatusVO.setIsdeal("未处理");
+        }
+        if ("1".equals(tagStatus.getIsdeal())){
+            tagStatusVO.setIsdeal("已处理");
+        }
         //type name
         Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
         if (person!=null){
@@ -941,6 +956,21 @@ public ResultBean setSoS(HttpServletRequest request,
 
 
     AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
+    //若该开关不存在,生成一个开关,默认全部开启
+    if (alertSet==null){
+        AlertSet insertalertSet=new AlertSet();
+        insertalertSet.setUserId(user.getId());
+        insertalertSet.setUpdateTime(new Date());
+        insertalertSet.setSosAlert("1");
+        insertalertSet.setHeartAlert("1");
+        insertalertSet.setCutAlert("1");
+        //生成开关
+        alertSetService.insertSelective(insertalertSet);
+        //将开关放到缓存
+        if (!SystemMap.getSosList().contains(alertSet.getUserId())){
+            SystemMap.getSosList().add(alertSet.getUserId());
+        }
+    }
     if ("1".equals(setSoS)){
         alertSet.setSosAlert(setSoS);
         //更新数据库
@@ -1035,7 +1065,21 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }
         AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
-
+        //若该开关不存在,生成一个开关,默认全部开启
+        if (alertSet==null){
+            AlertSet insertalertSet=new AlertSet();
+            insertalertSet.setUserId(user.getId());
+            insertalertSet.setUpdateTime(new Date());
+            insertalertSet.setSosAlert("1");
+            insertalertSet.setHeartAlert("1");
+            insertalertSet.setCutAlert("1");
+            //生成开关
+            alertSetService.insertSelective(insertalertSet);
+            //将开关放到缓存
+            if (!SystemMap.getSosList().contains(alertSet.getUserId())){
+                SystemMap.getSosList().add(alertSet.getUserId());
+            }
+        }
         if ("1".equals(setHeart)){
             alertSet.setHeartAlert(setHeart);
             //更新数据库
@@ -1130,7 +1174,21 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }
         AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
-
+        //若该开关不存在,生成一个开关,默认全部开启
+        if (alertSet==null){
+            AlertSet insertalertSet=new AlertSet();
+            insertalertSet.setUserId(user.getId());
+            insertalertSet.setUpdateTime(new Date());
+            insertalertSet.setSosAlert("1");
+            insertalertSet.setHeartAlert("1");
+            insertalertSet.setCutAlert("1");
+            //生成开关
+            alertSetService.insertSelective(insertalertSet);
+            //将开关放到缓存
+            if (!SystemMap.getSosList().contains(alertSet.getUserId())){
+                SystemMap.getSosList().add(alertSet.getUserId());
+            }
+        }
         if ("1".equals(setCut)){
             alertSet.setCutAlert(setCut);
             //更新数据库
@@ -1196,4 +1254,166 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }
     }
+
+    /*
+     * 设置低电量报警开关
+     * */
+    @RequestMapping(value = "setBattery",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean setBattery(HttpServletRequest request,
+                             @RequestParam(defaultValue = "") String setBattery) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (setBattery==null||"".equals(setBattery)){
+            resultBean = new ResultBean();
+            resultBean.setCode(120);
+            resultBean.setMsg("报警参数不能为空");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        AlertSet alertSet=alertSetService.getAlertSetByUserId(user.getId());
+        //若该开关不存在,生成一个开关,默认全部开启
+        if (alertSet==null){
+            AlertSet insertalertSet=new AlertSet();
+            insertalertSet.setUserId(user.getId());
+            insertalertSet.setUpdateTime(new Date());
+            insertalertSet.setSosAlert("1");
+            insertalertSet.setHeartAlert("1");
+            insertalertSet.setCutAlert("1");
+            //生成开关
+            alertSetService.insertSelective(insertalertSet);
+            //将开关放到缓存
+            if (!SystemMap.getBatteryList().contains(alertSet.getUserId())){
+                SystemMap.getBatteryList().add(alertSet.getUserId());
+            }
+        }
+        if ("1".equals(setBattery)){
+            alertSet.setBatteryAlert(setBattery);
+            //更新数据库
+            int update = alertSetService.updateByPrimaryKeySelective(alertSet);
+            if (update>0){
+                //将开关放到缓存
+                if (!SystemMap.getBatteryList().contains(alertSet.getUserId())){
+                    SystemMap.getBatteryList().add(alertSet.getUserId());
+                }
+                resultBean = new ResultBean();
+                resultBean.setCode(1);
+                resultBean.setMsg("操作成功");
+                List<AlertSet> list=new ArrayList<>();
+                list.add(alertSet);
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }else {
+                resultBean = new ResultBean();
+                resultBean.setCode(122);
+                resultBean.setMsg("报警开关设置失败");
+                List<AlertSet> list=new ArrayList<>();
+                list.add(alertSet);
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+
+        }else if ("0".equals(setBattery)){
+            alertSet.setBatteryAlert(setBattery);
+            //更新数据库
+            int update = alertSetService.updateByPrimaryKeySelective(alertSet);
+            if (update>0){
+                //将开关放从缓存清除
+                SystemMap.getBatteryList().remove(new Integer(alertSet.getUserId()));
+
+                resultBean = new ResultBean();
+                resultBean.setCode(1);
+                resultBean.setMsg("操作成功");
+                List<AlertSet> list=new ArrayList<>();
+                list.add(alertSet);
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }else {
+                resultBean = new ResultBean();
+                resultBean.setCode(122);
+                resultBean.setMsg("报警开关设置失败");
+                List<AlertSet> list=new ArrayList<>();
+                list.add(alertSet);
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(122);
+            resultBean.setMsg("报警开关设置失败");
+            List<AlertSet> list=new ArrayList<>();
+            list.add(alertSet);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+    }
+
+    /*
+    * 批量将未处理告警转为已处理
+    * */
+    @RequestMapping(value = "setDealBatch",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean setDealBatch(HttpServletRequest request,
+                             @RequestParam(defaultValue = "") String TagStatusIds) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (TagStatusIds==null||"".equals(TagStatusIds)){
+            resultBean = new ResultBean();
+            resultBean.setCode(120);
+            resultBean.setMsg("处理参数不能为空");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        String[]  ids = TagStatusIds.split(",");
+        int size=0;
+        for (String id : ids) {
+            if (StringUtils.isNumeric(id)){
+                TagStatus tagStatus = tagStatusService.selectByPrimaryKey(Integer.parseInt(id));
+                if (tagStatus!=null){
+                    tagStatus.setIsdeal("1");
+                    int i = tagStatusService.updateByPrimaryKeySelective(tagStatus);
+                    if (i>0){
+                        size++;
+                    }
+                }
+            }
+        }
+
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setSize(size);
+        return resultBean;
+    }
+
 }
