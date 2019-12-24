@@ -18,6 +18,43 @@
     id, person_idcard, data, alert_type, add_time, user_id, isDeal, map_key, x, y, z
   </sql>
 
+    <!--根据人员名称,处理情况,报警类型搜索报警记录-->
+    <select id="getTagStatusBySomeCondition"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tag_status
+        WHERE    user_id=#{userid}
+        AND person_idcard IN
+        <foreach collection="idCardList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="queryTagStatusVO.isDeal != null and queryTagStatusVO.isDeal !=''">
+            AND
+            isDeal=#{queryTagStatusVO.isDeal,jdbcType=VARCHAR}
+        </if>
+        <if test="queryTagStatusVO.alert_type != null and queryTagStatusVO.alert_type !=''">
+            AND
+            alert_type=#{queryTagStatusVO.alert_type}
+        </if>
+
+        ORDER BY add_time DESC
+    </select>
+
+    <!--根据处理情况,报警类型搜索报警记录-->
+    <select id="getTagStatusByNoIdCards"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tag_status
+        WHERE    user_id=#{userid}
+        AND  alert_type=#{alert_type}
+        <if test="isDeal != null and isDeal !=''">
+            AND
+            isDeal=#{isDeal,jdbcType=VARCHAR}
+        </if>
+        ORDER BY add_time DESC
+    </select>
+
+
 <!--批量更新-->
   <update id="updateBatch" parameterType="java.util.List" >
     UPDATE tag_status SET isDeal = '1' WHERE user_id=#{userid}

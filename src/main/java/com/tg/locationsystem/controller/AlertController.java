@@ -1517,4 +1517,196 @@ public ResultBean getAllAlertSet(HttpServletRequest request) {
     resultBean.setSize(alertSetVOList.size());
     return resultBean;
 }
+
+/*
+* 根据人员名称,处理情况,报警类型搜索报警记录
+* */
+@RequestMapping(value = "getTagStatusBySomeCondition",method = RequestMethod.GET)
+@ResponseBody
+public ResultBean getTagStatusBySomeCondition(HttpServletRequest request,
+                                          QueryTagStatusVO queryTagStatusVO,
+                                          @RequestParam(defaultValue = "1") Integer pageIndex,
+                                          @RequestParam(defaultValue = "10") Integer pageSize) {
+    ResultBean resultBean;
+    Myuser user = (Myuser) request.getSession().getAttribute("user");
+    //未登录
+    if (user==null){
+        resultBean = new ResultBean();
+        resultBean.setCode(5);
+        resultBean.setMsg("还未登录");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    if (queryTagStatusVO.getAlert_type()==null||"".equals(queryTagStatusVO.getAlert_type())){
+        resultBean = new ResultBean();
+        resultBean.setCode(114);
+        resultBean.setMsg("类型id不能为空");
+        List<TagStatusVO> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    if (queryTagStatusVO.getIdCards() == null || "".equals(queryTagStatusVO.getIdCards())) {
+        PageInfo<TagStatus> pageInfo=tagStatusService.getTagStatusByNoIdCards(pageIndex,pageSize,user.getId(),queryTagStatusVO.getAlert_type(),queryTagStatusVO.getIsDeal());
+        List<TagStatusVO> tagStatusVOList=new ArrayList<>();
+        for (TagStatus tagStatus : pageInfo.getList()) {
+            TagStatusVO tagStatusVO=new TagStatusVO();
+            tagStatusVO.setId(tagStatus.getId());
+            tagStatusVO.setPersonIdcard(tagStatus.getPersonIdcard());
+            tagStatusVO.setData(tagStatus.getData());
+            tagStatusVO.setAlertType(tagStatus.getAlertType());
+            tagStatusVO.setAddTime(tagStatus.getAddTime());
+            tagStatusVO.setUserId(tagStatus.getUserId());
+            tagStatusVO.setMapkey(tagStatus.getMapKey());
+            tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+            if ("0".equals(tagStatus.getIsdeal())){
+                tagStatusVO.setIsdeal("未处理");
+            }
+            if ("1".equals(tagStatus.getIsdeal())){
+                tagStatusVO.setIsdeal("已处理");
+            }
+            //type name
+            Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+            if (person!=null){
+                PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+                if (personType!=null){
+                    tagStatusVO.setType(personType.getTypeName());
+                }
+                tagStatusVO.setName(person.getPersonName());
+                tagStatusVO.setImg(person.getImg());
+            }else {
+                Goods goods = goodsMapper.getGoodsByByIdCard(tagStatus.getPersonIdcard());
+                if (goods!=null){
+                    GoodsType goodsType = goodsTypeMapper.selectByPrimaryKey(goods.getGoodsTypeid());
+                    if (goodsType!=null){
+                        tagStatusVO.setType(goodsType.getName());
+                    }
+                    tagStatusVO.setName(goods.getGoodsName());
+                    tagStatusVO.setImg(goods.getImg());
+                }
+            }
+            Person sqlperson = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+            Tag tag = tagMapper.getTagByOnlyAddress(sqlperson.getTagAddress());
+            if (tag!=null){
+                if (tag.getX()!=null){
+                    tagStatusVO.setX(tag.getX());
+                }
+                if (tag.getY()!=null){
+                    tagStatusVO.setY(tag.getY());
+                }
+                if (tag.getZ()!=null){
+                    tagStatusVO.setZ(tag.getZ());
+                }
+            }
+            tagStatusVOList.add(tagStatusVO);
+        }
+        PageInfo<TagStatusVO> page= new PageInfo<>(tagStatusVOList);
+        page.setPageNum(pageInfo.getPageNum());
+        page.setSize(pageInfo.getSize());
+        page.setSize(pageInfo.getSize());
+        page.setStartRow(pageInfo.getStartRow());
+        page.setEndRow(pageInfo.getEndRow());
+        page.setTotal(pageInfo.getTotal());
+        page.setPages(pageInfo.getPages());
+        page.setList(tagStatusVOList);
+        page.setPrePage(pageInfo.getPrePage());
+        page.setNextPage(pageInfo.getNextPage());
+        page.setIsFirstPage(pageInfo.isIsFirstPage());
+        page.setIsLastPage(pageInfo.isIsLastPage());
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List list=new ArrayList<>();
+        list.add(page);
+        resultBean.setData(list);
+        resultBean.setSize(page.getSize());
+        return resultBean;
+
+    }
+    String[] split = queryTagStatusVO.getIdCards().split(",");
+    List<String> idCardsList=new ArrayList<>();
+    for (String s : split) {
+        idCardsList.add(s);
+    }
+
+    PageInfo<TagStatus> pageInfo=tagStatusService.getTagStatusBySomeCondition(pageIndex,pageSize,user.getId(),queryTagStatusVO,idCardsList);
+    List<TagStatusVO> tagStatusVOList=new ArrayList<>();
+    for (TagStatus tagStatus : pageInfo.getList()) {
+        TagStatusVO tagStatusVO=new TagStatusVO();
+        tagStatusVO.setId(tagStatus.getId());
+        tagStatusVO.setPersonIdcard(tagStatus.getPersonIdcard());
+        tagStatusVO.setData(tagStatus.getData());
+        tagStatusVO.setAlertType(tagStatus.getAlertType());
+        tagStatusVO.setAddTime(tagStatus.getAddTime());
+        tagStatusVO.setUserId(tagStatus.getUserId());
+        tagStatusVO.setMapkey(tagStatus.getMapKey());
+        tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+        if ("0".equals(tagStatus.getIsdeal())){
+            tagStatusVO.setIsdeal("未处理");
+        }
+        if ("1".equals(tagStatus.getIsdeal())){
+            tagStatusVO.setIsdeal("已处理");
+        }
+        //type name
+        Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+        if (person!=null){
+            PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+            if (personType!=null){
+                tagStatusVO.setType(personType.getTypeName());
+            }
+            tagStatusVO.setName(person.getPersonName());
+            tagStatusVO.setImg(person.getImg());
+        }else {
+            Goods goods = goodsMapper.getGoodsByByIdCard(tagStatus.getPersonIdcard());
+            if (goods!=null){
+                GoodsType goodsType = goodsTypeMapper.selectByPrimaryKey(goods.getGoodsTypeid());
+                if (goodsType!=null){
+                    tagStatusVO.setType(goodsType.getName());
+                }
+                tagStatusVO.setName(goods.getGoodsName());
+                tagStatusVO.setImg(goods.getImg());
+            }
+        }
+        Person sqlperson = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+        Tag tag = tagMapper.getTagByOnlyAddress(sqlperson.getTagAddress());
+        if (tag!=null){
+            if (tag.getX()!=null){
+                tagStatusVO.setX(tag.getX());
+            }
+            if (tag.getY()!=null){
+                tagStatusVO.setY(tag.getY());
+            }
+            if (tag.getZ()!=null){
+                tagStatusVO.setZ(tag.getZ());
+            }
+        }
+        tagStatusVOList.add(tagStatusVO);
+    }
+    PageInfo<TagStatusVO> page= new PageInfo<>(tagStatusVOList);
+    page.setPageNum(pageInfo.getPageNum());
+    page.setSize(pageInfo.getSize());
+    page.setSize(pageInfo.getSize());
+    page.setStartRow(pageInfo.getStartRow());
+    page.setEndRow(pageInfo.getEndRow());
+    page.setTotal(pageInfo.getTotal());
+    page.setPages(pageInfo.getPages());
+    page.setList(tagStatusVOList);
+    page.setPrePage(pageInfo.getPrePage());
+    page.setNextPage(pageInfo.getNextPage());
+    page.setIsFirstPage(pageInfo.isIsFirstPage());
+    page.setIsLastPage(pageInfo.isIsLastPage());
+
+    resultBean = new ResultBean();
+    resultBean.setCode(1);
+    resultBean.setMsg("操作成功");
+    List list=new ArrayList<>();
+    list.add(page);
+    resultBean.setData(list);
+    resultBean.setSize(page.getSize());
+    return resultBean;
+}
+
 }

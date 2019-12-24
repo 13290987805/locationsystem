@@ -3,6 +3,7 @@ package com.tg.locationsystem.service;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.TagStatus;
+import com.tg.locationsystem.pojo.QueryTagStatusVO;
 
 import java.util.List;
 
@@ -28,4 +29,9 @@ public interface ITagStatusService extends IBaseService<TagStatus> {
 
 
     int updateBatch(Integer userid,List<Integer> list);
+
+
+    PageInfo<TagStatus> getTagStatusByNoIdCards(Integer pageIndex, Integer pageSize, Integer id, Integer alert_type, String isDeal);
+
+    PageInfo<TagStatus> getTagStatusBySomeCondition(Integer pageIndex, Integer pageSize, Integer id, QueryTagStatusVO queryTagStatusVO,List<String> idCardList);
 }

@@ -2,6 +2,7 @@ package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.TagStatus;
+import com.tg.locationsystem.pojo.QueryTagStatusVO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
@@ -36,4 +37,8 @@ public interface TagStatusMapper extends IBaseDao<TagStatus>{
 
 
     int updateBatch(@Param("userid") Integer userid,@Param("idList") List<Integer> list);
+
+    List<TagStatus> getTagStatusByNoIdCards(@Param("userid") Integer id,@Param("alert_type") Integer alert_type,@Param("isDeal") String isDeal);
+
+    List<TagStatus> getTagStatusBySomeCondition(@Param("userid") Integer id, @Param("queryTagStatusVO") QueryTagStatusVO queryTagStatusVO,@Param("idCardList") List<String> idCardList);
 }
