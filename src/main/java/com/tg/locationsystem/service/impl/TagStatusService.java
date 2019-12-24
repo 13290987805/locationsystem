@@ -102,7 +102,10 @@ public class TagStatusService extends BaseServiceImpl<TagStatus> implements ITag
         return new PageInfo<TagStatus>(list,3);
     }
 
-
+    @Override
+    public int updateBatch(Integer userid,List<Integer> list) {
+        return tagStatusMapper.updateBatch(userid,list);
+    }
 
 
 }

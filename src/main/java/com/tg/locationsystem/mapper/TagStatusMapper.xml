@@ -18,7 +18,14 @@
     id, person_idcard, data, alert_type, add_time, user_id, isDeal, map_key, x, y, z
   </sql>
 
-
+<!--批量更新-->
+  <update id="updateBatch" parameterType="java.util.List" >
+    UPDATE tag_status SET isDeal = '1' WHERE user_id=#{userid}
+    and id IN
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
 
     <!--根据类型id得到相关报警集合-->
     <select id="getTagStatusByTypeId"  resultMap="BaseResultMap">
@@ -31,7 +38,7 @@
     </select>
 
 
-    <!--得到所有已处理的报警集合-->
+    <!--得到所有已处理或未处理的报警集合-->
     <select id="getAllTagStatusByDeal"  resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />

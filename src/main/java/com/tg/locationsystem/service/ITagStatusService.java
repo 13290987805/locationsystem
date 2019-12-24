@@ -27,4 +27,5 @@ public interface ITagStatusService extends IBaseService<TagStatus> {
     PageInfo<TagStatus> getTagStatusByTypeId(Integer pageIndex, Integer pageSize, Integer id, String typeid);
 
 
+    int updateBatch(Integer userid,List<Integer> list);
 }

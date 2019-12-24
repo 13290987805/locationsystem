@@ -35,5 +35,5 @@ public interface TagStatusMapper extends IBaseDao<TagStatus>{
     List<TagStatus> getTagStatusByTypeId(@Param("userid") Integer id, @Param("typeid") String typeid);
 
 
-
+    int updateBatch(@Param("userid") Integer userid,@Param("idList") List<Integer> list);
 }

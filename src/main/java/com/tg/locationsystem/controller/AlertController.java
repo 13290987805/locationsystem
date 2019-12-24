@@ -1371,8 +1371,10 @@ public ResultBean setSoS(HttpServletRequest request,
 
     /*
     * 批量将未处理告警转为已处理
+    * 1 已处理
+    * 0 未处理
     * */
-    @RequestMapping(value = "setDealBatch",method = RequestMethod.POST)
+    @RequestMapping(value = "setDealBatch",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean setDealBatch(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String TagStatusIds) {
@@ -1399,25 +1401,39 @@ public ResultBean setSoS(HttpServletRequest request,
         }
         String[]  ids = TagStatusIds.split(",");
         int size=0;
+        List<Integer> idsList=new ArrayList<>();
         for (String id : ids) {
             if (StringUtils.isNumeric(id)){
-                TagStatus tagStatus = tagStatusService.selectByPrimaryKey(Integer.parseInt(id));
+                idsList.add(Integer.parseInt(id));
+               /* TagStatus tagStatus = tagStatusService.selectByPrimaryKey(Integer.parseInt(id));
                 if (tagStatus!=null){
                     tagStatus.setIsdeal("1");
                     int i = tagStatusService.updateByPrimaryKeySelective(tagStatus);
                     if (i>0){
                         size++;
                     }
-                }
+                }*/
             }
+        }
+        int update = tagStatusService.updateBatch(user.getId(),idsList);
+        //System.out.println(update);
+        if (update>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setSize(update);
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(95);
+            resultBean.setMsg("标签报警处理失败");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
         }
 
 
-        resultBean = new ResultBean();
-        resultBean.setCode(1);
-        resultBean.setMsg("操作成功");
-        resultBean.setSize(size);
-        return resultBean;
     }
 /*
 * 查看所有的开关信息
