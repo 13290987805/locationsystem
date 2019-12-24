@@ -29,4 +29,7 @@ public interface IPersonService extends IBaseService<Person>{
     Person getPersonByImg(String img);
 
     Person getPersonByOnlyAddress(String tagAddress);
+
+
+
 }
