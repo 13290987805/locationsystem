@@ -2,7 +2,6 @@ package com.tg.locationsystem.service;
 
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.HeartRateHistory;
-import com.tg.locationsystem.entity.HeartRateSet;
 import com.tg.locationsystem.pojo.HeartRateHistoryVO;
 
 import java.util.List;
@@ -17,4 +16,6 @@ public interface IHeartRateHistoryService extends IBaseService<HeartRateHistory>
     List<HeartRateHistoryVO> getSomeheartRateHistory();
 
     int deleteHistory(String tableName, String address);
+
+    List<HeartRateHistory> getheartRateHistoryByPersonIdcards(List<String> personIdcard);
 }

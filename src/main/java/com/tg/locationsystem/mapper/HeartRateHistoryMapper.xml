@@ -34,6 +34,15 @@
     WHERE person_idcard=#{address} AND add_time BETWEEN #{startTime} AND #{endTime}
   </select>
 
+  <select id="getheartRateHistoryByPersonIdcards"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from heart_rate_history
+    WHERE person_idcard in
+    <foreach collection="list" index="index" item="idcard" open="(" separator="," close=")">
+      #{idcard}
+    </foreach>
+  </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

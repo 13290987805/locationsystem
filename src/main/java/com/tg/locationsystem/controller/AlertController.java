@@ -505,10 +505,10 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
 
 }
 
-    @RequestMapping(value = "getHeartRateHistoryByAddAndTimeData",method = RequestMethod.GET)
+    @RequestMapping(value = "getHeartRateHistoryByAddData",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean getHeartRateHistoryByAddAndTimeData(HttpServletRequest request,
-                                                      @Valid HeartRateHistoryCondition historyCondition,BindingResult result) {
+                                                          @RequestParam(value = "personIdcards[]",required=true) List<String> personIdcards) {
 
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -523,66 +523,31 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
             return resultBean;
         }
         //有必填项没填
-        if (result.hasErrors()) {
+        if (personIdcards == null || personIdcards.size() == 0) {
             List<String> errorlist=new ArrayList<>();
-            result.getAllErrors().forEach((error) -> {
-                FieldError fieldError = (FieldError) error;
-                // 属性
-                String field = fieldError.getField();
-                // 错误信息
-                String message = field+":"+fieldError.getDefaultMessage();
-                //System.out.println(field + ":" + message);
-                errorlist.add(message);
-            });
             resultBean =new ResultBean();
             resultBean.setCode(-1);
-            resultBean.setMsg("信息未填完整");
+            resultBean.setMsg("请选择查看人员");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
             return resultBean;
         }
-        //2019-08-05 19:00:00
-        String startTime = historyCondition.getStartTime();
-        String endTime = historyCondition.getEndTime();
-        try {
-            long start = sdf.parse(startTime).getTime() / 1000;
-            long end = sdf.parse(endTime).getTime() / 1000;
-            System.out.println("心率记录:"+(end-start));
-            if (end-start<0){
-                resultBean = new ResultBean();
-                resultBean.setCode(-1);
-                resultBean.setMsg("起始时间大于结束时间");
-                List<Myuser> list = new ArrayList<>();
-                resultBean.setData(list);
-                resultBean.setSize(list.size());
-                return resultBean;
-            }
-            List<HeartRateHistory> histories=heartRateHistoryService.getheartRateHistoryByCondition(historyCondition.getPersonIdcard(),historyCondition.getStartTime(),historyCondition.getEndTime());
-            System.err.println("====");
-            if (histories.size()==0) {
-                resultBean = new ResultBean();
-                resultBean.setCode(-1);
-                resultBean.setMsg("该标签不存在或无心率记录");
-                List<Path> list = new ArrayList<>();
-                resultBean.setData(list);
-                resultBean.setSize(list.size());
-                return resultBean;
-            }
-            resultBean = new ResultBean();
-            resultBean.setCode(1);
-            resultBean.setMsg("操作成功");
-            resultBean.setData(histories);
-            resultBean.setSize(histories.size());
-            return resultBean;
-        } catch (ParseException e) {
+        List<HeartRateHistory> histories=heartRateHistoryService.getheartRateHistoryByPersonIdcards(personIdcards);
+        if (histories.size()==0) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
-            resultBean.setMsg("时间转换失败");
-            List<Myuser> list = new ArrayList<>();
+            resultBean.setMsg("该标签不存在或无心率记录");
+            List<Path> list = new ArrayList<>();
             resultBean.setData(list);
             resultBean.setSize(list.size());
             return resultBean;
         }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(histories);
+        resultBean.setSize(histories.size());
+        return resultBean;
 
     }
 
