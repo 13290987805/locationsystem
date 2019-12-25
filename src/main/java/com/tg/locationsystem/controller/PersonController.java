@@ -1225,8 +1225,6 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
 @RequestMapping(value = "getPersonsByTagTypeId",method = RequestMethod.GET)
 @ResponseBody
 public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
-                                  @RequestParam(defaultValue = "1") Integer pageIndex,
-                                  @RequestParam(defaultValue = "10") Integer pageSize,
                                   @RequestParam(defaultValue = "") String tagTypeId){
     ResultBean resultBean;
     Myuser user = (Myuser) request.getSession().getAttribute("user");
