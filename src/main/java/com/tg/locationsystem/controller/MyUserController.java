@@ -138,7 +138,7 @@ public class MyUserController {
     @RequestMapping(value = "updateUser",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResultBean updateUser(@Valid Myuser myuser, BindingResult result,
-                                     HttpServletRequest request,@RequestParam(value="logo",required=false)MultipartFile file){
+                                     HttpServletRequest request,@RequestParam(value="logoData",required=false)MultipartFile file){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
@@ -181,7 +181,9 @@ public class MyUserController {
             return resultBean;
         }
         myuser.setId(user.getId());
+        myuser.setCreateUser(user.getCreateUser());
         //设置图片路径
+        myuser.setLogo(user.getLogo());
         //获取文件名加后缀
         if (file!=null){
             //保存图片的路径
