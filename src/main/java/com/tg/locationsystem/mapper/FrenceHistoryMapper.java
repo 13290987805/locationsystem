@@ -38,4 +38,6 @@ public interface FrenceHistoryMapper extends IBaseDao<FrenceHistory>{
 
 
     int updateBatch(@Param("userid") Integer id,@Param("idList") List<Integer> idsList);
+
+    List<FrenceHistory> getAllFrenceHistoryByIsDeal(@Param("userid")Integer id, @Param("isdeal")String isdeal);
 }

@@ -306,6 +306,10 @@ public class FrenceController {
             frenceVO.setFrenceId(frenceHistory.getFrenceId());
             frenceVO.setUserId(frenceHistory.getUserId());
             frenceVO.setMapkey(frenceHistory.getMapKey());
+            com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
+            if (map != null) {
+                frenceVO.setMapName(map.getMapName());
+            }
             Frence frence = frenceMapper.selectByPrimaryKey(frenceHistory.getFrenceId());
             if (frence != null) {
                 frenceVO.setFrenceName(frence.getName());
@@ -1206,5 +1210,125 @@ public class FrenceController {
             return resultBean;
         }
 
+    }
+
+    /*
+    * 查看所有已处理或未处理的围栏告警
+    * */
+
+    @RequestMapping(value = "getAllFrenceHistoryByIsDeal",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getAllFrenceHistoryByIsDeal(HttpServletRequest request,
+                                              @RequestParam(defaultValue = "") String isdeal,
+                                              @RequestParam(defaultValue = "1") Integer pageIndex,
+                                              @RequestParam(defaultValue = "10") Integer pageSize) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (isdeal == null || "".equals(isdeal)) {
+            resultBean = new ResultBean();
+            resultBean.setCode(115);
+            resultBean.setMsg("处理参数不能为空");
+            List<TagStatusVO> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (!"0".equals(isdeal) && !"1".equals(isdeal)) {
+            resultBean = new ResultBean();
+            resultBean.setCode(116);
+            resultBean.setMsg("参数有误");
+            List<TagStatusVO> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        PageInfo<FrenceHistory> pageInfo = frenceHistoryService.getAllFrenceHistoryByIsDeal(pageIndex, pageSize, user.getId(),isdeal);
+
+        List<FrenceHistoryVO> frenceVOList = new ArrayList<>();
+        for (FrenceHistory frenceHistory : pageInfo.getList()) {
+            FrenceHistoryVO frenceVO = new FrenceHistoryVO();
+            frenceVO.setId(frenceHistory.getId());
+            frenceVO.setPersonIdcard(frenceHistory.getPersonIdcard());
+            frenceVO.setX(frenceHistory.getX());
+            frenceVO.setY(frenceHistory.getY());
+            frenceVO.setStatus(frenceHistory.getStatus());
+            frenceVO.setTime(frenceHistory.getTime());
+            frenceVO.setFrenceId(frenceHistory.getFrenceId());
+            frenceVO.setUserId(frenceHistory.getUserId());
+            frenceVO.setMapkey(frenceHistory.getMapKey());
+            com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
+            if (map != null) {
+                frenceVO.setMapName(map.getMapName());
+            }
+            Frence frence = frenceMapper.selectByPrimaryKey(frenceHistory.getFrenceId());
+            if (frence != null) {
+                frenceVO.setFrenceName(frence.getName());
+                String type = frence.getType();
+                frenceVO.setAlert_type(type);
+                if ("in".equals(type)) {
+                    frenceVO.setAlert_type("进入");
+                }
+                if ("out".equals(type)) {
+                    frenceVO.setAlert_type("离开");
+                }
+                if ("on".equals(type)) {
+                    frenceVO.setAlert_type("停留");
+                }
+                frenceVO.setData(frence.getData());
+            }
+            if ("0".equals(frenceHistory.getStatus())) {
+                frenceVO.setIsDeal("未处理");
+            }
+            if ("1".equals(frenceHistory.getStatus())) {
+                frenceVO.setIsDeal("已处理");
+            }
+            Person person = personMapper.getPersonByIdCard(frenceHistory.getPersonIdcard());
+            if (person != null) {
+                frenceVO.setTagName(person.getPersonName());
+                frenceVO.setImg(person.getImg());
+            } else {
+                Goods goods = goodsMapper.getGoodsByByIdCard(frenceHistory.getPersonIdcard());
+                if (goods != null) {
+                    frenceVO.setTagName(goods.getGoodsName());
+                    frenceVO.setImg(goods.getImg());
+                }
+            }
+            frenceVOList.add(frenceVO);
+        }
+
+        PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
+        page.setPageNum(pageInfo.getPageNum());
+        page.setSize(pageInfo.getSize());
+        page.setSize(pageInfo.getSize());
+        page.setStartRow(pageInfo.getStartRow());
+        page.setEndRow(pageInfo.getEndRow());
+        page.setTotal(pageInfo.getTotal());
+        page.setPages(pageInfo.getPages());
+        page.setList(frenceVOList);
+        page.setPrePage(pageInfo.getPrePage());
+        page.setNextPage(pageInfo.getNextPage());
+        page.setIsFirstPage(pageInfo.isIsFirstPage());
+        page.setIsLastPage(pageInfo.isIsLastPage());
+
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List list = new ArrayList<>();
+        list.add(page);
+        resultBean.setData(list);
+        resultBean.setSize(page.getSize());
+        return resultBean;
     }
 }

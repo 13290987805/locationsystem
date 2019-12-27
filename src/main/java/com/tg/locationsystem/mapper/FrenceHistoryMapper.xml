@@ -16,6 +16,17 @@
     id, person_idcard, x, y, status, time, map_key, user_id, frence_id
   </sql>
 
+  <!--查看用户所有的已处理或者未处理的围栏报警-->
+  <select id="getAllFrenceHistoryByIsDeal"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE    user_id=#{userid}
+    AND status=#{isdeal}
+    ORDER BY time DESC
+  </select>
+
+
   <!--批量将围栏警报设为已处理-->
   <update id="updateBatch" parameterType="java.util.List" >
     UPDATE frence_history SET status = '1' WHERE user_id=#{userid}

@@ -172,5 +172,14 @@ public class FrenceHistoryService extends BaseServiceImpl<FrenceHistory> impleme
         return frenceHistoryMapper.updateBatch(id,idsList);
     }
 
+    @Override
+    public PageInfo<FrenceHistory> getAllFrenceHistoryByIsDeal(Integer pageIndex, Integer pageSize, Integer id, String isdeal) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<FrenceHistory> getAllFrenceHistoryByIsDeal = frenceHistoryMapper.getAllFrenceHistoryByIsDeal(id,isdeal);
+
+        return new PageInfo<>(getAllFrenceHistoryByIsDeal);
+    }
+
 
 }
