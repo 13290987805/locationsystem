@@ -16,6 +16,13 @@
     id, person_idcard, x, y, status, time, map_key, user_id, frence_id
   </sql>
 
+    <!--将所有未处理围栏告警设成已处理-->
+    <update id="setAllFrenceHistoryDeal" parameterType="java.util.List" >
+        UPDATE frence_history
+        SET status = '1' WHERE user_id=#{userid} AND status='0'
+
+    </update>
+
   <!--查看用户所有的已处理或者未处理的围栏报警-->
   <select id="getAllFrenceHistoryByIsDeal"  resultMap="BaseResultMap">
     select

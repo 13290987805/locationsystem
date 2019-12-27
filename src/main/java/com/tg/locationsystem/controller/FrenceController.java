@@ -1331,4 +1331,34 @@ public class FrenceController {
         resultBean.setSize(page.getSize());
         return resultBean;
     }
+
+    /*
+    *将所有未处理围栏告警设成已处理
+    * */
+    @RequestMapping(value = "setAllFrenceHistoryDeal",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean setAllFrenceHistoryDeal(HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+       int update= frenceHistoryService.setAllFrenceHistoryDeal(user.getId());
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(update);
+        return resultBean;
+    }
 }

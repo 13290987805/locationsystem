@@ -18,6 +18,13 @@
     id, person_idcard, data, alert_type, add_time, user_id, isDeal, map_key, x, y, z
   </sql>
 
+    <!--将所有未处理告警设成已处理-->
+    <update id="setAllAlertDeal" parameterType="java.util.List" >
+        UPDATE tag_status
+        SET isDeal = '1' WHERE user_id=#{userid} AND isDeal='0'
+
+    </update>
+
   <!--查看用户所有的已处理或者未处理的报警-->
   <select id="getAllTagStatusByIsDeal"  resultMap="BaseResultMap">
     select

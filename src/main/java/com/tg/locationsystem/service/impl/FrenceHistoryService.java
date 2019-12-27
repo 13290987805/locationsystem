@@ -181,5 +181,10 @@ public class FrenceHistoryService extends BaseServiceImpl<FrenceHistory> impleme
         return new PageInfo<>(getAllFrenceHistoryByIsDeal);
     }
 
+    @Override
+    public int setAllFrenceHistoryDeal(Integer id) {
+        return frenceHistoryMapper.setAllFrenceHistoryDeal(id);
+    }
+
 
 }

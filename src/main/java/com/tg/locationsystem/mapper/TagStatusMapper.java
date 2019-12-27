@@ -43,4 +43,6 @@ public interface TagStatusMapper extends IBaseDao<TagStatus>{
     List<TagStatus> getTagStatusBySomeCondition(@Param("userid") Integer id, @Param("queryTagStatusVO") QueryTagStatusVO queryTagStatusVO,@Param("idCardList") List<String> idCardList);
 
     List<TagStatus> getAllTagStatusByIsDeal(@Param("userid") Integer id,@Param("isdeal") String isdeal);
+
+    int setAllAlertDeal(Integer id);
 }

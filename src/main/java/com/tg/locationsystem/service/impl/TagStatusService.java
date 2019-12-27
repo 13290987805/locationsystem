@@ -138,5 +138,10 @@ public class TagStatusService extends BaseServiceImpl<TagStatus> implements ITag
         return new PageInfo<TagStatus>(list,3);
     }
 
+    @Override
+    public int setAllAlertDeal(Integer id) {
+        return tagStatusMapper.setAllAlertDeal(id);
+    }
+
 
 }

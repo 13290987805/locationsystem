@@ -1374,7 +1374,7 @@ public ResultBean setSoS(HttpServletRequest request,
     * 1 已处理
     * 0 未处理
     * */
-    @RequestMapping(value = "setDealBatch",method = RequestMethod.GET)
+    @RequestMapping(value = "setDealBatch",method = RequestMethod.POST)
     @ResponseBody
     public ResultBean setDealBatch(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String TagStatusIds) {
@@ -1400,7 +1400,6 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }
         String[]  ids = TagStatusIds.split(",");
-        int size=0;
         List<Integer> idsList=new ArrayList<>();
         for (String id : ids) {
             if (StringUtils.isNumeric(id)){
@@ -1820,4 +1819,33 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
     return resultBean;
 }
 
+    /*
+     *将所有未处理围栏告警设成已处理
+     * */
+    @RequestMapping(value = "setAllAlertDeal",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean setAllAlertDeal(HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        int update= tagStatusService.setAllAlertDeal(user.getId());
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(update);
+        return resultBean;
+    }
 }
