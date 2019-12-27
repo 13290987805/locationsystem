@@ -34,4 +34,7 @@ public interface ITagStatusService extends IBaseService<TagStatus> {
     PageInfo<TagStatus> getTagStatusByNoIdCards(Integer pageIndex, Integer pageSize, Integer id, Integer alert_type, String isDeal);
 
     PageInfo<TagStatus> getTagStatusBySomeCondition(Integer pageIndex, Integer pageSize, Integer id, QueryTagStatusVO queryTagStatusVO,List<String> idCardList);
+
+
+    PageInfo<TagStatus> getAllTagStatusByIsDeal(Integer pageIndex, Integer pageSize, Integer id, String isdeal);
 }

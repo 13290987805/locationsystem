@@ -16,6 +16,14 @@
     id, person_idcard, x, y, status, time, map_key, user_id, frence_id
   </sql>
 
+  <!--批量将围栏警报设为已处理-->
+  <update id="updateBatch" parameterType="java.util.List" >
+    UPDATE frence_history SET status = '1' WHERE user_id=#{userid}
+    and id IN
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
 
 
 

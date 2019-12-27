@@ -10,6 +10,7 @@ import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.IFrenceHistoryService;
 import com.tg.locationsystem.service.IFrenceService;
 import com.tg.locationsystem.service.IMapService;
+import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1138,5 +1139,72 @@ public class FrenceController {
 
 
     }
+    /*
+     * 批量将围栏警报设为已处理
+     *
+     *
+     * */
 
+    @RequestMapping(value = "dealFrenceHistoryBatch", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public ResultBean dealFrenceHistoryBatch(@Param("") String frenceHistoryIds,
+                                        HttpServletRequest request
+    ) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (frenceHistoryIds==null||"".equals(frenceHistoryIds)){
+            resultBean = new ResultBean();
+            resultBean.setCode(120);
+            resultBean.setMsg("处理参数不能为空");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        String[]  ids = frenceHistoryIds.split(",");
+        int size=0;
+        List<Integer> idsList=new ArrayList<>();
+        for (String id : ids) {
+            if (StringUtils.isNumeric(id)){
+                idsList.add(Integer.parseInt(id));
+               /* TagStatus tagStatus = tagStatusService.selectByPrimaryKey(Integer.parseInt(id));
+                if (tagStatus!=null){
+                    tagStatus.setIsdeal("1");
+                    int i = tagStatusService.updateByPrimaryKeySelective(tagStatus);
+                    if (i>0){
+                        size++;
+                    }
+                }*/
+            }
+        }
+
+        int update = frenceHistoryService.updateBatch(user.getId(),idsList);
+        //System.out.println(update);
+        if (update>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setSize(update);
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(95);
+            resultBean.setMsg("标签报警处理失败");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+    }
 }

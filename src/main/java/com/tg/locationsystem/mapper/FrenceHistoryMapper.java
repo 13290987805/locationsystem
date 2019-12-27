@@ -37,4 +37,5 @@ public interface FrenceHistoryMapper extends IBaseDao<FrenceHistory>{
     List<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(@Param("frenceId")Integer frenceId, @Param("list")List<String> list);
 
 
+    int updateBatch(@Param("userid") Integer id,@Param("idList") List<Integer> idsList);
 }

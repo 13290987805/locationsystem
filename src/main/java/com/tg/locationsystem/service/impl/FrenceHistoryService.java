@@ -167,7 +167,10 @@ public class FrenceHistoryService extends BaseServiceImpl<FrenceHistory> impleme
         return new PageInfo<>(getFrenceHistoryByFrenceIdAndPersonName);
     }
 
-
+    @Override
+    public int updateBatch(Integer id, List<Integer> idsList) {
+        return frenceHistoryMapper.updateBatch(id,idsList);
+    }
 
 
 }

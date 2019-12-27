@@ -18,6 +18,16 @@
     id, person_idcard, data, alert_type, add_time, user_id, isDeal, map_key, x, y, z
   </sql>
 
+  <!--查看用户所有的已处理或者未处理的报警-->
+  <select id="getAllTagStatusByIsDeal"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag_status
+    WHERE    user_id=#{userid}
+     AND isDeal=#{isdeal}
+    ORDER BY add_time DESC
+  </select>
+
     <!--根据人员名称,处理情况,报警类型搜索报警记录-->
     <select id="getTagStatusBySomeCondition"  resultMap="BaseResultMap">
         select
@@ -125,6 +135,7 @@
     <include refid="Base_Column_List" />
     from tag_status
     WHERE   user_id=#{userid}
+    ORDER BY add_time DESC
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
