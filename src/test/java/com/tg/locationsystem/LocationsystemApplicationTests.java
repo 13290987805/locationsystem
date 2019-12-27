@@ -83,15 +83,14 @@ public class LocationsystemApplicationTests {
 	@Test
 	public void test10() {
 		List<Integer> list=new ArrayList<>();
-		list.add(10);
-		list.add(20);
-		list.add(30);
-		if (list.contains(1)){
-			System.out.println("有");
+		list.add(177);
+		list.add(178);
+		int update=tagStatusService.updateBatch(1,list);
+		if (update>0){
+			System.out.println("成功");
 		}else {
-			System.out.println("没有");
+			System.out.println("失败");
 		}
-
     }
 
 

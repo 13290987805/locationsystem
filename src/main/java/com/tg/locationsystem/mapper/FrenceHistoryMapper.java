@@ -24,15 +24,15 @@ public interface FrenceHistoryMapper extends IBaseDao<FrenceHistory>{
 
     List<FrenceHistory> getFrenceHistory(@Param("frenceid") Integer frenceid, @Param("userid") Integer userid);
 
-    int deleteHistory(@Param("tableName") String tableName, @Param("address") String address);
+    int deleteHistory(@Param("tableName") String tableName,@Param("address") String address);
 
     int deleteHistoryByFrenceId(Integer frenceid);
 
-    List<FrenceHistory> getFrenceHistoryByPersonIdCard(@Param("userid") Integer id, @Param("idCard") String idCard);
+    List<FrenceHistory> getFrenceHistoryByPersonIdCard(@Param("userid") Integer id,@Param("idCard") String idCard);
 
     List<FrenceHistory> getFrenceHistorysByPersonIdCard(@Param("userid") Integer id, @Param("idCard") String idCard);
 
     List<FrenceHistory> getFrenceHistoryByPersonIdCardss(@Param("list") List<String> list);
 
-    List<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(@Param("frenceId") Integer frenceId, @Param("list") List<String> list);
+    List<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(@Param("frenceId")Integer frenceId, @Param("list")List<String> list);
 }

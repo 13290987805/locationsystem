@@ -2,9 +2,11 @@ package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.pojo.HeartRateHistoryCondition;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -41,7 +43,7 @@ public class CallController {
     /*
     * 设置定时点名
     * */
-    @RequestMapping(value = "setTime",method = RequestMethod.GET)
+    @RequestMapping(value = "setTime",method = RequestMethod.POST)
     @ResponseBody
     public ResultBean setTime(@Valid EleCallSet eleCallSet, BindingResult result,
                               HttpServletRequest request) {
@@ -85,12 +87,21 @@ public class CallController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        EleCallSet eleCallSet1=eleCallSetService.getEleCallSetByUserid(user.getId());
-        if (eleCallSet1!=null){
-            eleCallSet.setUserId(eleCallSet1.getUserId());
-            eleCallSet.setUpdateTime(new Date());
-            eleCallSet.setId(eleCallSet1.getId());
-            int update = eleCallSetService.updateByPrimaryKeySelective(eleCallSet);
+        EleCallSet eleCallSet1=null;
+        eleCallSet1=eleCallSetService.getEleCallSetByUserid(user.getId());
+        if (eleCallSet1==null){
+            eleCallSet1=new EleCallSet();
+            eleCallSet1.setUserId(user.getId());
+            eleCallSet1.setUpdateTime(new Date());
+            eleCallSetService.insertSelective(eleCallSet1);
+        }
+
+        eleCallSet1.setUserId(user.getId());
+        eleCallSet1.setUpdateTime(new Date());
+        eleCallSet1.setId(eleCallSet1.getId());
+        eleCallSet1.setSetSwitch(eleCallSet.getSetSwitch());
+        eleCallSet1.setTimeInterval(eleCallSet.getTimeInterval());
+            int update = eleCallSetService.updateByPrimaryKeySelective(eleCallSet1);
             if (update>0){
                 if ("1".equals(eleCallSet.getSetSwitch())){
                     Timer timer1 = SystemMap.getTimermap().get(eleCallSet.getUserId());
@@ -161,7 +172,7 @@ public class CallController {
                             }
                             // 表示在3秒之后开始执行，并且每2秒执行一次
                         }, 3000, eleCallSet.getTimeInterval()*1000);
-                        SystemMap.getTimermap().put(eleCallSet.getUserId(),timer);
+                        SystemMap.getTimermap().put(user.getId(),timer);
                     }else {
                         // 创建定时器
                         Timer timer = new Timer();
@@ -219,7 +230,7 @@ public class CallController {
                             }
                             // 表示在3秒之后开始执行，并且每2秒执行一次
                         }, 3000, eleCallSet.getTimeInterval()*1000);
-                        SystemMap.getTimermap().put(eleCallSet.getUserId(),timer);
+                        SystemMap.getTimermap().put(user.getId(),timer);
                     }
 
                 }
@@ -228,7 +239,7 @@ public class CallController {
                     if (timer1!=null){
                         timer1.cancel();
                     }
-                    SystemMap.getTimermap().remove(eleCallSet.getUserId());
+                    SystemMap.getTimermap().remove(user.getId());
                 }
                 resultBean = new ResultBean();
                 resultBean.setCode(1);
@@ -247,20 +258,14 @@ public class CallController {
                 resultBean.setSize(list.size());
                 return resultBean;
             }
-        }
-        resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("设置定时时间失败");
-        List<EleCallSet> list = new ArrayList<>();
-        resultBean.setData(list);
-        resultBean.setSize(list.size());
-        return resultBean;
     }
 
     /*
     * 设置开关,打开关闭
+    * 1 打开
+    * 0 关闭
     * */
-    @RequestMapping(value = "setSwitch",method = RequestMethod.GET)
+    @RequestMapping(value = "setSwitch",method = RequestMethod.POST)
     @ResponseBody
     public ResultBean setSwitch(@RequestParam(defaultValue = "")String setSwitch,
                               HttpServletRequest request) {
@@ -368,7 +373,7 @@ public class CallController {
                                 statisticsCallService.insertSelective(statisticsCall);
                             }
                             // 表示在3秒之后开始执行，并且每2秒执行一次
-                        }, 3000, eleCallSet.getTimeInterval()*1000);
+                        }, 3000, eleCallSet.getTimeInterval()*1000*60);
                         SystemMap.getTimermap().put(eleCallSet.getUserId(),timer);
                     }else {
                         // 创建定时器
@@ -426,7 +431,7 @@ public class CallController {
                                 statisticsCallService.insertSelective(statisticsCall);
                             }
                             // 表示在3秒之后开始执行，并且每2秒执行一次
-                        }, 3000, eleCallSet.getTimeInterval()*1000);
+                        }, 3000, eleCallSet.getTimeInterval()*1000*60);
                         SystemMap.getTimermap().put(eleCallSet.getUserId(),timer);
                     }
 

@@ -914,16 +914,127 @@ public class FrenceController {
     else if (frenceHistoryCondition.getFrenceId()==null&&frenceHistoryCondition.getPersonName()!=null){
         //System.out.println("只根据人员名称");
             List<Person> personList=personMapper.getPersonsByName(user.getId(),frenceHistoryCondition.getPersonName());
-             List<FrenceHistoryVO> frenceVOList = new ArrayList<>();
-             List<String> list=new ArrayList<>();
-        PageInfo<FrenceHistory> pageInfo=null ;
+        List<FrenceHistoryVO> frenceVOList = new ArrayList<>();
+             if (personList.size()>0){
+                 List<String> list=new ArrayList<>();
+                 PageInfo<FrenceHistory> pageInfo=null ;
+                 if (personList.size()>0){
+                     StringBuffer sb=new StringBuffer();
+                     for (Person person : personList) {
+                         list.add(person.getIdCard());
+                     }
+                     pageInfo = frenceHistoryService.getFrenceHistoryByPersonIdcardss(pageIndex,pageSize,list);
+                     for (FrenceHistory frenceHistory :pageInfo.getList()) {
+                         FrenceHistoryVO frenceVO = new FrenceHistoryVO();
+                         frenceVO.setId(frenceHistory.getId());
+                         frenceVO.setPersonIdcard(frenceHistory.getPersonIdcard());
+                         frenceVO.setX(frenceHistory.getX());
+                         frenceVO.setY(frenceHistory.getY());
+                         frenceVO.setStatus(frenceHistory.getStatus());
+                         frenceVO.setTime(frenceHistory.getTime());
+                         frenceVO.setFrenceId(frenceHistory.getFrenceId());
+                         frenceVO.setUserId(frenceHistory.getUserId());
+                         frenceVO.setMapkey(frenceHistory.getMapKey());
+                         com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
+                         if (map!=null){
+                             frenceVO.setMapName(map.getMapName());
+                         }
+                         Frence frence = frenceMapper.selectByPrimaryKey(frenceHistory.getFrenceId());
+                         if (frence != null) {
+                             frenceVO.setFrenceName(frence.getName());
+                             String type = frence.getType();
+                             frenceVO.setAlert_type(type);
+                             if ("in".equals(type)) {
+                                 frenceVO.setAlert_type("进入");
+                             }
+                             if ("out".equals(type)) {
+                                 frenceVO.setAlert_type("离开");
+                             }
+                             if ("on".equals(type)) {
+                                 frenceVO.setAlert_type("停留");
+                             }
+                             frenceVO.setData(frence.getData());
+                         }
+                         if ("0".equals(frenceHistory.getStatus())) {
+                             frenceVO.setIsDeal("未处理");
+                         }
+                         if ("1".equals(frenceHistory.getStatus())) {
+                             frenceVO.setIsDeal("已处理");
+                         }
+                         Person sqlperson = personMapper.getPersonByIdCard(frenceHistory.getPersonIdcard());
+                         if (sqlperson != null) {
+                             frenceVO.setTagName(sqlperson.getPersonName());
+                             frenceVO.setImg(sqlperson.getImg());
+                         } else {
+                             Goods goods = goodsMapper.getGoodsByByIdCard(frenceHistory.getPersonIdcard());
+                             if (goods != null) {
+                                 frenceVO.setTagName(goods.getGoodsName());
+                                 frenceVO.setImg(goods.getImg());
+                             }
+                         }
+                         frenceVOList.add(frenceVO);
+                     }
+                 }
+                 PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
+                 page.setPageNum(pageInfo.getPageNum());
+                 page.setSize(pageInfo.getSize());
+                 page.setSize(pageInfo.getSize());
+                 page.setStartRow(pageInfo.getStartRow());
+                 page.setEndRow(pageInfo.getEndRow());
+                 page.setTotal(pageInfo.getTotal());
+                 page.setPages(pageInfo.getPages());
+                 page.setList(frenceVOList);
+                 page.setPrePage(pageInfo.getPrePage());
+                 page.setNextPage(pageInfo.getNextPage());
+                 page.setIsFirstPage(pageInfo.isIsFirstPage());
+                 page.setIsLastPage(pageInfo.isIsLastPage());
+
+                 resultBean = new ResultBean();
+                 resultBean.setCode(1);
+                 resultBean.setMsg("操作成功");
+                 List lists=new ArrayList();
+                 lists.add(page);
+                 resultBean.setData(lists);
+                 resultBean.setSize(pageInfo.getSize());
+                 return resultBean;
+             }else {
+                 PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
+                 page.setPageNum(0);
+                 page.setSize(0);
+                 page.setSize(0);
+                 page.setStartRow(0);
+                 page.setEndRow(0);
+                 page.setTotal(0);
+                 page.setPages(0);
+                 page.setList(frenceVOList);
+                 page.setPrePage(0);
+                 page.setNextPage(0);
+
+                 resultBean = new ResultBean();
+                 resultBean.setCode(1);
+                 resultBean.setMsg("操作成功");
+                 List lists=new ArrayList();
+                 lists.add(page);
+                 resultBean.setData(lists);
+                 resultBean.setSize(lists.size());
+                 return resultBean;
+             }
+
+
+            }
+        //围栏跟人员名称都有给
+        else {
+        List<Person> personList=personMapper.getPersonsByName(user.getId(),frenceHistoryCondition.getPersonName());
+        List<FrenceHistoryVO> frenceVOList = new ArrayList<>();
+        if (personList.size()>0){
+            List<String> list=new ArrayList<>();
+            PageInfo<FrenceHistory> pageInfo=null ;
             if (personList.size()>0){
                 StringBuffer sb=new StringBuffer();
                 for (Person person : personList) {
-                        list.add(person.getIdCard());
-                    }
-
-                 pageInfo = frenceHistoryService.getFrenceHistoryByPersonIdcardss(pageIndex,pageSize,list);
+                    list.add(person.getIdCard());
+                }
+                pageInfo = frenceHistoryService.getFrenceHistoryByFrenceIdAndPersonName(pageIndex,pageSize,frenceHistoryCondition.getFrenceId(),list);
                 for (FrenceHistory frenceHistory :pageInfo.getList()) {
                     FrenceHistoryVO frenceVO = new FrenceHistoryVO();
                     frenceVO.setId(frenceHistory.getId());
@@ -973,118 +1084,54 @@ public class FrenceController {
                         }
                     }
                     frenceVOList.add(frenceVO);
-                    }
                 }
-        PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
-        page.setPageNum(pageInfo.getPageNum());
-        page.setSize(pageInfo.getSize());
-        page.setSize(pageInfo.getSize());
-        page.setStartRow(pageInfo.getStartRow());
-        page.setEndRow(pageInfo.getEndRow());
-        page.setTotal(pageInfo.getTotal());
-        page.setPages(pageInfo.getPages());
-        page.setList(frenceVOList);
-        page.setPrePage(pageInfo.getPrePage());
-        page.setNextPage(pageInfo.getNextPage());
-        page.setIsFirstPage(pageInfo.isIsFirstPage());
-        page.setIsLastPage(pageInfo.isIsLastPage());
+            }
+            PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
+            page.setPageNum(pageInfo.getPageNum());
+            page.setSize(pageInfo.getSize());
+            page.setSize(pageInfo.getSize());
+            page.setStartRow(pageInfo.getStartRow());
+            page.setEndRow(pageInfo.getEndRow());
+            page.setTotal(pageInfo.getTotal());
+            page.setPages(pageInfo.getPages());
+            page.setList(frenceVOList);
+            page.setPrePage(pageInfo.getPrePage());
+            page.setNextPage(pageInfo.getNextPage());
+            page.setIsFirstPage(pageInfo.isIsFirstPage());
+            page.setIsLastPage(pageInfo.isIsLastPage());
+
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List datalist = new ArrayList<>();
+            datalist.add(page);
+            resultBean.setData(datalist);
+            resultBean.setSize(page.getSize());
+            return resultBean;
+        }else {
+            PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
+            page.setPageNum(0);
+            page.setSize(0);
+            page.setSize(0);
+            page.setStartRow(0);
+            page.setEndRow(0);
+            page.setTotal(0);
+            page.setPages(0);
+            page.setList(frenceVOList);
+            page.setPrePage(0);
+            page.setNextPage(0);
 
 
-
-                resultBean = new ResultBean();
-                resultBean.setCode(1);
-                resultBean.setMsg("操作成功");
-                List lists=new ArrayList();
-                lists.add(page);
-                resultBean.setData(lists);
-                resultBean.setSize(pageInfo.getSize());
-                return resultBean;
-            }
-        //围栏跟人员名称都有给
-        else {
-        List<Person> personList=personMapper.getPersonsByName(user.getId(),frenceHistoryCondition.getPersonName());
-        List<FrenceHistoryVO> frenceVOList = new ArrayList<>();
-        List<String> list=new ArrayList<>();
-        PageInfo<FrenceHistory> pageInfo=null ;
-        if (personList.size()>0){
-            StringBuffer sb=new StringBuffer();
-            for (Person person : personList) {
-                list.add(person.getIdCard());
-            }
-            pageInfo = frenceHistoryService.getFrenceHistoryByFrenceIdAndPersonName(pageIndex,pageSize,frenceHistoryCondition.getFrenceId(),list);
-            for (FrenceHistory frenceHistory :pageInfo.getList()) {
-                FrenceHistoryVO frenceVO = new FrenceHistoryVO();
-                frenceVO.setId(frenceHistory.getId());
-                frenceVO.setPersonIdcard(frenceHistory.getPersonIdcard());
-                frenceVO.setX(frenceHistory.getX());
-                frenceVO.setY(frenceHistory.getY());
-                frenceVO.setStatus(frenceHistory.getStatus());
-                frenceVO.setTime(frenceHistory.getTime());
-                frenceVO.setFrenceId(frenceHistory.getFrenceId());
-                frenceVO.setUserId(frenceHistory.getUserId());
-                frenceVO.setMapkey(frenceHistory.getMapKey());
-                com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
-                if (map!=null){
-                    frenceVO.setMapName(map.getMapName());
-                }
-                Frence frence = frenceMapper.selectByPrimaryKey(frenceHistory.getFrenceId());
-                if (frence != null) {
-                    frenceVO.setFrenceName(frence.getName());
-                    String type = frence.getType();
-                    frenceVO.setAlert_type(type);
-                    if ("in".equals(type)) {
-                        frenceVO.setAlert_type("进入");
-                    }
-                    if ("out".equals(type)) {
-                        frenceVO.setAlert_type("离开");
-                    }
-                    if ("on".equals(type)) {
-                        frenceVO.setAlert_type("停留");
-                    }
-                    frenceVO.setData(frence.getData());
-                }
-                if ("0".equals(frenceHistory.getStatus())) {
-                    frenceVO.setIsDeal("未处理");
-                }
-                if ("1".equals(frenceHistory.getStatus())) {
-                    frenceVO.setIsDeal("已处理");
-                }
-                Person sqlperson = personMapper.getPersonByIdCard(frenceHistory.getPersonIdcard());
-                if (sqlperson != null) {
-                    frenceVO.setTagName(sqlperson.getPersonName());
-                    frenceVO.setImg(sqlperson.getImg());
-                } else {
-                    Goods goods = goodsMapper.getGoodsByByIdCard(frenceHistory.getPersonIdcard());
-                    if (goods != null) {
-                        frenceVO.setTagName(goods.getGoodsName());
-                        frenceVO.setImg(goods.getImg());
-                    }
-                }
-                frenceVOList.add(frenceVO);
-            }
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List lists=new ArrayList();
+            lists.add(page);
+            resultBean.setData(lists);
+            resultBean.setSize(lists.size());
+            return resultBean;
         }
-        PageInfo<FrenceHistoryVO> page = new PageInfo<>(frenceVOList);
-        page.setPageNum(pageInfo.getPageNum());
-        page.setSize(pageInfo.getSize());
-        page.setSize(pageInfo.getSize());
-        page.setStartRow(pageInfo.getStartRow());
-        page.setEndRow(pageInfo.getEndRow());
-        page.setTotal(pageInfo.getTotal());
-        page.setPages(pageInfo.getPages());
-        page.setList(frenceVOList);
-        page.setPrePage(pageInfo.getPrePage());
-        page.setNextPage(pageInfo.getNextPage());
-        page.setIsFirstPage(pageInfo.isIsFirstPage());
-        page.setIsLastPage(pageInfo.isIsLastPage());
 
-        resultBean = new ResultBean();
-        resultBean.setCode(1);
-        resultBean.setMsg("操作成功");
-        List datalist = new ArrayList<>();
-        datalist.add(page);
-        resultBean.setData(datalist);
-        resultBean.setSize(page.getSize());
-        return resultBean;
     }
 
 

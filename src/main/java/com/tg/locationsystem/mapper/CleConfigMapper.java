@@ -1,7 +1,10 @@
 package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.base.dao.IBaseDao;
+import com.tg.locationsystem.entity.AlertSet;
 import com.tg.locationsystem.entity.CleConfig;
+
+import java.util.List;
 
 public interface CleConfigMapper extends IBaseDao<CleConfig>{
     int deleteByPrimaryKey(Integer id);
@@ -20,3 +23,18 @@ public interface CleConfigMapper extends IBaseDao<CleConfig>{
 
     CleConfig getConfigByMapKey(String mapKey);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ import com.tg.locationsystem.mapper.PersonTypeMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -514,16 +515,58 @@ public class PersonController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-
+        if (typeid==null||"".equals(typeid)|| !StringUtils.isNumeric(String.valueOf(typeid))){
+            resultBean = new ResultBean();
+            resultBean.setCode(124);
+            resultBean.setMsg("查询参数有误");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
         PageInfo<Person> pageInfo=personService.getPersonsByteTypePage(pageIndex,pageSize,typeid,user.getId());
+
+        List<PersonVO> personVOList=new ArrayList<>();
+        for (Person person : pageInfo.getList()) {
+            PersonVO personVO=new PersonVO();
+            personVO.setId(person.getId());
+            personVO.setIdCard(person.getIdCard());
+            personVO.setImg(person.getImg());
+            personVO.setPersonHeight(person.getPersonHeight());
+            personVO.setPersonPhone(person.getPersonPhone());
+            personVO.setPersonName(person.getPersonName());
+            personVO.setPersonSex(person.getPersonSex());
+            personVO.setTagAddress(person.getTagAddress());
+            personVO.setUserId(person.getUserId());
+            personVO.setPersonTypeid(person.getPersonTypeid());
+            //人员类型名字
+            PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+            if (personType!=null){
+                personVO.setPersonTypeName(personType.getTypeName());
+            }
+            personVOList.add(personVO);
+        }
+        PageInfo<PersonVO> page= new PageInfo<>(personVOList);
+        page.setPageNum(pageInfo.getPageNum());
+        page.setSize(pageInfo.getSize());
+        page.setSize(pageInfo.getSize());
+        page.setStartRow(pageInfo.getStartRow());
+        page.setEndRow(pageInfo.getEndRow());
+        page.setTotal(pageInfo.getTotal());
+        page.setPages(pageInfo.getPages());
+        page.setList(personVOList);
+        page.setPrePage(pageInfo.getPrePage());
+        page.setNextPage(pageInfo.getNextPage());
+        page.setIsFirstPage(pageInfo.isIsFirstPage());
+        page.setIsLastPage(pageInfo.isIsLastPage());
 
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
         List list=new ArrayList<>();
-        list.add(pageInfo);
+        list.add(page);
         resultBean.setData(list);
-        resultBean.setSize(pageInfo.getSize());
+        resultBean.setSize(page.getSize());
         return resultBean;
     }
     /*
@@ -546,11 +589,41 @@ public class PersonController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+        if (typeid==null||"".equals(typeid)|| !StringUtils.isNumeric(String.valueOf(typeid))){
+            resultBean = new ResultBean();
+            resultBean.setCode(124);
+            resultBean.setMsg("查询参数有误");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
         List<Person> personTypeList=personService.getPersonsByType(typeid,user.getId());
+        List<PersonVO> personVOList=new ArrayList<>();
+        for (Person person : personTypeList) {
+            PersonVO personVO=new PersonVO();
+            personVO.setId(person.getId());
+            personVO.setIdCard(person.getIdCard());
+            personVO.setImg(person.getImg());
+            personVO.setPersonHeight(person.getPersonHeight());
+            personVO.setPersonPhone(person.getPersonPhone());
+            personVO.setPersonName(person.getPersonName());
+            personVO.setPersonSex(person.getPersonSex());
+            personVO.setTagAddress(person.getTagAddress());
+            personVO.setUserId(person.getUserId());
+            personVO.setPersonTypeid(person.getPersonTypeid());
+            //人员类型名字
+            PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+            if (personType!=null){
+                personVO.setPersonTypeName(personType.getTypeName());
+            }
+            personVOList.add(personVO);
+        }
+
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
-        resultBean.setData(personTypeList);
+        resultBean.setData(personVOList);
         resultBean.setSize(personTypeList.size());
         return resultBean;
     }
@@ -1145,4 +1218,66 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         return resultBean;
 
     }
+/*
+* 根据标签类型查看所有相关人员信息
+*
+* */
+@RequestMapping(value = "getPersonsByTagTypeId",method = RequestMethod.GET)
+@ResponseBody
+public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
+                                  @RequestParam(defaultValue = "") String tagTypeId){
+    ResultBean resultBean;
+    Myuser user = (Myuser) request.getSession().getAttribute("user");
+    //未登录
+    if (user==null){
+        resultBean = new ResultBean();
+        resultBean.setCode(5);
+        resultBean.setMsg("还未登录");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    if (tagTypeId==null||"".equals(tagTypeId)|| !StringUtils.isNumeric(String.valueOf(tagTypeId))){
+        resultBean = new ResultBean();
+        resultBean.setCode(124);
+        resultBean.setMsg("查询参数有误");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    List<Tag> tagList=tagService.getTagsByType(Integer.parseInt(tagTypeId),user.getId());
+    List<PersonVO> personVOList=new ArrayList<>();
+    for (Tag tag : tagList) {
+        Person person = personService.getPersonByOnlyAddress(tag.getAddress());
+        if (person!=null){
+            PersonVO personVO=new PersonVO();
+            personVO.setId(person.getId());
+            personVO.setIdCard(person.getIdCard());
+            personVO.setImg(person.getImg());
+            personVO.setPersonHeight(person.getPersonHeight());
+            personVO.setPersonPhone(person.getPersonPhone());
+            personVO.setPersonName(person.getPersonName());
+            personVO.setPersonSex(person.getPersonSex());
+            personVO.setTagAddress(person.getTagAddress());
+            personVO.setUserId(person.getUserId());
+            personVO.setPersonTypeid(person.getPersonTypeid());
+            //人员类型名字
+            PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+            if (personType!=null){
+                personVO.setPersonTypeName(personType.getTypeName());
+            }
+            personVOList.add(personVO);
+        }
+    }
+
+    resultBean = new ResultBean();
+    resultBean.setCode(1);
+    resultBean.setMsg("操作成功");
+    resultBean.setData(personVOList);
+    resultBean.setSize(personVOList.size());
+    return resultBean;
+}
+
 }

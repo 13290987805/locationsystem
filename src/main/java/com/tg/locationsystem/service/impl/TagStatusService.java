@@ -6,6 +6,7 @@ import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.*;
+import com.tg.locationsystem.pojo.QueryTagStatusVO;
 import com.tg.locationsystem.pojo.TagStatusVO;
 import com.tg.locationsystem.pojo.TagVO;
 import com.tg.locationsystem.service.ITagService;
@@ -97,6 +98,31 @@ public class TagStatusService extends BaseServiceImpl<TagStatus> implements ITag
         //设置分页
         PageHelper.startPage(pageIndex,pageSize);
         List<TagStatus> list = tagStatusMapper.getTagStatusByTypeId(id,typeid);
+
+
+        return new PageInfo<TagStatus>(list,3);
+    }
+
+    @Override
+    public int updateBatch(Integer userid,List<Integer> list) {
+        return tagStatusMapper.updateBatch(userid,list);
+    }
+
+    @Override
+    public PageInfo<TagStatus> getTagStatusByNoIdCards(Integer pageIndex, Integer pageSize, Integer id, Integer alert_type, String isDeal) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<TagStatus> list = tagStatusMapper.getTagStatusByNoIdCards(id,alert_type,isDeal);
+
+
+        return new PageInfo<TagStatus>(list,3);
+    }
+
+    @Override
+    public PageInfo<TagStatus> getTagStatusBySomeCondition(Integer pageIndex, Integer pageSize, Integer id, QueryTagStatusVO queryTagStatusVO,List<String> idCardList) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<TagStatus> list = tagStatusMapper.getTagStatusBySomeCondition(id,queryTagStatusVO,idCardList);
 
 
         return new PageInfo<TagStatus>(list,3);

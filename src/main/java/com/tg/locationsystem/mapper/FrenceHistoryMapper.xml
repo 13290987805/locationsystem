@@ -17,6 +17,8 @@
   </sql>
 
 
+
+
     <select id="getFrenceHistoryByFrenceIdAndPersonName"  resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />

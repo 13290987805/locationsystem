@@ -43,7 +43,7 @@
     values (#{id,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{timeInterval,jdbcType=INTEGER}, 
       #{setSwitch,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.EleCallSet">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.EleCallSet" useGeneratedKeys="true" keyProperty="id">
     insert into ele_call_set
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
