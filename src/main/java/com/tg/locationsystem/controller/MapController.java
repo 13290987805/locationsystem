@@ -59,7 +59,7 @@ public class MapController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -340,6 +340,15 @@ public class MapController {
             mapVO.setMapdata(sb.toString());
             //cle配置
             CleConfig cleConfig=cleConfigService.getConfigByMapKey(map.getMapKey());
+            if (cleConfig==null){
+                //默认cle配置
+                cleConfig=new CleConfig();
+                cleConfig.setMapKey(map.getMapKey());
+                cleConfig.setChannel("2");
+                cleConfig.setAskTime("10");
+                cleConfig.setSendTime("10");
+                int insertconfig = cleConfigService.insertSelective(cleConfig);
+            }
             mapVO.setChannel(cleConfig.getChannel());
             mapVO.setAskTime(cleConfig.getAskTime());
             mapVO.setSendTime(cleConfig.getSendTime());

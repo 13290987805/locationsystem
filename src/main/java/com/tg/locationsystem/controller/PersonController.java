@@ -517,7 +517,7 @@ public class PersonController {
         }
         if (typeid==null||"".equals(typeid)|| !StringUtils.isNumeric(String.valueOf(typeid))){
             resultBean = new ResultBean();
-            resultBean.setCode(124);
+            resultBean.setCode(-1);
             resultBean.setMsg("查询参数有误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -591,7 +591,7 @@ public class PersonController {
         }
         if (typeid==null||"".equals(typeid)|| !StringUtils.isNumeric(String.valueOf(typeid))){
             resultBean = new ResultBean();
-            resultBean.setCode(124);
+            resultBean.setCode(-1);
             resultBean.setMsg("查询参数有误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1231,7 +1231,7 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1240,7 +1240,7 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
     }
     if (tagTypeId==null||"".equals(tagTypeId)|| !StringUtils.isNumeric(String.valueOf(tagTypeId))){
         resultBean = new ResultBean();
-        resultBean.setCode(124);
+        resultBean.setCode(-1);
         resultBean.setMsg("查询参数有误");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);

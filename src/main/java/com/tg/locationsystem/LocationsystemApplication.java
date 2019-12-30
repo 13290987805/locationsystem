@@ -84,10 +84,11 @@ public class LocationsystemApplication  {
     public static final double boundary_MinX=7.57;
     public static final double boundary_MaxY=19.75;
     public static final double boundary_MinY=1.65;
-	public static final String sos="_sos";
-	public static final String heart="_heatr";
-	public static final String cut="_cut";
-	public static final String battery="_battery";
+	public static final String SOS="_sos";
+	public static final String HEART="_heatr";
+	public static final String CUT="_cut";
+	public static final String BATTERY="_battery";
+	public static final String FRENCE="_frence";
 
 	public static  SkylabSDK skylabSDK=new SkylabSDK(3600,3601);
 
@@ -126,6 +127,7 @@ public class LocationsystemApplication  {
 		skylabSDK.setUwbDataCallback(new UWBCallback() {
 			@Override
 			public void onLocation(String key, bean.Tag tag) {
+                //System.out.println("标签:"+tag.getAddres());
 				//System.out.println("cle链路:"+key);
 				//地图的key
 				String mapKey = SystemMap.getKey(SystemMap.getCleAndKeyMap(),key);
@@ -169,24 +171,88 @@ public class LocationsystemApplication  {
 							//System.out.println("点与围栏的关系:"+s);
 							//System.out.println("数据库围栏的触发条件:"+frence.getType());
 							if (s.equals(frence.getType())) {
-								FrenceHistory frenceHistory = new FrenceHistory();
-								//frenceHistory.setTagAddress(tag.getAddres());
-								String peridcard = SystemMap.getTagAndPersonMap().get(tag.getAddres());
-								frenceHistory.setPersonIdcard(peridcard);
-								frenceHistory.setX(tag.getX());
-								frenceHistory.setY(tag.getY());
-								frenceHistory.setStatus("0");
-								frenceHistory.setTime(new Date());
-								frenceHistory.setUserId(userid);
-								frenceHistory.setFrenceId(frence.getId());
-                                frenceHistory.setMapKey(mapKey);
-								//websocket通知前端有警告
+								String frenceTime = SystemMap.getFrenceTimemap().get(tag.getAddres());
+								//第一次进来,不存在
+								if (frenceTime==null||"".equals(frenceTime)){
+									String time = sdf1.format(new Date());
+									SystemMap.getFrenceTimemap().put(tag.getAddres(),time+","+time);
+								}else {
+									DateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+									String[] frenceTimesplit = frenceTime.split(",");
+									try {
+										long nowTime = sdf1.parse(frenceTimesplit[1]).getTime() / 1000;
+										long now = System.currentTimeMillis()/1000;
+										//缓存的当前时间-系统当前时间
+										//若超过3s,刷新缓存当前时间
+										if ((nowTime-now)>3){
+											String time = sdf1.format(new Date());
+											SystemMap.getFrenceTimemap().put(tag.getAddres(),time+","+time);
+										}else {
+											String time = sdf1.format(new Date());
+											frenceTimesplit[1]=time;
+											SystemMap.getFrenceTimemap().put(tag.getAddres(),frenceTimesplit[0]+","+frenceTimesplit[1]);
+											long firstTime = sdf1.parse(frenceTimesplit[0]).getTime() / 1000;
+											//真的进入了围栏,触发了警报
+											if ((firstTime-nowTime)>5){
+												//报警标识
+												String alertData=tag.getAddres()+FRENCE;
+												Map<String, String> alertmap = SystemMap.getAlertmap();
+												String alerttime = alertmap.get(alertData);
+												//最新时间
+												String format = sdf1.format(new Date());
+												if (alerttime==null||"".equals(alerttime)){
+													alertmap.put(alertData,format);
+													FrenceHistory frenceHistory = new FrenceHistory();
+													//frenceHistory.setTagAddress(tag.getAddres());
+													String peridcard = SystemMap.getTagAndPersonMap().get(tag.getAddres());
+													frenceHistory.setPersonIdcard(peridcard);
+													frenceHistory.setX(tag.getX());
+													frenceHistory.setY(tag.getY());
+													frenceHistory.setStatus("0");
+													frenceHistory.setTime(new Date());
+													frenceHistory.setUserId(userid);
+													frenceHistory.setFrenceId(frence.getId());
+													frenceHistory.setMapKey(mapKey);
+													//websocket通知前端有警告
                             /*   String tagStatusjson = net.sf.json.JSONObject.fromObject(frenceHistory).toString();
                                Channel channel = SystemMap.getChannelmap().get(userid);
                                TextWebSocketFrame tws = new TextWebSocketFrame(tagStatusjson);
                                channel.writeAndFlush(tws);*/
-								//插入一条围栏记录
-								frenceHistoryService.insertSelective(frenceHistory);
+													//插入一条围栏记录
+													frenceHistoryService.insertSelective(frenceHistory);
+												}else {
+													if (System.currentTimeMillis()/1000-sdf1.parse(alerttime).getTime()/1000>10) {
+														alertmap.put(alertData,format);
+														FrenceHistory frenceHistory = new FrenceHistory();
+														//frenceHistory.setTagAddress(tag.getAddres());
+														String peridcard = SystemMap.getTagAndPersonMap().get(tag.getAddres());
+														frenceHistory.setPersonIdcard(peridcard);
+														frenceHistory.setX(tag.getX());
+														frenceHistory.setY(tag.getY());
+														frenceHistory.setStatus("0");
+														frenceHistory.setTime(new Date());
+														frenceHistory.setUserId(userid);
+														frenceHistory.setFrenceId(frence.getId());
+														frenceHistory.setMapKey(mapKey);
+														//websocket通知前端有警告
+                            /*   String tagStatusjson = net.sf.json.JSONObject.fromObject(frenceHistory).toString();
+                               Channel channel = SystemMap.getChannelmap().get(userid);
+                               TextWebSocketFrame tws = new TextWebSocketFrame(tagStatusjson);
+                               channel.writeAndFlush(tws);*/
+														//插入一条围栏记录
+														frenceHistoryService.insertSelective(frenceHistory);
+
+													}
+												}
+											}
+										}
+									} catch (ParseException e) {
+										e.printStackTrace();
+									}
+
+								}
+
 							}
 						}
 					}
@@ -421,7 +487,7 @@ public class LocationsystemApplication  {
 					net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(alertVO, jsonConfig);*/
 
 						//报警标识
-						String alertData=tagAdd+sos;
+						String alertData=tagAdd+SOS;
 						Map<String, String> alertmap = SystemMap.getAlertmap();
 						String time = alertmap.get(alertData);
 						//最新时间
@@ -538,7 +604,7 @@ public class LocationsystemApplication  {
 
 
 						//报警标识
-						String alertData=tagAdd+battery;
+						String alertData=tagAdd+BATTERY;
 						Map<String, String> alertmap = SystemMap.getAlertmap();
 						String time = alertmap.get(alertData);
 
@@ -682,7 +748,7 @@ public class LocationsystemApplication  {
 					net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(alertVO, jsonConfig);*/
 
 							//报警标识
-							String alertData=tagAdd+heart;
+							String alertData=tagAdd+HEART;
 							Map<String, String> alertmap = SystemMap.getAlertmap();
 							String time = alertmap.get(alertData);
 							//最新时间
@@ -805,7 +871,7 @@ public class LocationsystemApplication  {
 					net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(alertVO, jsonConfig);*/
 
 						//报警标识
-						String alertData=tagAdd+cut;
+						String alertData=tagAdd+CUT;
 						Map<String, String> alertmap = SystemMap.getAlertmap();
 						String time = alertmap.get(alertData);
 						//最新时间

@@ -31,5 +31,5 @@ public interface IPersonService extends IBaseService<Person>{
     Person getPersonByOnlyAddress(String tagAddress);
 
 
-
+    Person getPersonByPersonIdCard(String idCard);
 }

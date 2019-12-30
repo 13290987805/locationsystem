@@ -59,6 +59,9 @@ public class SystemMap {
     //缓存低电量报警的用户id
     private static List<Integer> batteryList=new ArrayList<>();
 
+    //缓存标签mac (第一次触发时间,当前时间)
+    private static Map<String,String> frenceTimemap = new ConcurrentHashMap();
+
     public static Map<String, Integer> getCountmap() {
         return countmap;
     }
@@ -185,6 +188,14 @@ public class SystemMap {
 
     public static Map<String, String> getMapRuleMap() {
         return MapRuleMap;
+    }
+
+    public static Map<String, String> getFrenceTimemap() {
+        return frenceTimemap;
+    }
+
+    public static void setFrenceTimemap(Map<String, String> frenceTimemap) {
+        SystemMap.frenceTimemap = frenceTimemap;
     }
 
     public static void setMapRuleMap(Map<String, String> mapRuleMap) {

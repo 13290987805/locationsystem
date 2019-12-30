@@ -794,7 +794,6 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
     if (!sqlGoods.getGoodsIdcard().equals(goods.getGoodsIdcard())){
         Goods goodsByGoodsIdCard = goodsService.getGoodsByGoodsIdCard(goods.getGoodsIdcard());
         if (goodsByGoodsIdCard!=null){
-            if (sqlGoods!=null){
                 resultBean = new ResultBean();
                 resultBean.setCode(-1);
                 resultBean.setMsg("该物品编码不唯一");
@@ -802,7 +801,6 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
                 resultBean.setData(list);
                 resultBean.setSize(list.size());
                 return resultBean;
-            }
         }
 
     }
@@ -866,7 +864,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
                 if (sqltag.getAddress()!=null){
                     //把该标签放到缓存中
                     Map<String, Integer> usermap = SystemMap.getUsermap();
-                    usermap.put(sqltag.getAddress(),tag.getUserId());
+                    usermap.put(goods.getTagAddress(),user.getId());
                     SystemMap.getTagAndPersonMap().put(sqltag.getAddress(),goods.getGoodsIdcard());
                     //设置次数
                     SystemMap.getCountmap().put(sqltag.getAddress(),0);

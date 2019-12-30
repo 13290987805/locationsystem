@@ -1157,7 +1157,7 @@ public class FrenceController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1166,7 +1166,7 @@ public class FrenceController {
         }
         if (frenceHistoryIds==null||"".equals(frenceHistoryIds)){
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("处理参数不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1200,7 +1200,7 @@ public class FrenceController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(95);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签报警处理失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1225,7 +1225,7 @@ public class FrenceController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1234,7 +1234,7 @@ public class FrenceController {
         }
         if (isdeal == null || "".equals(isdeal)) {
             resultBean = new ResultBean();
-            resultBean.setCode(115);
+            resultBean.setCode(-1);
             resultBean.setMsg("处理参数不能为空");
             List<TagStatusVO> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1243,7 +1243,7 @@ public class FrenceController {
         }
         if (!"0".equals(isdeal) && !"1".equals(isdeal)) {
             resultBean = new ResultBean();
-            resultBean.setCode(116);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数有误");
             List<TagStatusVO> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1341,7 +1341,7 @@ public class FrenceController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
