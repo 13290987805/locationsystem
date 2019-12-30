@@ -8,10 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.handler.NettyServerHandler;
-import com.tg.locationsystem.maprule.ThroughWall;
 import com.tg.locationsystem.pojo.AlertVO;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
@@ -31,10 +29,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.text.DateFormat;
@@ -131,6 +127,7 @@ public class LocationsystemApplication  {
 		skylabSDK.setUwbDataCallback(new UWBCallback() {
 			@Override
 			public void onLocation(String key, bean.Tag tag) {
+                //System.out.println("标签:"+tag.getAddres());
 				//System.out.println("cle链路:"+key);
 				//地图的key
 				String mapKey = SystemMap.getKey(SystemMap.getCleAndKeyMap(),key);

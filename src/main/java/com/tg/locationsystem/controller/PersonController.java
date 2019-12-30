@@ -828,7 +828,6 @@ public ResultBean deletePerson(HttpServletRequest request,
     @ResponseBody
     public ResultBean UpdatePerson(@Valid Person person, BindingResult result,
                                 HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
-
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
@@ -865,24 +864,24 @@ public ResultBean deletePerson(HttpServletRequest request,
             resultBean = new ResultBean();
             resultBean.setCode(78);
             resultBean.setMsg("id不能为空");
-            List<Myuser> list = new ArrayList<>();     
+            List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
             resultBean.setSize(list.size());
             return resultBean;
         }
         Person sqlPerson2=personService.selectByPrimaryKey(person.getId());
         if (!sqlPerson2.getIdCard().equals(person.getIdCard())){
-            Person personByOnlyAddress = personService.getPersonByOnlyAddress(person.getIdCard());
+
+            Person personByOnlyAddress = personService.getPersonByPersonIdCard(person.getIdCard());
+
             if (personByOnlyAddress!=null){
-                if (sqlPerson2!=null){
-                    resultBean = new ResultBean();
-                    resultBean.setCode(82);
-                    resultBean.setMsg("身份证号码有误");
-                    List<Myuser> list = new ArrayList<>();
-                    resultBean.setData(list);
-                    resultBean.setSize(list.size());
-                    return resultBean;
-                }
+                resultBean = new ResultBean();
+                resultBean.setCode(82);
+                resultBean.setMsg("身份证号码有误");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
             }
 
         }
@@ -903,7 +902,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             String s = System.getProperty("user.dir");//C:\whzy\locationsystem
             String filePath =s.split(":")[0]+":\\img";
             UploadFileUtil.isChartPathExist(filePath);
-          //  String filePath = "C:\\whzy\\locationsystem\\src\\main\\resources\\static\\person";
+            //  String filePath = "C:\\whzy\\locationsystem\\src\\main\\resources\\static\\person";
             //获取原始图片的拓展名
             String originalFilename = file.getOriginalFilename();
             //新的文件名字
@@ -943,7 +942,7 @@ public ResultBean deletePerson(HttpServletRequest request,
                     if (sqltag.getAddress()!=null){
                         //把该标签放到缓存中
                         Map<String, Integer> usermap = SystemMap.getUsermap();
-                        usermap.put(sqltag.getAddress(),tag.getUserId());
+                        usermap.put(person.getTagAddress(),sqltag.getUserId());
                         SystemMap.getTagAndPersonMap().put(sqltag.getAddress(),person.getIdCard());
                         //设置次数
                         SystemMap.getCountmap().put(sqltag.getAddress(),0);
@@ -966,7 +965,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             SystemMap.getCountmap().put(person.getTagAddress(),0);
 
             resultBean = new ResultBean();
-            resultBean.setCode(79);
+            resultBean.setCode(1);
             resultBean.setMsg("人员修改成功");
             List<Person> list = new ArrayList<>();
             list.add(person);

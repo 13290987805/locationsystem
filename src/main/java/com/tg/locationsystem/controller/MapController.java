@@ -341,6 +341,15 @@ public class MapController {
             mapVO.setMapdata(sb.toString());
             //cle配置
             CleConfig cleConfig=cleConfigService.getConfigByMapKey(map.getMapKey());
+            if (cleConfig==null){
+                //默认cle配置
+                cleConfig=new CleConfig();
+                cleConfig.setMapKey(map.getMapKey());
+                cleConfig.setChannel("2");
+                cleConfig.setAskTime("10");
+                cleConfig.setSendTime("10");
+                int insertconfig = cleConfigService.insertSelective(cleConfig);
+            }
             mapVO.setChannel(cleConfig.getChannel());
             mapVO.setAskTime(cleConfig.getAskTime());
             mapVO.setSendTime(cleConfig.getSendTime());

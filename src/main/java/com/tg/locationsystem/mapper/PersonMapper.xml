@@ -20,7 +20,13 @@
     img, person_type, reserved2_date, person_phone
   </sql>
 
-
+  <!--根据身份证得到人员-->
+  <select id="getPersonByPersonIdCard"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE    id_card=#{idCard}
+  </select>
 
 <!--根据人员名称得到人员对象-->
   <select id="getPersonsByName"  resultMap="BaseResultMap">

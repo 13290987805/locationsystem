@@ -1223,12 +1223,7 @@ public class TagController {
             return allTag;
         }
 
-        if (!SystemMap.getCleAndKeyMap().containsKey(MapUUID)){
-            allTag = new AllTagLocationResult();
-            allTag.setCode(109);
-            allTag.setMsg("该地图不存在");
-            return allTag;
-        }
+
 
         //得到地图下所有的标签
         List<Tag> usedTags=tagService.getTagsByMapUUID(MapUUID);
