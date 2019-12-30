@@ -128,5 +128,20 @@ public class TagStatusService extends BaseServiceImpl<TagStatus> implements ITag
         return new PageInfo<TagStatus>(list,3);
     }
 
+    @Override
+    public PageInfo<TagStatus> getAllTagStatusByIsDeal(Integer pageIndex, Integer pageSize, Integer id, String isdeal) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+        List<TagStatus> list = tagStatusMapper.getAllTagStatusByIsDeal(id,isdeal);
+
+
+        return new PageInfo<TagStatus>(list,3);
+    }
+
+    @Override
+    public int setAllAlertDeal(Integer id) {
+        return tagStatusMapper.setAllAlertDeal(id);
+    }
+
 
 }

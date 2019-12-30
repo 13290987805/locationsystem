@@ -39,4 +39,9 @@ public interface IFrenceHistoryService extends IBaseService<FrenceHistory> {
     PageInfo<FrenceHistory> getFrenceHistoryByFrenceIdAndPersonName(Integer pageIndex, Integer pageSize, Integer frenceId, List<String> list);
 
 
+    int updateBatch(Integer id, List<Integer> idsList);
+
+    PageInfo<FrenceHistory> getAllFrenceHistoryByIsDeal(Integer pageIndex, Integer pageSize, Integer id, String isdeal);
+
+    int setAllFrenceHistoryDeal(Integer id);
 }
