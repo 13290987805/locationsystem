@@ -1,6 +1,5 @@
 package com.tg.locationsystem.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.FrenceMapper;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +79,7 @@ public class FrenceController {
                 errorlist.add(message);
             });
             resultBean = new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -92,7 +90,7 @@ public class FrenceController {
         Frence myfrence = frenceService.getFrenceByname(frence.getName(), user.getId());
         if (myfrence != null) {
             resultBean = new ResultBean();
-            resultBean.setCode(54);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加电子围栏,该围栏已经存在");
             List<Frence> list = new ArrayList<>();
             resultBean.setData(list);
@@ -118,7 +116,7 @@ public class FrenceController {
 
 
             resultBean = new ResultBean();
-            resultBean.setCode(55);
+            resultBean.setCode(1);
             resultBean.setMsg("围栏添加成功");
             List<Frence> list = new ArrayList<>();
             list.add(frence);
@@ -127,7 +125,7 @@ public class FrenceController {
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(56);
+            resultBean.setCode(-1);
             resultBean.setMsg("围栏添加失败");
             List<Frence> list = new ArrayList<>();
             resultBean.setData(list);
@@ -230,7 +228,7 @@ public class FrenceController {
         Frence frence = frenceService.selectByPrimaryKey(frenceid);
         if (frence == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(57);
+            resultBean.setCode(-1);
             resultBean.setMsg("该围栏不存在");
             List<Frence> list = new ArrayList<>();
             resultBean.setData(list);
@@ -253,7 +251,7 @@ public class FrenceController {
 
 
             resultBean = new ResultBean();
-            resultBean.setCode(58);
+            resultBean.setCode(1);
             resultBean.setMsg("删除围栏成功");
             List<Frence> frenceList = new ArrayList<>();
             frenceList.add(frence);
@@ -262,7 +260,7 @@ public class FrenceController {
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(59);
+            resultBean.setCode(-1);
             resultBean.setMsg("删除围栏失败");
             List<Frence> list = new ArrayList<>();
             resultBean.setData(list);
@@ -433,7 +431,7 @@ public class FrenceController {
                 errorlist.add(message);
             });
             resultBean = new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -441,7 +439,7 @@ public class FrenceController {
         }
         if (frence.getId() == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(86);
+            resultBean.setCode(-1);
             resultBean.setMsg("id不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -451,7 +449,7 @@ public class FrenceController {
         Frence frence1 = frenceService.selectByPrimaryKey(frence.getId());
         if (frence1 == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(57);
+            resultBean.setCode(-1);
             resultBean.setMsg("该围栏不存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -465,7 +463,7 @@ public class FrenceController {
         int update = frenceService.updateByPrimaryKey(frence);
         if (update > 0) {
             resultBean = new ResultBean();
-            resultBean.setCode(87);
+            resultBean.setCode(1);
             resultBean.setMsg("围栏修改成功");
             List<Frence> list = new ArrayList<>();
             list.add(frence);
@@ -474,7 +472,7 @@ public class FrenceController {
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(88);
+            resultBean.setCode(-1);
             resultBean.setMsg("围栏修改失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -643,7 +641,7 @@ public class FrenceController {
         }
         if (frenceHistoryid == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(93);
+            resultBean.setCode(-1);
             resultBean.setMsg("围栏报警id不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -656,7 +654,7 @@ public class FrenceController {
             int update = frenceHistoryService.updateByPrimaryKeySelective(frenceHistory);
             if (update > 0) {
                 resultBean = new ResultBean();
-                resultBean.setCode(94);
+                resultBean.setCode(1);
                 resultBean.setMsg("围栏报警处理成功");
                 List<FrenceHistory> list = new ArrayList<>();
                 list.add(frenceHistory);
@@ -665,7 +663,7 @@ public class FrenceController {
                 return resultBean;
             } else {
                 resultBean = new ResultBean();
-                resultBean.setCode(95);
+                resultBean.setCode(-1);
                 resultBean.setMsg("围栏报警处理失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -674,7 +672,7 @@ public class FrenceController {
             }
         }
         resultBean = new ResultBean();
-        resultBean.setCode(95);
+        resultBean.setCode(-1);
         resultBean.setMsg("围栏报警处理失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -706,7 +704,7 @@ public class FrenceController {
         }
         if (frenceHistoryid == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(93);
+            resultBean.setCode(-1);
             resultBean.setMsg("围栏报警id不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -717,7 +715,7 @@ public class FrenceController {
 
         if (delete > 0) {
             resultBean = new ResultBean();
-            resultBean.setCode(58);
+            resultBean.setCode(1);
             resultBean.setMsg("删除围栏警报成功");
             List<FrenceHistory> frenceList = new ArrayList<>();
             resultBean.setData(frenceList);
@@ -725,7 +723,7 @@ public class FrenceController {
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(59);
+            resultBean.setCode(-1);
             resultBean.setMsg("删除围栏警报失败");
             List<Frence> list = new ArrayList<>();
             resultBean.setData(list);
@@ -748,7 +746,7 @@ public class FrenceController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1159,7 +1157,7 @@ public class FrenceController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1168,7 +1166,7 @@ public class FrenceController {
         }
         if (frenceHistoryIds==null||"".equals(frenceHistoryIds)){
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("处理参数不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1202,7 +1200,7 @@ public class FrenceController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(95);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签报警处理失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1227,7 +1225,7 @@ public class FrenceController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1236,7 +1234,7 @@ public class FrenceController {
         }
         if (isdeal == null || "".equals(isdeal)) {
             resultBean = new ResultBean();
-            resultBean.setCode(115);
+            resultBean.setCode(-1);
             resultBean.setMsg("处理参数不能为空");
             List<TagStatusVO> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1245,7 +1243,7 @@ public class FrenceController {
         }
         if (!"0".equals(isdeal) && !"1".equals(isdeal)) {
             resultBean = new ResultBean();
-            resultBean.setCode(116);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数有误");
             List<TagStatusVO> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1343,7 +1341,7 @@ public class FrenceController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

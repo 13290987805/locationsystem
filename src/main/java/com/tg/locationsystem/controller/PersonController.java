@@ -195,7 +195,62 @@ public class PersonController {
 
 
     }
+    /*
+     * 得到用户下没有绑定标签的人员
+     * */
+    @RequestMapping(value = "getPersonsByNoTag",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getPersonsByNoTag(HttpServletRequest request){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Person> personList = personService.getPersonsByNoTag(user.getId());
 
+        if (personList.size()>0){
+            List<PersonVO> personVOList = new ArrayList<>();
+            for (Person person : personList) {
+                PersonVO personVO = new PersonVO();
+                personVO.setId(person.getId());
+                personVO.setIdCard(person.getIdCard());
+                personVO.setImg(person.getImg());
+                personVO.setPersonHeight(person.getPersonHeight());
+                personVO.setPersonPhone(person.getPersonPhone());
+                personVO.setPersonName(person.getPersonName());
+                personVO.setPersonSex(person.getPersonSex());
+                personVO.setTagAddress(person.getTagAddress());
+                personVO.setUserId(person.getUserId());
+                personVO.setPersonTypeid(person.getPersonTypeid());
+                //人员类型名字
+                PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+                if (personType != null) {
+                    personVO.setPersonTypeName(personType.getTypeName());
+                }
+                personVOList.add(personVO);
+            }
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(personVOList);
+            resultBean.setSize(personVOList.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(personList);
+            resultBean.setSize(personList.size());
+            return resultBean;
+        }
+    }
     /*
      * 查看所有人员信息
      * */
@@ -517,7 +572,7 @@ public class PersonController {
         }
         if (typeid==null||"".equals(typeid)|| !StringUtils.isNumeric(String.valueOf(typeid))){
             resultBean = new ResultBean();
-            resultBean.setCode(124);
+            resultBean.setCode(-1);
             resultBean.setMsg("查询参数有误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -591,7 +646,7 @@ public class PersonController {
         }
         if (typeid==null||"".equals(typeid)|| !StringUtils.isNumeric(String.valueOf(typeid))){
             resultBean = new ResultBean();
-            resultBean.setCode(124);
+            resultBean.setCode(-1);
             resultBean.setMsg("查询参数有误");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -698,7 +753,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             }
         }
         resultBean = new ResultBean();
-        resultBean.setCode(61);
+        resultBean.setCode(1);
         resultBean.setMsg("成功删除人员");
         List<Person> list = new ArrayList<>();
         list.add(person);
@@ -707,7 +762,7 @@ public ResultBean deletePerson(HttpServletRequest request,
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(62);
+        resultBean.setCode(-1);
         resultBean.setMsg("删除失败");
         List<Person> list = new ArrayList<>();
         resultBean.setData(list);
@@ -828,6 +883,7 @@ public ResultBean deletePerson(HttpServletRequest request,
     @ResponseBody
     public ResultBean UpdatePerson(@Valid Person person, BindingResult result,
                                 HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
+
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
@@ -854,7 +910,7 @@ public ResultBean deletePerson(HttpServletRequest request,
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -862,26 +918,26 @@ public ResultBean deletePerson(HttpServletRequest request,
         }
         if (person.getId()==null){
             resultBean = new ResultBean();
-            resultBean.setCode(78);
+            resultBean.setCode(-1);
             resultBean.setMsg("id不能为空");
-            List<Myuser> list = new ArrayList<>();
+            List<Myuser> list = new ArrayList<>();     
             resultBean.setData(list);
             resultBean.setSize(list.size());
             return resultBean;
         }
         Person sqlPerson2=personService.selectByPrimaryKey(person.getId());
         if (!sqlPerson2.getIdCard().equals(person.getIdCard())){
-
-            Person personByOnlyAddress = personService.getPersonByPersonIdCard(person.getIdCard());
-
+            Person personByOnlyAddress = personService.getPersonByOnlyAddress(person.getIdCard());
             if (personByOnlyAddress!=null){
-                resultBean = new ResultBean();
-                resultBean.setCode(82);
-                resultBean.setMsg("身份证号码有误");
-                List<Myuser> list = new ArrayList<>();
-                resultBean.setData(list);
-                resultBean.setSize(list.size());
-                return resultBean;
+                if (sqlPerson2!=null){
+                    resultBean = new ResultBean();
+                    resultBean.setCode(-1);
+                    resultBean.setMsg("身份证号码有误");
+                    List<Myuser> list = new ArrayList<>();
+                    resultBean.setData(list);
+                    resultBean.setSize(list.size());
+                    return resultBean;
+                }
             }
 
         }
@@ -902,7 +958,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             String s = System.getProperty("user.dir");//C:\whzy\locationsystem
             String filePath =s.split(":")[0]+":\\img";
             UploadFileUtil.isChartPathExist(filePath);
-            //  String filePath = "C:\\whzy\\locationsystem\\src\\main\\resources\\static\\person";
+          //  String filePath = "C:\\whzy\\locationsystem\\src\\main\\resources\\static\\person";
             //获取原始图片的拓展名
             String originalFilename = file.getOriginalFilename();
             //新的文件名字
@@ -916,7 +972,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(13);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传人员头像失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -942,7 +998,7 @@ public ResultBean deletePerson(HttpServletRequest request,
                     if (sqltag.getAddress()!=null){
                         //把该标签放到缓存中
                         Map<String, Integer> usermap = SystemMap.getUsermap();
-                        usermap.put(person.getTagAddress(),sqltag.getUserId());
+                        usermap.put(sqltag.getAddress(),tag.getUserId());
                         SystemMap.getTagAndPersonMap().put(sqltag.getAddress(),person.getIdCard());
                         //设置次数
                         SystemMap.getCountmap().put(sqltag.getAddress(),0);
@@ -974,7 +1030,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(80);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员修改失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1015,7 +1071,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
             errorlist.add(message);
         });
         resultBean =new ResultBean();
-        resultBean.setCode(2);
+        resultBean.setCode(-1);
         resultBean.setMsg("信息未填完整");
         resultBean.setData(errorlist);
         resultBean.setSize(errorlist.size());
@@ -1023,7 +1079,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
     }
     if (personType.getId()==null){
         resultBean = new ResultBean();
-        resultBean.setCode(78);
+        resultBean.setCode(-1);
         resultBean.setMsg("id不能为空");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1064,7 +1120,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         } catch (IOException e) {
             e.printStackTrace();
             resultBean = new ResultBean();
-            resultBean.setCode(40);
+            resultBean.setCode(-1);
             resultBean.setMsg("上传人员类型logo失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1075,7 +1131,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
     int update = personTypeService.updateByPrimaryKey(personType);
     if (update>0){
         resultBean = new ResultBean();
-        resultBean.setCode(80);
+        resultBean.setCode(1);
         resultBean.setMsg("人员类型修改成功");
         List<PersonType> list = new ArrayList<>();
         list.add(personType);
@@ -1084,7 +1140,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(83);
+        resultBean.setCode(-1);
         resultBean.setMsg("人员类型修改失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1230,7 +1286,7 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1239,7 +1295,7 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
     }
     if (tagTypeId==null||"".equals(tagTypeId)|| !StringUtils.isNumeric(String.valueOf(tagTypeId))){
         resultBean = new ResultBean();
-        resultBean.setCode(124);
+        resultBean.setCode(-1);
         resultBean.setMsg("查询参数有误");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);

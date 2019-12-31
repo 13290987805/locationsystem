@@ -33,7 +33,7 @@
     select
     <include refid="Base_Column_List" />
     from station
-    WHERE map_id=#{id} AND station_status=1
+    WHERE map_id=#{id}/* AND station_status=1*/
   </select>
 
 

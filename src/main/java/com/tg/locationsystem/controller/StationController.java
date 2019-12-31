@@ -73,7 +73,7 @@ public class StationController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -84,7 +84,7 @@ public class StationController {
         Station mystation=stationService.getStationByAddress(station.getAddr(),user.getId());
         if(mystation!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(6);
+            resultBean.setCode(-1);
             resultBean.setMsg("该网关已经存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -146,7 +146,7 @@ public class StationController {
             }
 
             resultBean = new ResultBean();
-            resultBean.setCode(7);
+            resultBean.setCode(1);
             resultBean.setMsg("添加网关成功");
             List<StationVO> list = new ArrayList<>();
             list.add(stationVO);
@@ -155,7 +155,7 @@ public class StationController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(8);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加网关失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -269,7 +269,7 @@ public class StationController {
        }
        if (StationIds==null||"".equals(StationIds)){
            resultBean = new ResultBean();
-           resultBean.setCode(107);
+           resultBean.setCode(-1);
            resultBean.setMsg("基站不能为空");
            List<Myuser> list = new ArrayList<>();
            resultBean.setData(list);
@@ -331,7 +331,7 @@ public class StationController {
        }
        if (mapkey==null||"".equals(mapkey)){
            resultBean = new ResultBean();
-           resultBean.setCode(108);
+           resultBean.setCode(-1);
            resultBean.setMsg("地图key不能为空");
            List<Station> list = new ArrayList<>();
            resultBean.setData(list);
@@ -341,7 +341,7 @@ public class StationController {
        Map map = mapService.getMapByUuid(mapkey);
        if (map==null){
            resultBean = new ResultBean();
-           resultBean.setCode(109);
+           resultBean.setCode(-1);
            resultBean.setMsg("该地图不存在");
            List<Station> list = new ArrayList<>();
            resultBean.setData(list);
@@ -427,7 +427,7 @@ public class StationController {
         }
         if (MapUUID==null||"".equals(MapUUID)){
             resultBean = new ResultBean();
-            resultBean.setCode(108);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图key不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -436,7 +436,7 @@ public class StationController {
         }
         if (stationJson==null||"".equals(stationJson)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("基站不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -480,7 +480,7 @@ public class StationController {
         String key = SystemMap.getCleAndKeyMap().get(MapUUID);
         if (key==null||"".equals(key)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("定位引擎未连接");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -562,7 +562,7 @@ public class StationController {
         }
         if (locationOrder==null||"".equals(locationOrder)){
             resultBean = new ResultBean();
-            resultBean.setCode(110);
+            resultBean.setCode(-1);
             resultBean.setMsg("命令不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -571,7 +571,7 @@ public class StationController {
         }
         if (MapUUID==null||"".equals(MapUUID)){
             resultBean = new ResultBean();
-            resultBean.setCode(108);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图key不能为空");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -582,7 +582,7 @@ public class StationController {
         String key = SystemMap.getCleAndKeyMap().get(MapUUID);
         if (key==null||"".equals(key)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("定位引擎未连接");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);
@@ -630,7 +630,7 @@ public class StationController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -639,7 +639,7 @@ public class StationController {
         }
         if (stationId==null||"".equals(stationId)){
             resultBean = new ResultBean();
-            resultBean.setCode(107);
+            resultBean.setCode(-1);
             resultBean.setMsg("基站id不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -649,7 +649,7 @@ public class StationController {
         Station station = stationService.selectByPrimaryKey(stationId);
         if (station==null){
             resultBean = new ResultBean();
-            resultBean.setCode(107);
+            resultBean.setCode(-1);
             resultBean.setMsg("该基站不存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -668,7 +668,7 @@ public class StationController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("操作失败");
             List list=new ArrayList<>();
             resultBean.setData(list);

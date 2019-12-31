@@ -1,6 +1,5 @@
 package com.tg.locationsystem.controller;
 
-import boot.SkylabSDK;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
 import com.tg.locationsystem.entity.*;
@@ -82,7 +81,7 @@ public class MapController {
 
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -93,7 +92,7 @@ public class MapController {
         Map mymap=mapService.getMapByName(addMapVO.getMapName(),user.getId());
         if (mymap!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(102);
+            resultBean.setCode(-1);
             resultBean.setMsg("该地图已经存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -102,7 +101,7 @@ public class MapController {
         }
         if (file==null){
             resultBean = new ResultBean();
-            resultBean.setCode(103);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -112,7 +111,7 @@ public class MapController {
         long size=1024*10*1024;
         if (file.getSize()>size){
             resultBean = new ResultBean();
-            resultBean.setCode(121);
+            resultBean.setCode(-1);
             resultBean.setMsg("文件过大,最大限制10MB");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -124,7 +123,7 @@ public class MapController {
         if (!StringUtils.isNumeric(addMapVO.getPixelX())||!StringUtils.isNumeric(addMapVO.getPixelY())
                 ||!StringUtils.isNumeric(addMapVO.getRealityX())||!StringUtils.isNumeric(addMapVO.getRealityY())){
             resultBean = new ResultBean();
-            resultBean.setCode(103);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图参数有误,请输入整数");
             List<Person> list = new ArrayList<>();
             resultBean.setData(list);
@@ -141,7 +140,7 @@ public class MapController {
         double pro_y = pixelY / realityY;
         if (pro_x<1||pro_y<1){
             resultBean = new ResultBean();
-            resultBean.setCode(103);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图参数有误,像素长宽应大于等于实际长宽");
             List<Person> list = new ArrayList<>();
             resultBean.setData(list);
@@ -150,7 +149,7 @@ public class MapController {
         }
         if (Math.abs(pro_x-pro_y)>1){
             resultBean = new ResultBean();
-            resultBean.setCode(103);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图参数有误,长宽倍数相差过大");
             List<Person> list = new ArrayList<>();
             resultBean.setData(list);
@@ -210,7 +209,7 @@ public class MapController {
                             map.setMapData(sb.toString());
                         }else {
                             resultBean = new ResultBean();
-                            resultBean.setCode(106);
+                            resultBean.setCode(-1);
                             resultBean.setMsg("内部错误,地图导入失败");
                             List<Myuser> list = new ArrayList<>();
                             resultBean.setData(list);
@@ -220,7 +219,7 @@ public class MapController {
                     } catch (FileNotFoundException e) {
                         System.err.println("文件路径错误");
                         resultBean = new ResultBean();
-                        resultBean.setCode(106);
+                        resultBean.setCode(-1);
                         resultBean.setMsg("地图导入失败");
                         List<Myuser> list = new ArrayList<>();
                         resultBean.setData(list);
@@ -229,7 +228,7 @@ public class MapController {
                     } catch (IOException e) {
                         System.err.println("图片转换错误");
                         resultBean = new ResultBean();
-                        resultBean.setCode(106);
+                        resultBean.setCode(-1);
                         resultBean.setMsg("地图导入失败");
                         List<Myuser> list = new ArrayList<>();
                         resultBean.setData(list);
@@ -243,7 +242,7 @@ public class MapController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(104);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传地图失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -276,7 +275,7 @@ public class MapController {
 
         if (insertMap>0){
             resultBean = new ResultBean();
-            resultBean.setCode(105);
+            resultBean.setCode(1);
             resultBean.setMsg("地图导入成功");
             List<Map> list = new ArrayList<>();
             list.add(map);
@@ -285,7 +284,7 @@ public class MapController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(106);
+            resultBean.setCode(-1);
             resultBean.setMsg("地图导入失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -401,7 +400,7 @@ public class MapController {
         }
         if (MapId==null||"".equals(MapId)){
             resultBean = new ResultBean();
-            resultBean.setCode(110);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数有误,地图id不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -411,7 +410,7 @@ public class MapController {
         Map map = mapService.selectByPrimaryKey(MapId);
         if (map==null){
             resultBean = new ResultBean();
-            resultBean.setCode(107);
+            resultBean.setCode(-1);
             resultBean.setMsg("该地图为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -457,7 +456,7 @@ public class MapController {
         }
         if (MapKey==null||"".equals(MapKey)){
             resultBean = new ResultBean();
-            resultBean.setCode(111);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数有误,地图key不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -467,7 +466,7 @@ public class MapController {
         Map map = mapService.getMapByUuid(MapKey);
         if (map==null){
             resultBean = new ResultBean();
-            resultBean.setCode(107);
+            resultBean.setCode(-1);
             resultBean.setMsg("该地图为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -514,7 +513,7 @@ public class MapController {
         }
         if (MapKey==null||"".equals(MapKey)){
             resultBean = new ResultBean();
-            resultBean.setCode(111);
+            resultBean.setCode(-1);
             resultBean.setMsg("参数有误,地图key不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -524,7 +523,7 @@ public class MapController {
         Map map = mapService.getMapByUuid(MapKey);
         if (map==null){
             resultBean = new ResultBean();
-            resultBean.setCode(107);
+            resultBean.setCode(-1);
             resultBean.setMsg("该地图为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -557,7 +556,7 @@ public class MapController {
         }
 
         resultBean = new ResultBean();
-        resultBean.setCode(117);
+        resultBean.setCode(-1);
         resultBean.setMsg("删除地图失败");
         List<Map> list=new ArrayList<>();
         list.add(map);
@@ -588,7 +587,7 @@ public class MapController {
 
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -598,7 +597,7 @@ public class MapController {
         CleConfig configByMapKey = cleConfigService.getConfigByMapKey(cleconfigVO.getMapKey());
         if (configByMapKey==null){
             resultBean = new ResultBean();
-            resultBean.setCode(107);
+            resultBean.setCode(-1);
             resultBean.setMsg("该地图为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -608,7 +607,7 @@ public class MapController {
         String key = SystemMap.getCleAndKeyMap().get(cleconfigVO.getMapKey());
         if (key==null||"".equals(key)){
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("定位引擎未连接");
             List<Station> list = new ArrayList<>();
             resultBean.setData(list);

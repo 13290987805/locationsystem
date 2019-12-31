@@ -508,6 +508,55 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
 
 }
 
+    @RequestMapping(value = "getHeartRateHistoryByAddData",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getHeartRateHistoryByAddAndTimeData(HttpServletRequest request,
+                                                          @RequestParam(value = "personIdcards[]",required=true) List<String> personIdcards) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //有必填项没填
+        if (personIdcards == null || personIdcards.size() == 0) {
+            List<String> errorlist=new ArrayList<>();
+            resultBean =new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("请选择查看人员");
+            resultBean.setData(errorlist);
+            resultBean.setSize(errorlist.size());
+            return resultBean;
+        }
+        List<HeartRateHistory> histories=heartRateHistoryService.getheartRateHistoryByPersonIdcards(personIdcards);
+        if (histories.size()==0) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该标签不存在或无心率记录");
+            List<Path> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(histories);
+        resultBean.setSize(histories.size());
+        return resultBean;
+
+    }
+
+
+
+
 /*
 * 将报警类型转为已处理
 * */
@@ -543,7 +592,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
         int i = tagStatusService.updateByPrimaryKeySelective(tagStatus);
         if (i > 0) {
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(1);
             resultBean.setMsg("标签报警处理成功");
             List<TagStatus> list = new ArrayList<>();
             list.add(tagStatus);
@@ -937,7 +986,7 @@ public ResultBean setSoS(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -946,7 +995,7 @@ public ResultBean setSoS(HttpServletRequest request,
     }
     if (setSoS==null||"".equals(setSoS)){
         resultBean = new ResultBean();
-        resultBean.setCode(120);
+        resultBean.setCode(-1);
         resultBean.setMsg("报警参数不能为空");
         List list = new ArrayList<>();
         resultBean.setData(list);
@@ -991,7 +1040,7 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(122);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警开关设置失败");
             List<AlertSet> list=new ArrayList<>();
             list.add(alertSet);
@@ -1018,7 +1067,7 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(122);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警开关设置失败");
             List<AlertSet> list=new ArrayList<>();
             list.add(alertSet);
@@ -1028,7 +1077,7 @@ public ResultBean setSoS(HttpServletRequest request,
         }
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(122);
+        resultBean.setCode(-1);
         resultBean.setMsg("报警开关设置失败");
         List<AlertSet> list=new ArrayList<>();
         list.add(alertSet);
@@ -1049,7 +1098,7 @@ public ResultBean setSoS(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1058,7 +1107,7 @@ public ResultBean setSoS(HttpServletRequest request,
         }
         if (setHeart==null||"".equals(setHeart)){
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警参数不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1101,7 +1150,7 @@ public ResultBean setSoS(HttpServletRequest request,
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(122);
+                resultBean.setCode(-1);
                 resultBean.setMsg("报警开关设置失败");
                 List<AlertSet> list=new ArrayList<>();
                 list.add(alertSet);
@@ -1128,7 +1177,7 @@ public ResultBean setSoS(HttpServletRequest request,
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(122);
+                resultBean.setCode(-1);
                 resultBean.setMsg("报警开关设置失败");
                 List<AlertSet> list=new ArrayList<>();
                 list.add(alertSet);
@@ -1138,7 +1187,7 @@ public ResultBean setSoS(HttpServletRequest request,
             }
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(122);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警开关设置失败");
             List<AlertSet> list=new ArrayList<>();
             list.add(alertSet);
@@ -1159,7 +1208,7 @@ public ResultBean setSoS(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1168,7 +1217,7 @@ public ResultBean setSoS(HttpServletRequest request,
         }
         if (setCut==null||"".equals(setCut)){
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警参数不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1211,7 +1260,7 @@ public ResultBean setSoS(HttpServletRequest request,
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(122);
+                resultBean.setCode(-1);
                 resultBean.setMsg("报警开关设置失败");
                 List<AlertSet> list=new ArrayList<>();
                 list.add(alertSet);
@@ -1238,7 +1287,7 @@ public ResultBean setSoS(HttpServletRequest request,
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(122);
+                resultBean.setCode(-1);
                 resultBean.setMsg("报警开关设置失败");
                 List<AlertSet> list=new ArrayList<>();
                 list.add(alertSet);
@@ -1248,7 +1297,7 @@ public ResultBean setSoS(HttpServletRequest request,
             }
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(122);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警开关设置失败");
             List<AlertSet> list=new ArrayList<>();
             list.add(alertSet);

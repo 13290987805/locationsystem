@@ -5,16 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.Goods;
-import com.tg.locationsystem.entity.GoodsType;
-import com.tg.locationsystem.entity.Person;
 import com.tg.locationsystem.mapper.GoodsMapper;
 import com.tg.locationsystem.mapper.GoodsTypeMapper;
-import com.tg.locationsystem.pojo.GoodsVO;
 import com.tg.locationsystem.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,10 +89,5 @@ public class GoodsService extends BaseServiceImpl<Goods> implements IGoodsServic
     @Override
     public Goods getGoodsByGoodsIdCard(String goodsIdcard) {
         return goodsMapper.getGoodsByGoodsIdCard(goodsIdcard);
-    }
-
-    @Override
-    public List<Goods> getGoodsByNoTag(Integer userid) {
-        return goodsMapper.getGoodsByNoTag(userid);
     }
 }

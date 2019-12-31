@@ -323,9 +323,13 @@ public class PathController {
             int i = tagHistoryService.existTable(format);
             if (i==0){
                 resultBean = new ResultBean();
-
+<<<<<<<<< Temporary merge branch 1
                 resultBean.setCode(-1);
                 resultBean.setMsg("时间参数有误");
+=========
+                resultBean.setCode(51);
+                resultBean.setMsg("该时间段没有数据");
+>>>>>>>>> Temporary merge branch 2
                 List<PathMap> list = new ArrayList<>();
                 list.add(pathMap);
                 resultBean.setData(list);
@@ -391,6 +395,4 @@ public class PathController {
         }
 
     }
-
-
     }

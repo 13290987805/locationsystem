@@ -489,15 +489,12 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
         }
     }
     resultBean = new ResultBean();
-
     resultBean.setCode(-1);
     resultBean.setMsg("解绑失败");
-
     List list = new ArrayList<>();
     resultBean.setData(list);
     resultBean.setSize(list.size());
     return resultBean;
 }
-
 }
 

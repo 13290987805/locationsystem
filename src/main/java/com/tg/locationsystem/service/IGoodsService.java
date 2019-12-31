@@ -3,7 +3,6 @@ package com.tg.locationsystem.service;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.Goods;
-import com.tg.locationsystem.pojo.GoodsVO;
 
 import java.util.List;
 

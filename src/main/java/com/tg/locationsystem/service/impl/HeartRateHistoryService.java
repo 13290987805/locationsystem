@@ -3,7 +3,6 @@ package com.tg.locationsystem.service.impl;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.HeartRateHistory;
-import com.tg.locationsystem.entity.HeartRateSet;
 import com.tg.locationsystem.entity.Person;
 import com.tg.locationsystem.mapper.HeartRateHistoryMapper;
 import com.tg.locationsystem.pojo.HeartRateHistoryVO;
@@ -84,5 +83,10 @@ public class HeartRateHistoryService extends BaseServiceImpl<HeartRateHistory> i
     @Override
     public int deleteHistory(String tableName, String address) {
         return heartRateHistoryMapper.deleteHistory(tableName,address);
+    }
+
+    @Override
+    public List<HeartRateHistory> getheartRateHistoryByPersonIdcards(List<String> personIdcard) {
+        return heartRateHistoryMapper.getheartRateHistoryByPersonIdcards(personIdcard) ;
     }
 }

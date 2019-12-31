@@ -463,10 +463,13 @@ public class MyUserController {
             return resultBean;
         }
         try {
-
+<<<<<<<<< Temporary merge branch 1
 
             String pass = Base64.getEncoder().encodeToString(myuser.getPassword().getBytes());
-
+=========
+            //String pass = BASE64.encryptBASE64(myuser.getPassword().getBytes());
+            String pass = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
+>>>>>>>>> Temporary merge branch 2
             myuser.setPassword(pass);
             myuser.setCreateUser("1");
             int insert = myUserService.insertSelective(myuser);

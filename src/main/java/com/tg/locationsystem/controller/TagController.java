@@ -1223,8 +1223,6 @@ public class TagController {
             return allTag;
         }
 
-
-
         //得到地图下所有的标签
         List<Tag> usedTags=tagService.getTagsByMapUUID(MapUUID);
         allTag=new AllTagLocationResult();
@@ -1336,7 +1334,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1345,7 +1343,7 @@ public class TagController {
         }
         if (tagAddress==null||"".equals(tagAddress)){
             resultBean = new ResultBean();
-            resultBean.setCode(17);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签address不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1355,7 +1353,7 @@ public class TagController {
         Tag tag = tagService.getTagByOnlyAddress(tagAddress);
         if (tag==null){
             resultBean = new ResultBean();
-            resultBean.setCode(19);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1364,7 +1362,7 @@ public class TagController {
         }
         if ("1".equals(tag.getUsed())){
             resultBean = new ResultBean();
-            resultBean.setCode(20);
+            resultBean.setCode(-1);
             resultBean.setMsg("该标签被别人使用,请先解绑");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1383,7 +1381,7 @@ public class TagController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(118);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签删除失败");
             List list = new ArrayList<>();
             resultBean.setData(list);

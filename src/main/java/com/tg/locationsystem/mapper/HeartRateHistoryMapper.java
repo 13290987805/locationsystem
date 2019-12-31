@@ -26,4 +26,5 @@ public interface HeartRateHistoryMapper extends IBaseDao<HeartRateHistory>{
     int deleteHistory(@Param("tableName") String tableName,@Param("address") String address);
 
 
+    List<HeartRateHistory> getheartRateHistoryByPersonIdcards(List<String> personIdcard);
 }

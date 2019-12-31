@@ -87,7 +87,14 @@
     from person
     WHERE   user_id=#{userid} AND tag_address=#{address}
   </select>
-
+  <!--得到用户下没有绑定标签的人员-->
+  <select id="getPersonsByNoTag"  resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List" />
+  from person
+  WHERE    user_id=#{userid}
+  AND  (tag_address='' OR tag_address IS NULL)
+  </select>
 
   <!--根据idcard得到person对象-->
   <select id="getPersonByIdCard"  resultMap="BaseResultMap">

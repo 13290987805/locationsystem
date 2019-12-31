@@ -52,7 +52,14 @@
     from goods
     WHERE    goods_idCard=#{personIdcard}
   </select>
-
+  <!--得到物品下没有绑定标签的物品-->
+  <select id="getGoodsByNoTag"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    WHERE    user_id=#{userid}
+    AND  (tag_address='' OR tag_address IS NULL)
+  </select>
   <!--根据img得到物品-->
   <select id="getGoodsByImg"  resultMap="BaseResultMap">
     select
