@@ -195,7 +195,62 @@ public class PersonController {
 
 
     }
+    /*
+     * 得到用户下没有绑定标签的人员
+     * */
+    @RequestMapping(value = "getPersonsByNoTag",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getPersonsByNoTag(HttpServletRequest request){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Person> personList = personService.getPersonsByNoTag(user.getId());
 
+        if (personList.size()>0){
+            List<PersonVO> personVOList = new ArrayList<>();
+            for (Person person : personList) {
+                PersonVO personVO = new PersonVO();
+                personVO.setId(person.getId());
+                personVO.setIdCard(person.getIdCard());
+                personVO.setImg(person.getImg());
+                personVO.setPersonHeight(person.getPersonHeight());
+                personVO.setPersonPhone(person.getPersonPhone());
+                personVO.setPersonName(person.getPersonName());
+                personVO.setPersonSex(person.getPersonSex());
+                personVO.setTagAddress(person.getTagAddress());
+                personVO.setUserId(person.getUserId());
+                personVO.setPersonTypeid(person.getPersonTypeid());
+                //人员类型名字
+                PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+                if (personType != null) {
+                    personVO.setPersonTypeName(personType.getTypeName());
+                }
+                personVOList.add(personVO);
+            }
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(personVOList);
+            resultBean.setSize(personVOList.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(personList);
+            resultBean.setSize(personList.size());
+            return resultBean;
+        }
+    }
     /*
      * 查看所有人员信息
      * */

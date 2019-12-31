@@ -2,7 +2,6 @@ package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.Goods;
-import com.tg.locationsystem.entity.GoodsType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -40,4 +39,6 @@ public interface GoodsMapper extends IBaseDao<Goods>{
     List<Goods> getGoodsByGoodsTypeId(@Param("userid") Integer id, @Param("typeid") Integer id1);
 
     Goods getGoodsByGoodsIdCard(String goodsIdcard);
+
+    List<Goods> getGoodsByNoTag(Integer id);
 }

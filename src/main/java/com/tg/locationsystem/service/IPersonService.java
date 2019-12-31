@@ -3,9 +3,6 @@ package com.tg.locationsystem.service;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.entity.PersonType;
-import com.tg.locationsystem.pojo.PersonVO;
-import com.tg.locationsystem.pojo.PersonsByMsg;
 
 import java.util.List;
 
@@ -32,4 +29,6 @@ public interface IPersonService extends IBaseService<Person>{
 
 
     Person getPersonByPersonIdCard(String idCard);
+
+    List<Person> getPersonsByNoTag(Integer id);
 }

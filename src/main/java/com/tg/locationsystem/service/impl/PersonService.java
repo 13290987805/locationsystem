@@ -5,16 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.entity.PersonType;
 import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.PersonTypeMapper;
-import com.tg.locationsystem.pojo.PersonVO;
-import com.tg.locationsystem.pojo.PersonsByMsg;
 import com.tg.locationsystem.service.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,6 +91,11 @@ public class PersonService extends BaseServiceImpl<Person> implements IPersonSer
     @Override
     public Person getPersonByPersonIdCard(String idCard) {
         return personMapper.getPersonByPersonIdCard(idCard);
+    }
+
+    @Override
+    public List<Person> getPersonsByNoTag(Integer id) {
+        return personMapper.getPersonsByNoTag(id);
     }
 
 

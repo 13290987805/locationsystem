@@ -2,7 +2,6 @@ package com.tg.locationsystem.mapper;
 
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.pojo.PersonsByMsg;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -40,4 +39,6 @@ public interface PersonMapper extends IBaseDao<Person>{
 
 
     Person getPersonByPersonIdCard(String idCard);
+
+    List<Person> getPersonsByNoTag(Integer id);
 }

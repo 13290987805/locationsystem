@@ -5,10 +5,7 @@ import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.GoodsMapper;
 import com.tg.locationsystem.mapper.GoodsTypeMapper;
 import com.tg.locationsystem.mapper.TableMapper;
-import com.tg.locationsystem.pojo.AllTagLocationResult;
-import com.tg.locationsystem.pojo.GoodsLocation;
-import com.tg.locationsystem.pojo.GoodsVO;
-import com.tg.locationsystem.pojo.ResultBean;
+import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
@@ -1137,4 +1134,64 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         resultBean.setSize(page.getSize());
         return resultBean;
     }
+
+    /*
+     * 得到物品下没有绑定标签的物品
+     * */
+    @RequestMapping(value = "getGoodsByNoTag",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getGoodsByNoTag(HttpServletRequest request){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Goods> goodsList = goodsService.getGoodsByNoTag(user.getId());
+
+        if (goodsList.size()>0){
+            List<GoodsVO> goodsVOList = new ArrayList<>();
+            for (Goods goods : goodsList) {
+                GoodsVO goodsVO=new GoodsVO();
+                goodsVO.setId(goods.getId());
+                goodsVO.setGoodsName(goods.getGoodsName());
+                goodsVO.setUserId(goods.getUserId());
+                goodsVO.setGoodsTypeid(goods.getGoodsTypeid());
+                goodsVO.setTagAddress(goods.getTagAddress());
+                goodsVO.setImg(goods.getImg());
+                goodsVO.setAddTime(goods.getAddTime());
+                goodsVO.setGoodsIdcard(goods.getGoodsIdcard());
+                //goodsVO.setRank(goods.getRank());
+
+                //物品类型名字
+                GoodsType goodsType = goodsTypeMapper.selectByPrimaryKey(goods.getGoodsTypeid());
+                if (goodsType!=null){
+                    goodsVO.setGoodsTypeName(goodsType.getName());
+                }
+                goodsVOList.add(goodsVO);
+            }
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(goodsVOList);
+            resultBean.setSize(goodsVOList.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(goodsList);
+            resultBean.setSize(goodsList.size());
+            return resultBean;
+        }
+    }
+
+
+
 }
