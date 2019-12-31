@@ -65,7 +65,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -87,7 +87,7 @@ public class PersonController {
 
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -99,7 +99,7 @@ public class PersonController {
         Person myperson=personService.getPersonByIdCard(person.getIdCard());
         if (myperson!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(12);
+            resultBean.setCode(-1);
             resultBean.setMsg("该人员已经存在");
             List<Person> list = new ArrayList<>();
             resultBean.setData(list);
@@ -109,7 +109,7 @@ public class PersonController {
         Tag usetag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
         if ("1".equals(usetag.getUsed())){
             resultBean = new ResultBean();
-            resultBean.setCode(20);
+            resultBean.setCode(-1);
             resultBean.setMsg("该标签已被别人使用");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -157,7 +157,7 @@ public class PersonController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(13);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传人员头像失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -176,7 +176,7 @@ public class PersonController {
 
 
             resultBean = new ResultBean();
-            resultBean.setCode(14);
+            resultBean.setCode(1);
             resultBean.setMsg("添加人员成功");
             List<Person> list = new ArrayList<>();
             list.add(person);
@@ -185,7 +185,7 @@ public class PersonController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(15);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加人员失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -209,7 +209,7 @@ public class PersonController {
         //未登录
        /* if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -276,7 +276,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new AllTagLocationResult();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             return resultBean;
         }
@@ -324,7 +324,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -345,7 +345,7 @@ public class PersonController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -356,7 +356,7 @@ public class PersonController {
       PersonType mypersontype= personTypeService.getPersonTypeByName(personType.getTypeName(),user.getId());
         if (mypersontype!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(39);
+            resultBean.setCode(-1);
             resultBean.setMsg("类型已经存在,无法重复添加");
             List<PersonType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -371,7 +371,7 @@ public class PersonController {
 
         if (file==null){
             resultBean = new ResultBean();
-            resultBean.setCode(77);
+            resultBean.setCode(-1);
             resultBean.setMsg("图标不能为空");
             List<PersonType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -401,7 +401,7 @@ public class PersonController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(40);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传人员类型logo失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -413,7 +413,7 @@ public class PersonController {
         int insert = personTypeService.insertSelective(personType);
         if (insert>0){
             resultBean = new ResultBean();
-            resultBean.setCode(41);
+            resultBean.setCode(1);
             resultBean.setMsg("人员类型添加成功");
             List<PersonType> list = new ArrayList<>();
             list.add(personType);
@@ -422,7 +422,7 @@ public class PersonController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(42);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员类型添加失败");
             List<PersonType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -446,7 +446,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -476,7 +476,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -508,7 +508,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -582,7 +582,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -639,7 +639,7 @@ public ResultBean deletePerson(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -649,7 +649,7 @@ public ResultBean deletePerson(HttpServletRequest request,
     Person person = personService.selectByPrimaryKey(personid);
     if (person==null){
         resultBean = new ResultBean();
-        resultBean.setCode(60);
+        resultBean.setCode(-1);
         resultBean.setMsg("该人员不存在");
         List<Person> list = new ArrayList<>();
         resultBean.setData(list);
@@ -688,7 +688,7 @@ public ResultBean deletePerson(HttpServletRequest request,
             }
             if (updatetag>0){
                 resultBean = new ResultBean();
-                resultBean.setCode(61);
+                resultBean.setCode(1);
                 resultBean.setMsg("成功删除人员");
                 List<Person> list = new ArrayList<>();
                 list.add(person);
@@ -833,7 +833,7 @@ public ResultBean deletePerson(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -994,7 +994,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1107,7 +1107,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

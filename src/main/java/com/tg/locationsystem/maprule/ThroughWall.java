@@ -1,12 +1,12 @@
 package com.tg.locationsystem.maprule;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tg.locationsystem.entity.Tag;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ThroughWall {
 	static Map<String, PolygonArea> curAreaMap = new ConcurrentHashMap<String, PolygonArea>();
@@ -182,7 +182,7 @@ public class ThroughWall {
 				//把新点存进缓存
 				preTagMap.put(nowTag.getAddress(), nowTag);
 				curAreaMap.put(nowTag.getAddress(), area2);
-				System.err.println("次数过多");
+				//System.err.println("次数过多");
 				return nowTag;
 			}
 			flagCountMap.put(nowTag.getAddress(), flagCount);
@@ -207,7 +207,7 @@ public class ThroughWall {
 							preTagMap.put(nowTag.getAddress(), reTag);
 							//把flag设置为0
 							flagCountMap.put(nowTag.getAddress(), 0);
-							System.err.println("过门");
+							//System.err.println("过门");
 							return reTag;
 						}
 					}
@@ -230,7 +230,7 @@ public class ThroughWall {
 					}
 					//把新点存进缓存
 					preTagMap.put(nowTag.getAddress(), reTag);
-					System.err.println("不过门");
+					//System.err.println("不过门");
 					return reTag;
 				}
 			}

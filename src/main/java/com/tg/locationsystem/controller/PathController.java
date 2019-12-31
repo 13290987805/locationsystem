@@ -1,10 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.tg.locationsystem.entity.*;
-import com.tg.locationsystem.pojo.Path;
-import com.tg.locationsystem.pojo.PathMap;
-import com.tg.locationsystem.pojo.PathVO;
-import com.tg.locationsystem.pojo.ResultBean;
+import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +52,7 @@ public class PathController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -76,7 +73,7 @@ public class PathController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -103,7 +100,7 @@ public class PathController {
         //System.out.println("结束时间-开始时间:"+(en-s));
         if (en-s>0){
             resultBean = new ResultBean();
-            resultBean.setCode(74);
+            resultBean.setCode(-1);
             resultBean.setMsg("当前不支持跨天查询");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -125,7 +122,7 @@ public class PathController {
             if (starttime>endtime){
                 System.out.println("开始时间-结束时间:"+(starttime>endtime));
                 resultBean = new ResultBean();
-                resultBean.setCode(51);
+                resultBean.setCode(-1);
                 resultBean.setMsg("时间参数有误");
                 List<Path> list = new ArrayList<>();
                 list.add(path);
@@ -144,7 +141,7 @@ public class PathController {
             int i = tagHistoryService.existTable(format);
             if (i==0){
                 resultBean = new ResultBean();
-                resultBean.setCode(51);
+                resultBean.setCode(-1);
                 resultBean.setMsg("时间参数有误");
                 List<Path> list = new ArrayList<>();
                 list.add(path);
@@ -158,7 +155,7 @@ public class PathController {
            // System.out.println(path.getTagAddress()+":"+tagHistories.size());
             if (tagHistories.size()==0) {
                 resultBean = new ResultBean();
-                resultBean.setCode(53);
+                resultBean.setCode(-1);
                 resultBean.setMsg("该标签不存在或无轨迹记录");
                 List<Path> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -170,7 +167,7 @@ public class PathController {
            // System.out.println(format+":"+tagHistoryList.size());
             if (tagHistoryList.size()==0){
                 resultBean = new ResultBean();
-                resultBean.setCode(53);
+                resultBean.setCode(-1);
                 resultBean.setMsg("该标签不存在或无轨迹记录");
                 List<Path> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -209,7 +206,7 @@ public class PathController {
 
         } catch (ParseException e) {
             resultBean = new ResultBean();
-            resultBean.setCode(52);
+            resultBean.setCode(-1);
             resultBean.setMsg("时间数据处理失败");
             List<Path> list = new ArrayList<>();
             resultBean.setData(list);
@@ -230,7 +227,7 @@ public class PathController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -250,7 +247,7 @@ public class PathController {
                 errorlist.add(message);
             });
             resultBean = new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -259,7 +256,7 @@ public class PathController {
         Map map = mapService.getMapByUuid(pathMap.getMapkey());
         if (map == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(109);
+            resultBean.setCode(-1);
             resultBean.setMsg("该地图不存在");
             List<Map> list = new ArrayList<>();
             resultBean.setData(list);
@@ -288,7 +285,7 @@ public class PathController {
         //System.out.println("结束时间-开始时间:"+(en-s));
         if (en - s > 0) {
             resultBean = new ResultBean();
-            resultBean.setCode(74);
+            resultBean.setCode(-1);
             resultBean.setMsg("当前不支持跨天查询");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -307,7 +304,7 @@ public class PathController {
             //开始时间大于结束时间,时间输入有误
             if (starttime > endtime) {
                 resultBean = new ResultBean();
-                resultBean.setCode(51);
+                resultBean.setCode(-1);
                 resultBean.setMsg("时间参数有误");
                 List<PathMap> list = new ArrayList<>();
                 list.add(pathMap);
@@ -326,8 +323,9 @@ public class PathController {
             int i = tagHistoryService.existTable(format);
             if (i==0){
                 resultBean = new ResultBean();
-                resultBean.setCode(51);
-                resultBean.setMsg("该时间段没有数据");
+
+                resultBean.setCode(-1);
+                resultBean.setMsg("时间参数有误");
                 List<PathMap> list = new ArrayList<>();
                 list.add(pathMap);
                 resultBean.setData(list);
@@ -339,7 +337,7 @@ public class PathController {
             // System.out.println(path.getTagAddress()+":"+tagHistories.size());
             if (tagHistories.size()==0) {
                 resultBean = new ResultBean();
-                resultBean.setCode(53);
+                resultBean.setCode(-1);
                 resultBean.setMsg("该标签不存在或无轨迹记录");
                 List<Path> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -351,7 +349,7 @@ public class PathController {
             // System.out.println(format+":"+tagHistoryList.size());
             if (tagHistoryList.size()==0){
                 resultBean = new ResultBean();
-                resultBean.setCode(53);
+                resultBean.setCode(-1);
                 resultBean.setMsg("该标签不存在或无轨迹记录");
                 List<Path> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -384,7 +382,7 @@ public class PathController {
             return pathVO;
         } catch (ParseException e) {
             resultBean = new ResultBean();
-            resultBean.setCode(52);
+            resultBean.setCode(-1);
             resultBean.setMsg("时间数据处理失败");
             List<Path> list = new ArrayList<>();
             resultBean.setData(list);
@@ -393,4 +391,6 @@ public class PathController {
         }
 
     }
+
+
     }

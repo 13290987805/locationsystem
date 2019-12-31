@@ -30,4 +30,6 @@ public interface IGoodsService extends IBaseService<Goods> {
     PageInfo<Goods> getGoodsByMsg(Integer pageIndex, Integer pageSize, Integer id, String msg);
 
     Goods getGoodsByGoodsIdCard(String goodsIdcard);
+
+    List<Goods> getGoodsByNoTag(Integer id);
 }

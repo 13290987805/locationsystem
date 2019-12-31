@@ -40,4 +40,6 @@ public interface GoodsMapper extends IBaseDao<Goods>{
     List<Goods> getGoodsByGoodsTypeId(@Param("userid") Integer id, @Param("typeid") Integer id1);
 
     Goods getGoodsByGoodsIdCard(String goodsIdcard);
+
+    List<Goods> getGoodsByNoTag(Integer userid);
 }

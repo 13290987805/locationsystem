@@ -94,4 +94,9 @@ public class GoodsService extends BaseServiceImpl<Goods> implements IGoodsServic
     public Goods getGoodsByGoodsIdCard(String goodsIdcard) {
         return goodsMapper.getGoodsByGoodsIdCard(goodsIdcard);
     }
+
+    @Override
+    public List<Goods> getGoodsByNoTag(Integer userid) {
+        return goodsMapper.getGoodsByNoTag(userid);
+    }
 }

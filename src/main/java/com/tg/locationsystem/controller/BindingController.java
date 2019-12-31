@@ -47,7 +47,7 @@ public class BindingController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -56,7 +56,7 @@ public class BindingController {
         }
         if (address==null||"".equals(address)){
             resultBean = new ResultBean();
-            resultBean.setCode(17);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签address未填");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -65,7 +65,7 @@ public class BindingController {
         }
         if (idCard==null||"".equals(idCard)){
             resultBean = new ResultBean();
-            resultBean.setCode(16);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员身份证号码未填");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -75,7 +75,7 @@ public class BindingController {
         Person person = personService.getPersonByIdCard(idCard);
         if (person==null){
             resultBean = new ResultBean();
-            resultBean.setCode(18);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -85,7 +85,7 @@ public class BindingController {
        // System.out.println("人员绑定:"+idCard+"--->"+person.getTagAddress());
         if (!person.getTagAddress().equals("")){
             resultBean = new ResultBean();
-            resultBean.setCode(21);
+            resultBean.setCode(-1);
             resultBean.setMsg("该人员已绑定过价签");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -95,7 +95,7 @@ public class BindingController {
         Tag tag = tagService.getTagByAddress(address, user.getId());
         if (tag==null){
             resultBean = new ResultBean();
-            resultBean.setCode(19);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -104,7 +104,7 @@ public class BindingController {
         }
         if ("1".equals(tag.getUsed())){
             resultBean = new ResultBean();
-            resultBean.setCode(20);
+            resultBean.setCode(-1);
             resultBean.setMsg("该标签已被别人使用");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -119,7 +119,7 @@ public class BindingController {
         int tagupdate = tagService.updateByPrimaryKeySelective(tag);
         if (personupdate>0&&tagupdate>0){
             resultBean = new ResultBean();
-            resultBean.setCode(22);
+            resultBean.setCode(1);
             resultBean.setMsg("绑定成功");
             List list = new ArrayList<>();
             list.add(person);
@@ -128,7 +128,7 @@ public class BindingController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(23);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加绑定失败");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -152,7 +152,7 @@ public class BindingController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -162,7 +162,7 @@ public class BindingController {
         Person person = personService.getPersonByIdCard(idCard);
         if (person==null){
             resultBean = new ResultBean();
-            resultBean.setCode(18);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -171,7 +171,7 @@ public class BindingController {
         }
         if (person.getTagAddress()==null||"".equals(person.getTagAddress())) {
             resultBean = new ResultBean();
-            resultBean.setCode(24);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员没有绑定标签,无法解绑");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -181,7 +181,7 @@ public class BindingController {
         String tagAddress = person.getTagAddress();
         if ("".equals(tagAddress)){
             resultBean = new ResultBean();
-            resultBean.setCode(24);
+            resultBean.setCode(-1);
             resultBean.setMsg("人员没有绑定标签,无法解绑");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -192,7 +192,7 @@ public class BindingController {
         Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
         if (tag == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(19);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -213,7 +213,7 @@ public class BindingController {
             SystemMap.getCountmap().remove(tag.getAddress());
 
             resultBean = new ResultBean();
-            resultBean.setCode(25);
+            resultBean.setCode(1);
             resultBean.setMsg("解绑成功");
             List list = new ArrayList<>();
             list.add(person);
@@ -222,7 +222,7 @@ public class BindingController {
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(26);
+            resultBean.setCode(-1);
             resultBean.setMsg("解绑失败");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -245,7 +245,7 @@ public class BindingController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -254,7 +254,7 @@ public class BindingController {
         }
         if (address==null||"".equals(address)){
             resultBean = new ResultBean();
-            resultBean.setCode(17);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签address未填");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -263,7 +263,7 @@ public class BindingController {
         }
         if (idCard==null||"".equals(idCard)){
             resultBean = new ResultBean();
-            resultBean.setCode(35);
+            resultBean.setCode(-1);
             resultBean.setMsg("物品唯一标识未填");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -273,7 +273,7 @@ public class BindingController {
         Goods goods = goodsService.getGoodsByIdCard(idCard, user.getId());
         if (goods==null){
             resultBean = new ResultBean();
-            resultBean.setCode(31);
+            resultBean.setCode(-1);
             resultBean.setMsg("物品不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -282,7 +282,7 @@ public class BindingController {
         }
         if (!goods.getTagAddress().equals("")){
             resultBean = new ResultBean();
-            resultBean.setCode(36);
+            resultBean.setCode(-1);
             resultBean.setMsg("物品已经绑定标签,请先解绑");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -292,7 +292,7 @@ public class BindingController {
         Tag tag = tagService.getTagByAddress(address, user.getId());
         if (tag==null){
             resultBean = new ResultBean();
-            resultBean.setCode(19);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -301,7 +301,7 @@ public class BindingController {
         }
         if ("1".equals(tag.getUsed())){
             resultBean = new ResultBean();
-            resultBean.setCode(20);
+            resultBean.setCode(-1);
             resultBean.setMsg("该标签已被别人使用");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -316,7 +316,7 @@ public class BindingController {
         int tagupdate = tagService.updateByPrimaryKeySelective(tag);
         if (goodsupdate>0&&tagupdate>0){
             resultBean = new ResultBean();
-            resultBean.setCode(37);
+            resultBean.setCode(1);
             resultBean.setMsg("绑定成功");
             List list = new ArrayList<>();
             list.add(goods);
@@ -325,7 +325,7 @@ public class BindingController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(38);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加绑定失败");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -346,7 +346,7 @@ public class BindingController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -357,7 +357,7 @@ public class BindingController {
         Goods goods = goodsService.getGoodsByIdCard(idCard, user.getId());
         if (goods == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(31);
+            resultBean.setCode(-1);
             resultBean.setMsg("物品不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -366,7 +366,7 @@ public class BindingController {
         }
         if (goods.getTagAddress() == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(32);
+            resultBean.setCode(-1);
             resultBean.setMsg("物品没有绑定标签,无法解绑");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -376,7 +376,7 @@ public class BindingController {
         Tag tag = tagService.getTagByAddress(goods.getTagAddress(), user.getId());
         if (tag == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(19);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签不存在");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -392,7 +392,7 @@ public class BindingController {
 
         if (goodsupdate > 0 && tagupdate > 0) {
             resultBean = new ResultBean();
-            resultBean.setCode(33);
+            resultBean.setCode(1);
             resultBean.setMsg("解绑成功");
             List list = new ArrayList<>();
             list.add(goods);
@@ -401,7 +401,7 @@ public class BindingController {
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(34);
+            resultBean.setCode(-1);
             resultBean.setMsg("解绑失败");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -422,7 +422,7 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
     //未登录
     if (user == null) {
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -432,7 +432,7 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
     Tag tag = tagService.getTagByAddress(address, user.getId());
     if (tag==null){
         resultBean = new ResultBean();
-        resultBean.setCode(19);
+        resultBean.setCode(-1);
         resultBean.setMsg("标签不存在");
         List list = new ArrayList<>();
         resultBean.setData(list);
@@ -454,7 +454,7 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
             SystemMap.getCountmap().remove(tag.getAddress());
 
             resultBean = new ResultBean();
-            resultBean.setCode(75);
+            resultBean.setCode(1);
             resultBean.setMsg("解绑成功");
             List list = new ArrayList<>();
             list.add(person);
@@ -479,7 +479,7 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
             SystemMap.getCountmap().remove(tag.getAddress());
 
             resultBean = new ResultBean();
-            resultBean.setCode(75);
+            resultBean.setCode(1);
             resultBean.setMsg("解绑成功");
             List list = new ArrayList<>();
             list.add(goods);
@@ -489,12 +489,15 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
         }
     }
     resultBean = new ResultBean();
-    resultBean.setCode(118);
-    resultBean.setMsg("标签删除失败");
+
+    resultBean.setCode(-1);
+    resultBean.setMsg("解绑失败");
+
     List list = new ArrayList<>();
     resultBean.setData(list);
     resultBean.setSize(list.size());
     return resultBean;
 }
+
 }
 

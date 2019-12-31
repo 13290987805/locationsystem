@@ -74,7 +74,7 @@ private IEleCallSetService eleCallSetService;
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -167,7 +167,7 @@ private IEleCallSetService eleCallSetService;
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -335,7 +335,7 @@ private IEleCallSetService eleCallSetService;
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -355,7 +355,7 @@ private IEleCallSetService eleCallSetService;
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -364,7 +364,7 @@ private IEleCallSetService eleCallSetService;
         int data = heartRateSet.getMaxData() - heartRateSet.getMinData();
         if (data<=0){
             resultBean = new ResultBean();
-            resultBean.setCode(91);
+            resultBean.setCode(-1);
             resultBean.setMsg("最小心率不能大于等于最大心率");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -383,7 +383,7 @@ private IEleCallSetService eleCallSetService;
             int insert = heartRateSetService.insertSelective(heartRateSet);
             if (insert>0){
                 resultBean = new ResultBean();
-                resultBean.setCode(89);
+                resultBean.setCode(-1);
                 resultBean.setMsg("设置心率成功");
                 List list=new ArrayList<>();
                 list.add(heart);
@@ -392,7 +392,7 @@ private IEleCallSetService eleCallSetService;
                 return resultBean;
             }
             resultBean = new ResultBean();
-            resultBean.setCode(90);
+            resultBean.setCode(-1);
             resultBean.setMsg("设置心率失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -405,7 +405,7 @@ private IEleCallSetService eleCallSetService;
             int update = heartRateSetService.updateByPrimaryKeySelective(heart);
             if (update>0){
                 resultBean = new ResultBean();
-                resultBean.setCode(89);
+                resultBean.setCode(-1);
                 resultBean.setMsg("设置心率成功");
                 List list=new ArrayList<>();
                 list.add(heart);
@@ -414,7 +414,7 @@ private IEleCallSetService eleCallSetService;
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(90);
+                resultBean.setCode(-1);
                 resultBean.setMsg("设置心率失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -438,7 +438,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -458,7 +458,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
             errorlist.add(message);
         });
         resultBean =new ResultBean();
-        resultBean.setCode(2);
+        resultBean.setCode(-1);
         resultBean.setMsg("信息未填完整");
         resultBean.setData(errorlist);
         resultBean.setSize(errorlist.size());
@@ -473,7 +473,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
         System.out.println("心率记录:"+(end-start));
         if (end-start<0){
             resultBean = new ResultBean();
-            resultBean.setCode(92);
+            resultBean.setCode(-1);
             resultBean.setMsg("起始时间大于结束时间");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -483,7 +483,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
         List<HeartRateHistory> histories=heartRateHistoryService.getheartRateHistoryByCondition(historyCondition.getPersonIdcard(),historyCondition.getStartTime(),historyCondition.getEndTime());
         if (histories.size()==0) {
             resultBean = new ResultBean();
-            resultBean.setCode(53);
+            resultBean.setCode(-1);
             resultBean.setMsg("该标签不存在或无心率记录");
             List<Path> list = new ArrayList<>();
             resultBean.setData(list);
@@ -498,7 +498,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
         return resultBean;
     } catch (ParseException e) {
         resultBean = new ResultBean();
-        resultBean.setCode(91);
+        resultBean.setCode(-1);
         resultBean.setMsg("时间转换失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -521,7 +521,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
     //未登录
     if (user == null) {
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -530,7 +530,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
     }
     if (tagStatusid == null) {
         resultBean = new ResultBean();
-        resultBean.setCode(93);
+        resultBean.setCode(-1);
         resultBean.setMsg("标签报警id不能为空");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -543,7 +543,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
         int i = tagStatusService.updateByPrimaryKeySelective(tagStatus);
         if (i > 0) {
             resultBean = new ResultBean();
-            resultBean.setCode(94);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签报警处理成功");
             List<TagStatus> list = new ArrayList<>();
             list.add(tagStatus);
@@ -552,7 +552,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
             return resultBean;
         } else {
             resultBean = new ResultBean();
-            resultBean.setCode(95);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签报警处理失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -561,7 +561,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
         }
     }
     resultBean = new ResultBean();
-    resultBean.setCode(95);
+    resultBean.setCode(-1);
     resultBean.setMsg("标签报警处理失败");
     List<Myuser> list = new ArrayList<>();
     resultBean.setData(list);
@@ -583,7 +583,7 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -592,7 +592,7 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
     }
     if (typeid==null||"".equals(typeid)){
         resultBean = new ResultBean();
-        resultBean.setCode(114);
+        resultBean.setCode(-1);
         resultBean.setMsg("类型id不能为空");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);
@@ -767,7 +767,7 @@ public ResultBean deleteTagStatus(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -776,7 +776,7 @@ public ResultBean deleteTagStatus(HttpServletRequest request,
     }
     if (tagStatusid==null||"".equals(tagStatusid)){
         resultBean = new ResultBean();
-        resultBean.setCode(112);
+        resultBean.setCode(-1);
         resultBean.setMsg("告警记录id不能为空");
         List<TagStatus> list = new ArrayList<>();
         resultBean.setData(list);
@@ -794,7 +794,7 @@ public ResultBean deleteTagStatus(HttpServletRequest request,
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(113);
+        resultBean.setCode(-1);
         resultBean.setMsg("删除告警记录失败");
         List<TagStatus> list = new ArrayList<>();
         resultBean.setData(list);
@@ -818,7 +818,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -827,7 +827,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
     }
     if (typeid==null||"".equals(typeid)){
         resultBean = new ResultBean();
-        resultBean.setCode(114);
+        resultBean.setCode(-1);
         resultBean.setMsg("类型id不能为空");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);
@@ -836,7 +836,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
     }
     if (isdeal==null||"".equals(isdeal)){
         resultBean = new ResultBean();
-        resultBean.setCode(115);
+        resultBean.setCode(-1);
         resultBean.setMsg("处理参数不能为空");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);
@@ -845,7 +845,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
     }
     if (!"0".equals(isdeal)&&!"1".equals(isdeal)){
         resultBean = new ResultBean();
-        resultBean.setCode(116);
+        resultBean.setCode(-1);
         resultBean.setMsg("参数有误");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);

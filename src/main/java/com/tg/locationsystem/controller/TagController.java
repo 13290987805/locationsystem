@@ -65,7 +65,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -85,7 +85,7 @@ public class TagController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -96,7 +96,7 @@ public class TagController {
         Tag mytag=tagService.getTagByAddress(tag.getAddress(),user.getId());
         if (mytag!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(9);
+            resultBean.setCode(-1);
             resultBean.setMsg("该标签已经存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -112,7 +112,7 @@ public class TagController {
         if (insert>0){
 
             resultBean = new ResultBean();
-            resultBean.setCode(7);
+            resultBean.setCode(1);
             resultBean.setMsg("添加标签成功");
             List<Tag> list = new ArrayList<>();
             list.add(tag);
@@ -121,7 +121,7 @@ public class TagController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(11);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加标签失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -143,7 +143,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -248,7 +248,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -343,7 +343,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -375,7 +375,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -470,7 +470,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -503,7 +503,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -523,7 +523,7 @@ public class TagController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -532,7 +532,7 @@ public class TagController {
     //权限不够
         if (!"0".equals(user.getCreateUser())){
             resultBean =new ResultBean();
-            resultBean.setCode(69);
+            resultBean.setCode(-1);
             resultBean.setMsg("权限不足,无法添加标签类型");
             List<Myuser> list=new ArrayList<>();
             list.add(user);
@@ -544,7 +544,7 @@ public class TagController {
         TagType mytagtype=tagTypeService.getTagTypeByName(tagType.getName(),user.getId());
         if (mytagtype!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(43);
+            resultBean.setCode(-1);
             resultBean.setMsg("类型已经存在,无法重复添加");
             List<PersonType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -574,7 +574,7 @@ public class TagController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(44);
+                resultBean.setCode(-1);
                 resultBean.setMsg("标签图片上传失败");
                 List<TagType> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -586,7 +586,7 @@ public class TagController {
 
         if (insert>0){
             resultBean = new ResultBean();
-            resultBean.setCode(45);
+            resultBean.setCode(1);
             resultBean.setMsg("标签类型添加成功");
             List<TagType> list = new ArrayList<>();
             list.add(tagType);
@@ -595,7 +595,7 @@ public class TagController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(46);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签类型添加失败");
             List<TagType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -618,7 +618,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -650,7 +650,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -682,7 +682,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -715,7 +715,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -745,7 +745,7 @@ public class TagController {
         //未登录
         if (user==null){
             allTag = new AllTagLocationResult();
-            allTag.setCode(5);
+            allTag.setCode(-1);
             allTag.setMsg("还未登录");
             return allTag;
         }
@@ -861,7 +861,7 @@ public class TagController {
             //未登录
             if (user==null){
                 allTag = new AllTagLocationResult();
-                allTag.setCode(5);
+                allTag.setCode(-1);
                 allTag.setMsg("还未登录");
                 return allTag;
             }
@@ -968,7 +968,7 @@ public class TagController {
             //未登录
             if (user==null){
                 allTag = new AllTagLocationResult();
-                allTag.setCode(5);
+                allTag.setCode(-1);
                 allTag.setMsg("还未登录");
                 return allTag;
             }
@@ -1077,7 +1077,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1110,7 +1110,7 @@ public class TagController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1212,13 +1212,13 @@ public class TagController {
         //未登录
         if (user==null){
             allTag = new AllTagLocationResult();
-            allTag.setCode(5);
+            allTag.setCode(-1);
             allTag.setMsg("还未登录");
             return allTag;
         }
         if (MapUUID==null||"".equals(MapUUID)){
             allTag = new AllTagLocationResult();
-            allTag.setCode(109);
+            allTag.setCode(-1);
             allTag.setMsg("该地图不存在");
             return allTag;
         }

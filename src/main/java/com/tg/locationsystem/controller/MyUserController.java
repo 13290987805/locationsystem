@@ -330,7 +330,7 @@ public class MyUserController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -406,7 +406,7 @@ public class MyUserController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -463,8 +463,10 @@ public class MyUserController {
             return resultBean;
         }
         try {
-            //String pass = BASE64.encryptBASE64(myuser.getPassword().getBytes());
-            String pass = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
+
+
+            String pass = Base64.getEncoder().encodeToString(myuser.getPassword().getBytes());
+
             myuser.setPassword(pass);
             myuser.setCreateUser("1");
             int insert = myUserService.insertSelective(myuser);
@@ -508,7 +510,7 @@ public class MyUserController {
     public ResultBean toLogin(HttpServletRequest request){
 
         ResultBean resultBean = new ResultBean();
-        resultBean.setCode(5);
+        resultBean.setCode(-1);
         resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
