@@ -63,7 +63,7 @@ public class GoodsController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -203,8 +203,8 @@ public ResultBean getGoods(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -272,7 +272,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new AllTagLocationResult();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             return resultBean;
@@ -321,7 +321,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -436,7 +436,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -466,7 +466,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -497,7 +497,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -531,7 +531,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -560,8 +560,8 @@ public ResultBean deleteGoods(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -749,8 +749,8 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -914,8 +914,8 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -1027,7 +1027,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1146,7 +1146,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

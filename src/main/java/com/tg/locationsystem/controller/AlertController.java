@@ -74,7 +74,7 @@ private IEleCallSetService eleCallSetService;
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -167,7 +167,7 @@ private IEleCallSetService eleCallSetService;
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -335,7 +335,7 @@ private IEleCallSetService eleCallSetService;
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -438,8 +438,8 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -518,7 +518,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -570,8 +570,8 @@ public ResultBean dealTagStatus(HttpServletRequest request,
     //未登录
     if (user == null) {
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -632,8 +632,8 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -816,8 +816,8 @@ public ResultBean deleteTagStatus(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -867,8 +867,8 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -986,8 +986,8 @@ public ResultBean setSoS(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -1098,7 +1098,7 @@ public ResultBean setSoS(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1208,7 +1208,7 @@ public ResultBean setSoS(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1328,7 +1328,7 @@ public ResultBean setSoS(HttpServletRequest request,
         }
         if (setBattery==null||"".equals(setBattery)){
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警参数不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1371,7 +1371,7 @@ public ResultBean setSoS(HttpServletRequest request,
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(122);
+                resultBean.setCode(-1);
                 resultBean.setMsg("报警开关设置失败");
                 List<AlertSet> list=new ArrayList<>();
                 list.add(alertSet);
@@ -1398,7 +1398,7 @@ public ResultBean setSoS(HttpServletRequest request,
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(122);
+                resultBean.setCode(-1);
                 resultBean.setMsg("报警开关设置失败");
                 List<AlertSet> list=new ArrayList<>();
                 list.add(alertSet);
@@ -1408,7 +1408,7 @@ public ResultBean setSoS(HttpServletRequest request,
             }
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(122);
+            resultBean.setCode(-1);
             resultBean.setMsg("报警开关设置失败");
             List<AlertSet> list=new ArrayList<>();
             list.add(alertSet);
@@ -1441,7 +1441,7 @@ public ResultBean setSoS(HttpServletRequest request,
         }
         if (TagStatusIds==null||"".equals(TagStatusIds)){
             resultBean = new ResultBean();
-            resultBean.setCode(120);
+            resultBean.setCode(-1);
             resultBean.setMsg("处理参数不能为空");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -1473,7 +1473,7 @@ public ResultBean setSoS(HttpServletRequest request,
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(95);
+            resultBean.setCode(-1);
             resultBean.setMsg("标签报警处理失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1589,7 +1589,7 @@ public ResultBean getTagStatusBySomeCondition(HttpServletRequest request,
     }
     if (queryTagStatusVO.getAlert_type()==null||"".equals(queryTagStatusVO.getAlert_type())){
         resultBean = new ResultBean();
-        resultBean.setCode(114);
+        resultBean.setCode(-1);
         resultBean.setMsg("类型id不能为空");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1780,7 +1780,7 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
     }
     if (isdeal == null || "".equals(isdeal)) {
         resultBean = new ResultBean();
-        resultBean.setCode(115);
+        resultBean.setCode(-1);
         resultBean.setMsg("处理参数不能为空");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1789,7 +1789,7 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
     }
     if (!"0".equals(isdeal) && !"1".equals(isdeal)) {
         resultBean = new ResultBean();
-        resultBean.setCode(116);
+        resultBean.setCode(-1);
         resultBean.setMsg("参数有误");
         List<TagStatusVO> list = new ArrayList<>();
         resultBean.setData(list);

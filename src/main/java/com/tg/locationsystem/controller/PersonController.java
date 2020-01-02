@@ -65,7 +65,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -206,7 +206,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -264,7 +264,7 @@ public class PersonController {
         //未登录
        /* if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -331,7 +331,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new AllTagLocationResult();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             return resultBean;
         }
@@ -379,7 +379,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -501,7 +501,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -531,7 +531,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -563,7 +563,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -637,7 +637,7 @@ public class PersonController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -694,8 +694,8 @@ public ResultBean deletePerson(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -889,7 +889,7 @@ public ResultBean deletePerson(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1050,8 +1050,8 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -1163,7 +1163,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1286,8 +1286,8 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
