@@ -1,12 +1,9 @@
 package com.tg.locationsystem.controller;
 
 import boot.SkylabSDK;
-import com.tg.locationsystem.LocationsystemApplication;
-import com.tg.locationsystem.entity.Map;
 import com.tg.locationsystem.entity.Station;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.IMapService;
-import com.tg.locationsystem.utils.SystemMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +30,7 @@ public class SetDegugController {
     @RequestMapping(value = "setDebug",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public ResultBean setDegug(HttpServletRequest request
-            ,@RequestParam("") String debug) {
+            , @RequestParam("") String debug) {
         ResultBean resultBean;
         if (debug==null||"".equals(debug)){
             resultBean = new ResultBean();

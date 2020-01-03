@@ -81,9 +81,9 @@ public class LocationsystemApplication  {
 	//边界限定
     //public static final double boundary_MaxX=30.91;
     public static final double boundary_MaxX=25;
-    public static final double boundary_MinX=7.57;
-    public static final double boundary_MaxY=19.75;
-    public static final double boundary_MinY=1.65;
+    public static final double boundary_MinX=0;
+    public static final double boundary_MaxY=18;
+    public static final double boundary_MinY=0;
 	public static final String SOS="_sos";
 	public static final String HEART="_heatr";
 	public static final String CUT="_cut";

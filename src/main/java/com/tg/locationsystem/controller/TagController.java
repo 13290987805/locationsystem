@@ -745,7 +745,7 @@ public class TagController {
         //未登录
         if (user==null){
             allTag = new AllTagLocationResult();
-            allTag.setCode(-1);
+            allTag.setCode(5);
             allTag.setMsg("还未登录");
             return allTag;
         }
@@ -861,7 +861,7 @@ public class TagController {
             //未登录
             if (user==null){
                 allTag = new AllTagLocationResult();
-                allTag.setCode(-1);
+                allTag.setCode(5);
                 allTag.setMsg("还未登录");
                 return allTag;
             }
@@ -968,7 +968,7 @@ public class TagController {
             //未登录
             if (user==null){
                 allTag = new AllTagLocationResult();
-                allTag.setCode(-1);
+                allTag.setCode(5);
                 allTag.setMsg("还未登录");
                 return allTag;
             }
@@ -1212,7 +1212,7 @@ public class TagController {
         //未登录
         if (user==null){
             allTag = new AllTagLocationResult();
-            allTag.setCode(-1);
+            allTag.setCode(5);
             allTag.setMsg("还未登录");
             return allTag;
         }
