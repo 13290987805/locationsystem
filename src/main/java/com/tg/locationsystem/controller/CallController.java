@@ -2,11 +2,9 @@ package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.*;
-import com.tg.locationsystem.pojo.HeartRateHistoryCondition;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -52,7 +50,7 @@ public class CallController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -274,7 +272,7 @@ public class CallController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -482,7 +480,7 @@ public class CallController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -512,7 +510,7 @@ public class CallController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -542,7 +540,7 @@ public class CallController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -584,7 +582,7 @@ public class CallController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

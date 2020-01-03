@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.*;
 import java.util.Map;
+import java.util.*;
 
 /**
  * @author hyy
@@ -63,7 +63,7 @@ public class GoodsController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -83,7 +83,7 @@ public class GoodsController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -93,7 +93,7 @@ public class GoodsController {
         Goods mygoods=goodsService.getGoodsByIdCard(goods.getGoodsIdcard(),user.getId());
         if (mygoods!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(27);
+            resultBean.setCode(-1);
             resultBean.setMsg("该物品已经存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -104,7 +104,7 @@ public class GoodsController {
             Goods goods2 = goodsService.getGoodsByAddress(user.getId(), goods.getTagAddress());
             if (goods2!=null){
                 resultBean = new ResultBean();
-                resultBean.setCode(20);
+                resultBean.setCode(-1);
                 resultBean.setMsg("该标签已被别人使用");
                 List list = new ArrayList<>();
                 resultBean.setData(list);
@@ -154,7 +154,7 @@ public class GoodsController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(28);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传物品照片失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -172,7 +172,7 @@ public class GoodsController {
             SystemMap.getCountmap().put(goods.getTagAddress(),0);
 
             resultBean = new ResultBean();
-            resultBean.setCode(29);
+            resultBean.setCode(1);
             resultBean.setMsg("添加物品成功");
             List<Goods> list = new ArrayList<>();
             list.add(goods);
@@ -181,7 +181,7 @@ public class GoodsController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(30);
+            resultBean.setCode(-1);
             resultBean.setMsg("添加物品失败");
             List list = new ArrayList<>();
             resultBean.setData(list);
@@ -203,8 +203,8 @@ public ResultBean getGoods(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -272,7 +272,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new AllTagLocationResult();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             return resultBean;
@@ -321,7 +321,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -341,7 +341,7 @@ public ResultBean getGoods(HttpServletRequest request,
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -351,7 +351,7 @@ public ResultBean getGoods(HttpServletRequest request,
         GoodsType mygoodstype= goodsTypeService.getGoodsTypeByName(goodsType.getName(),user.getId());
         if (mygoodstype!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(47);
+            resultBean.setCode(-1);
             resultBean.setMsg("类型已经存在,无法重复添加");
             List<GoodsType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -364,7 +364,7 @@ public ResultBean getGoods(HttpServletRequest request,
         goodsType.setUserId(user.getId());
         if (file==null){
             resultBean = new ResultBean();
-            resultBean.setCode(77);
+            resultBean.setCode(-1);
             resultBean.setMsg("图标不能为空");
             List<PersonType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -393,7 +393,7 @@ public ResultBean getGoods(HttpServletRequest request,
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(48);
+                resultBean.setCode(-1);
                 resultBean.setMsg("物品类型上传图片失败");
                 List<GoodsType> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -404,7 +404,7 @@ public ResultBean getGoods(HttpServletRequest request,
         int insert = goodsTypeService.insertSelective(goodsType);
         if (insert>0){
             resultBean = new ResultBean();
-            resultBean.setCode(49);
+            resultBean.setCode(1);
             resultBean.setMsg("物品类型添加成功");
             List<GoodsType> list = new ArrayList<>();
             list.add(goodsType);
@@ -413,7 +413,7 @@ public ResultBean getGoods(HttpServletRequest request,
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(50);
+            resultBean.setCode(-1);
             resultBean.setMsg("物品类型添加失败");
             List<GoodsType> list = new ArrayList<>();
             resultBean.setData(list);
@@ -436,7 +436,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -466,7 +466,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -497,7 +497,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -531,7 +531,7 @@ public ResultBean getGoods(HttpServletRequest request,
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -560,8 +560,8 @@ public ResultBean deleteGoods(HttpServletRequest request,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -570,7 +570,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
     Goods goods = goodsService.selectByPrimaryKey(goodsid);
     if (goods==null){
         resultBean = new ResultBean();
-        resultBean.setCode(63);
+        resultBean.setCode(-1);
         resultBean.setMsg("该物品不存在");
         List<Person> list = new ArrayList<>();
         resultBean.setData(list);
@@ -606,7 +606,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
             }
             if (updatetag>0){
                 resultBean = new ResultBean();
-                resultBean.setCode(64);
+                resultBean.setCode(1);
                 resultBean.setMsg("成功删除物品");
                 List<Goods> list = new ArrayList<>();
                 list.add(goods);
@@ -616,7 +616,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
             }
         }
         resultBean = new ResultBean();
-        resultBean.setCode(64);
+        resultBean.setCode(1);
         resultBean.setMsg("成功删除物品");
         List<Goods> list = new ArrayList<>();
         list.add(goods);
@@ -625,7 +625,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(65);
+        resultBean.setCode(-1);
         resultBean.setMsg("删除失败");
         List<Goods> list = new ArrayList<>();
         resultBean.setData(list);
@@ -749,8 +749,8 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -771,7 +771,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
             errorlist.add(message);
         });
         resultBean =new ResultBean();
-        resultBean.setCode(2);
+        resultBean.setCode(-1);
         resultBean.setMsg("信息未填完整");
         resultBean.setData(errorlist);
         resultBean.setSize(errorlist.size());
@@ -779,7 +779,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
     }
     if (goods.getId()==null){
         resultBean = new ResultBean();
-        resultBean.setCode(78);
+        resultBean.setCode(-1);
         resultBean.setMsg("id不能为空");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -792,7 +792,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
         Goods goodsByGoodsIdCard = goodsService.getGoodsByGoodsIdCard(goods.getGoodsIdcard());
         if (goodsByGoodsIdCard!=null){
                 resultBean = new ResultBean();
-                resultBean.setCode(82);
+                resultBean.setCode(-1);
                 resultBean.setMsg("该物品编码不唯一");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -834,7 +834,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
         } catch (IOException e) {
             e.printStackTrace();
             resultBean = new ResultBean();
-            resultBean.setCode(28);
+            resultBean.setCode(-1);
             resultBean.setMsg("上传物品照片失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -884,7 +884,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
         SystemMap.getCountmap().put(goods.getTagAddress(),0);
 
         resultBean = new ResultBean();
-        resultBean.setCode(81);
+        resultBean.setCode(1);
         resultBean.setMsg("物品修改成功");
         List<Goods> list = new ArrayList<>();
         list.add(goods);
@@ -893,7 +893,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(82);
+        resultBean.setCode(-1);
         resultBean.setMsg("物品修改失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -914,8 +914,8 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
     //未登录
     if (user==null){
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
@@ -935,7 +935,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
             errorlist.add(message);
         });
         resultBean =new ResultBean();
-        resultBean.setCode(2);
+        resultBean.setCode(-1);
         resultBean.setMsg("信息未填完整");
         resultBean.setData(errorlist);
         resultBean.setSize(errorlist.size());
@@ -943,7 +943,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
     }
     if (goodsType.getId()==null){
         resultBean = new ResultBean();
-        resultBean.setCode(78);
+        resultBean.setCode(-1);
         resultBean.setMsg("id不能为空");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -983,7 +983,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         } catch (IOException e) {
             e.printStackTrace();
             resultBean = new ResultBean();
-            resultBean.setCode(40);
+            resultBean.setCode(-1);
             resultBean.setMsg("上传人员类型logo失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -995,7 +995,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
 
     if (update>0){
         resultBean = new ResultBean();
-        resultBean.setCode(84);
+        resultBean.setCode(1);
         resultBean.setMsg("物品类型修改成功");
         List<GoodsType> list = new ArrayList<>();
         list.add(goodsType);
@@ -1004,7 +1004,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(85);
+        resultBean.setCode(-1);
         resultBean.setMsg("物品类型修改失败");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
@@ -1027,7 +1027,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -1134,4 +1134,64 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
         resultBean.setSize(page.getSize());
         return resultBean;
     }
+
+    /*
+     * 得到物品下没有绑定标签的物品
+     * */
+    @RequestMapping(value = "getGoodsByNoTag",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getGoodsByNoTag(HttpServletRequest request){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Goods> goodsList = goodsService.getGoodsByNoTag(user.getId());
+
+        if (goodsList.size()>0){
+            List<GoodsVO> goodsVOList = new ArrayList<>();
+            for (Goods goods : goodsList) {
+                GoodsVO goodsVO=new GoodsVO();
+                goodsVO.setId(goods.getId());
+                goodsVO.setGoodsName(goods.getGoodsName());
+                goodsVO.setUserId(goods.getUserId());
+                goodsVO.setGoodsTypeid(goods.getGoodsTypeid());
+                goodsVO.setTagAddress(goods.getTagAddress());
+                goodsVO.setImg(goods.getImg());
+                goodsVO.setAddTime(goods.getAddTime());
+                goodsVO.setGoodsIdcard(goods.getGoodsIdcard());
+                //goodsVO.setRank(goods.getRank());
+
+                //物品类型名字
+                GoodsType goodsType = goodsTypeMapper.selectByPrimaryKey(goods.getGoodsTypeid());
+                if (goodsType!=null){
+                    goodsVO.setGoodsTypeName(goodsType.getName());
+                }
+                goodsVOList.add(goodsVO);
+            }
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(goodsVOList);
+            resultBean.setSize(goodsVOList.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            resultBean.setData(goodsList);
+            resultBean.setSize(goodsList.size());
+            return resultBean;
+        }
+    }
+
+
+
 }

@@ -47,7 +47,7 @@ public class BindingController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -152,7 +152,7 @@ public class BindingController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -245,7 +245,7 @@ public class BindingController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -346,7 +346,7 @@ public class BindingController {
         //未登录
         if (user == null) {
             resultBean = new ResultBean();
-            resultBean.setCode(-1);
+            resultBean.setCode(5);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -422,8 +422,8 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
     //未登录
     if (user == null) {
         resultBean = new ResultBean();
-        resultBean.setCode(-1);
-        resultBean.setMsg("还未登录");
+        resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
