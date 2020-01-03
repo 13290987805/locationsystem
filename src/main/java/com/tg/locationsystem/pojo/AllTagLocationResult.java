@@ -16,6 +16,8 @@ public class AllTagLocationResult implements Serializable {
 
     private List<GoodsLocation> goodsLocations;
 
+    private Integer size;
+
     public Integer getCode() {
         return code;
     }
@@ -38,6 +40,14 @@ public class AllTagLocationResult implements Serializable {
 
     public void setPersonlocationList(List<Location> personlocationList) {
         this.personlocationList = personlocationList;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 
     public List<GoodsLocation> getGoodsLocations() {

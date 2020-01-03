@@ -54,7 +54,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -64,7 +64,7 @@ public class MyUserController {
         Myuser myuser=myUserService.getUserByName(user.getUsername());
         if (null==myuser){
             resultBean = new ResultBean();
-            resultBean.setCode(3);
+            resultBean.setCode(-1);
             resultBean.setMsg("该账户不存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -77,7 +77,7 @@ public class MyUserController {
             //System.out.println(myuser.getPassword()+":"+myuser.getPassword().length());
             if (!myuser.getPassword().equals(pass)){
                 resultBean = new ResultBean();
-                resultBean.setCode(4);
+                resultBean.setCode(-1);
                 resultBean.setMsg("密码错误");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -121,7 +121,7 @@ public class MyUserController {
 
         } catch (Exception e) {
             resultBean = new ResultBean();
-            resultBean.setCode(4);
+            resultBean.setCode(-1);
             resultBean.setMsg("密码错误:"+e.getMessage());
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -138,13 +138,13 @@ public class MyUserController {
     @RequestMapping(value = "updateUser",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResultBean updateUser(@Valid Myuser myuser, BindingResult result,
-                                     HttpServletRequest request,@RequestParam(value="logo",required=false)MultipartFile file){
+                                     HttpServletRequest request,@RequestParam(value="logoData",required=false)MultipartFile file){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -163,7 +163,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -173,7 +173,7 @@ public class MyUserController {
         Myuser sqlUser = myUserService.selectByPrimaryKey(user.getId());
         if (sqlUser==null){
             resultBean = new ResultBean();
-            resultBean.setCode(3);
+            resultBean.setCode(-1);
             resultBean.setMsg("该登录用户不存在");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -181,7 +181,9 @@ public class MyUserController {
             return resultBean;
         }
         myuser.setId(user.getId());
+        myuser.setCreateUser(user.getCreateUser());
         //设置图片路径
+        myuser.setLogo(user.getLogo());
         //获取文件名加后缀
         if (file!=null){
             //保存图片的路径
@@ -201,7 +203,7 @@ public class MyUserController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(13);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传logo失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -225,7 +227,7 @@ public class MyUserController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(71);
+            resultBean.setCode(-1);
             resultBean.setMsg("操作失败:");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -247,7 +249,7 @@ public class MyUserController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -257,7 +259,7 @@ public class MyUserController {
        // System.out.println("上传logo:"+request.getRequestURI());
         if (file==null){
             resultBean = new ResultBean();
-            resultBean.setCode(119);
+            resultBean.setCode(-1);
             resultBean.setMsg("logo不能为空");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -284,7 +286,7 @@ public class MyUserController {
             } catch (IOException e) {
                 e.printStackTrace();
                 resultBean = new ResultBean();
-                resultBean.setCode(13);
+                resultBean.setCode(-1);
                 resultBean.setMsg("上传logo失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -309,7 +311,7 @@ public class MyUserController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(71);
+            resultBean.setCode(-1);
             resultBean.setMsg("操作失败:");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -349,7 +351,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -359,7 +361,7 @@ public class MyUserController {
         String pass = Base64.getEncoder().encodeToString(updatePassword.getOldPassword().getBytes());
         if (!loginUser.getPassword().equals(pass)){
             resultBean =new ResultBean();
-            resultBean.setCode(66);
+            resultBean.setCode(-1);
             resultBean.setMsg("密码错误");
             List list=new ArrayList();
             resultBean.setData(list);
@@ -371,7 +373,7 @@ public class MyUserController {
         int update = myUserService.updateByPrimaryKeySelective(loginUser);
         if (update>0){
             resultBean =new ResultBean();
-            resultBean.setCode(67);
+            resultBean.setCode(1);
             resultBean.setMsg("密码修改成功");
             //设置session过期
             request.getSession().setAttribute("user",null);
@@ -383,7 +385,7 @@ public class MyUserController {
             return resultBean;
         }else {
             resultBean =new ResultBean();
-            resultBean.setCode(68);
+            resultBean.setCode(-1);
             resultBean.setMsg("密码修改失败");
             List<Myuser> list=new ArrayList();
             resultBean.setData(list);
@@ -425,7 +427,7 @@ public class MyUserController {
                 errorlist.add(message);
             });
             resultBean =new ResultBean();
-            resultBean.setCode(2);
+            resultBean.setCode(-1);
             resultBean.setMsg("信息未填完整");
             resultBean.setData(errorlist);
             resultBean.setSize(errorlist.size());
@@ -434,7 +436,7 @@ public class MyUserController {
 
         if (!"0".equals(user.getCreateUser())){
             resultBean =new ResultBean();
-            resultBean.setCode(69);
+            resultBean.setCode(-1);
             resultBean.setMsg("权限不足,无法添加用户");
             List<Myuser> list=new ArrayList<>();
             list.add(user);
@@ -445,7 +447,7 @@ public class MyUserController {
         Myuser userByName = myUserService.getUserByName(myuser.getUsername());
         if (userByName!=null){
             resultBean = new ResultBean();
-            resultBean.setCode(72);
+            resultBean.setCode(-1);
             resultBean.setMsg("该用户已经存在,无法添加");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -455,7 +457,7 @@ public class MyUserController {
         boolean matches = myuser.getPhonenumber().matches("^[1][3,4,5,7,8][0-9]{9}$");
         if (!matches){
             resultBean = new ResultBean();
-            resultBean.setCode(73);
+            resultBean.setCode(-1);
             resultBean.setMsg("手机号码格式不正确");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -463,13 +465,8 @@ public class MyUserController {
             return resultBean;
         }
         try {
-<<<<<<<<< Temporary merge branch 1
-
-            String pass = Base64.getEncoder().encodeToString(myuser.getPassword().getBytes());
-=========
             //String pass = BASE64.encryptBASE64(myuser.getPassword().getBytes());
             String pass = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
->>>>>>>>> Temporary merge branch 2
             myuser.setPassword(pass);
             myuser.setCreateUser("1");
             int insert = myUserService.insertSelective(myuser);
@@ -481,7 +478,7 @@ public class MyUserController {
             int i = eleCallSetService.insertSelective(eleCallSet);
             if (insert>0&&i>0){
                 resultBean = new ResultBean();
-                resultBean.setCode(70);
+                resultBean.setCode(1);
                 resultBean.setMsg("用户添加成功");
                 List<Myuser> list = new ArrayList<>();
                 list.add(myuser);
@@ -490,7 +487,7 @@ public class MyUserController {
                 return resultBean;
             }else {
                 resultBean = new ResultBean();
-                resultBean.setCode(71);
+                resultBean.setCode(-1);
                 resultBean.setMsg("用户添加失败");
                 List<Myuser> list = new ArrayList<>();
                 resultBean.setData(list);
@@ -499,7 +496,7 @@ public class MyUserController {
             }
         } catch (Exception e) {
             resultBean = new ResultBean();
-            resultBean.setCode(71);
+            resultBean.setCode(-1);
             resultBean.setMsg("用户添加失败:"+e.getMessage());
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -565,7 +562,7 @@ public class MyUserController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(-1);
             resultBean.setMsg("还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -579,7 +576,7 @@ public class MyUserController {
         //未登录
         if (user==null){
             resultBean = new ResultBean();
-            resultBean.setCode(5);
+            resultBean.setCode(1);
             resultBean.setMsg("退出登录成功,还未登录");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);
@@ -587,7 +584,7 @@ public class MyUserController {
             return resultBean;
         }else {
             resultBean = new ResultBean();
-            resultBean.setCode(119);
+            resultBean.setCode(-1);
             resultBean.setMsg("退出登录失败");
             List<Myuser> list = new ArrayList<>();
             resultBean.setData(list);

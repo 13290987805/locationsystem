@@ -1204,7 +1204,7 @@ public class TagController {
     @RequestMapping(value = "getAllTagLocationByMap",method = RequestMethod.GET)
     @ResponseBody
     public AllTagLocationResult getAllTagLocationByMap(HttpServletRequest request,
-                                                       @RequestParam("") String MapUUID
+                                                       @RequestParam(defaultValue = "",required = false) String MapUUID
     ){
         AllTagLocationResult allTag;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1318,6 +1318,7 @@ public class TagController {
 
         allTag.setCode(1);
         allTag.setMsg("操作成功");
+        allTag.setSize(personLocation.size()+goodsLocationList.size());
         return allTag;
     }
 
