@@ -20,6 +20,15 @@
     img, person_type, reserved2_date, person_phone
   </sql>
 
+
+  <!--得到所有的登录用户下的人员-->
+  <select id="getPersonListByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE    user_id=#{userid}
+  </select>
+
   <!--根据身份证得到人员-->
   <select id="getPersonByPersonIdCard"  resultMap="BaseResultMap">
     select

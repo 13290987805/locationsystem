@@ -52,7 +52,7 @@
       #{mapKey,jdbcType=VARCHAR}, #{personPhone,jdbcType=VARCHAR}, #{personLog,jdbcType=VARCHAR}, 
       #{personIdcard,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.EleCall">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.EleCall" useGeneratedKeys="true" keyProperty="id">
     insert into ele_call
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

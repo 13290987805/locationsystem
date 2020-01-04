@@ -31,4 +31,7 @@ public interface IPersonService extends IBaseService<Person>{
     Person getPersonByPersonIdCard(String idCard);
 
     List<Person> getPersonsByNoTag(Integer id);
+
+
+    List<Person> getPersonListByUserId(Integer userId);
 }

@@ -91,12 +91,175 @@ public class CallController {
             eleCallSet1=new EleCallSet();
             eleCallSet1.setUserId(user.getId());
             eleCallSet1.setUpdateTime(new Date());
+            eleCallSet1.setSetSwitch(eleCallSet.getSetSwitch());
+            eleCallSet1.setTimeInterval(eleCallSet.getTimeInterval());
             eleCallSetService.insertSelective(eleCallSet1);
-        }
 
+            if ("1".equals(eleCallSet.getSetSwitch())){
+                Timer timer1 = SystemMap.getTimermap().get(eleCallSet.getUserId());
+                if (timer1!=null){
+                    timer1.cancel();
+                    // 创建定时器
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        // 在run方法中的语句就是定时任务执行时运行的语句。
+                        public void run() {
+                            //统计
+                            if (eleCallSet.getTimeInterval()==null){
+                                eleCallSet.setTimeInterval(15);
+                            }
+                            String format = simpleDateFormat.format(new Date());
+                            StringBuffer sb=new StringBuffer(format);
+                            sb.append("_");
+                            sb.append(eleCallSet.getUserId());
+                            //在线集合
+                            List<Person> onlineList=new ArrayList<>();
+                            //离线集合
+                            List<Person> notOnlineList=new ArrayList<>();
+                            List<Person> personList=personService.getPersonListByUserId(eleCallSet.getUserId());
+                            for (Person person :personList) {
+                                EleCall eleCall=new EleCall();
+                                eleCall.setUserId(person.getUserId());
+                                //电子点名设置人员名字,地图key,电话,logo,idcard
+                                eleCall.setPersonName(person.getPersonName());
+                                eleCall.setPersonPhone(person.getPersonPhone());
+                                eleCall.setPersonLog(person.getImg());
+                                eleCall.setPersonIdcard(person.getIdCard());
+                                //设置唯一标识
+                                eleCall.setTimeUserid(sb.toString());
+                                if (person.getTagAddress()==null||"".equals(person.getTagAddress())){
+                                    notOnlineList.add(person);
+                                    eleCallService.insertSelective(eleCall);
+                                }else {
+                                    Tag tag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                                    if (tag==null){
+                                        notOnlineList.add(person);
+                                    }else {
+                                        eleCall.setAddress(tag.getAddress());
+                                        eleCall.setMapKey(tag.getMapKey());
+                                        eleCall.setIsonline(tag.getIsonline());
+                                        eleCall.setLastTime(tag.getLastonline());
+                                        eleCall.setX(tag.getX());
+                                        eleCall.setY(tag.getY());
+                                        eleCall.setZ(tag.getZ());
+                                        int i = eleCallService.insertSelective(eleCall);
+                                        if (i>0){
+                                            if ("1".equals(tag.getIsonline())){
+                                                onlineList.add(person);
+                                            }
+                                            if ("0".equals(tag.getIsonline())){
+                                                notOnlineList.add(person);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                            StatisticsCall statisticsCall=new StatisticsCall();
+                            statisticsCall.setTotal(onlineList.size()+notOnlineList.size());
+                            statisticsCall.setOnline(onlineList.size());
+                            statisticsCall.setNotOnline(notOnlineList.size());
+                            statisticsCall.setTimeUser(sb.toString());
+                            statisticsCall.setUserId(eleCallSet.getUserId());
+                            statisticsCall.setRecordTime(new Date());
+                            statisticsCall.setTimeInterval(eleCallSet.getTimeInterval());
+                            statisticsCallService.insertSelective(statisticsCall);
+                        }
+                        // 表示在3秒之后开始执行，并且每2秒执行一次
+                    }, 3000, eleCallSet.getTimeInterval()*1000);
+                    SystemMap.getTimermap().put(user.getId(),timer);
+                }else {
+                    // 创建定时器
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        // 在run方法中的语句就是定时任务执行时运行的语句。
+                        public void run() {
+                            //统计
+                            if (eleCallSet.getTimeInterval()==null){
+                                eleCallSet.setTimeInterval(15);
+                            }
+                            String format = simpleDateFormat.format(new Date());
+                            StringBuffer sb=new StringBuffer(format);
+                            sb.append("_");
+                            sb.append(eleCallSet.getUserId());
+                            //在线集合
+                            List<Person> onlineList=new ArrayList<>();
+                            //离线集合
+                            List<Person> notOnlineList=new ArrayList<>();
+                            List<Person> personList=personService.getPersonListByUserId(eleCallSet.getUserId());
+                            for (Person person :personList) {
+                                EleCall eleCall=new EleCall();
+                                eleCall.setUserId(person.getUserId());
+                                //电子点名设置人员名字,地图key,电话,logo,idcard
+                                eleCall.setPersonName(person.getPersonName());
+                                eleCall.setPersonPhone(person.getPersonPhone());
+                                eleCall.setPersonLog(person.getImg());
+                                eleCall.setPersonIdcard(person.getIdCard());
+                                //设置唯一标识
+                                eleCall.setTimeUserid(sb.toString());
+                                if (person.getTagAddress()==null||"".equals(person.getTagAddress())){
+                                    notOnlineList.add(person);
+                                    eleCallService.insertSelective(eleCall);
+                                }else {
+                                    Tag tag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                                    if (tag==null){
+                                        notOnlineList.add(person);
+                                    }else {
+                                        eleCall.setAddress(tag.getAddress());
+                                        eleCall.setMapKey(tag.getMapKey());
+                                        eleCall.setIsonline(tag.getIsonline());
+                                        eleCall.setLastTime(tag.getLastonline());
+                                        eleCall.setX(tag.getX());
+                                        eleCall.setY(tag.getY());
+                                        eleCall.setZ(tag.getZ());
+                                        int i = eleCallService.insertSelective(eleCall);
+                                        if (i>0){
+                                            if ("1".equals(tag.getIsonline())){
+                                                onlineList.add(person);
+                                            }
+                                            if ("0".equals(tag.getIsonline())){
+                                                notOnlineList.add(person);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                            StatisticsCall statisticsCall=new StatisticsCall();
+                            statisticsCall.setTotal(onlineList.size()+notOnlineList.size());
+                            statisticsCall.setOnline(onlineList.size());
+                            statisticsCall.setNotOnline(notOnlineList.size());
+                            statisticsCall.setTimeUser(sb.toString());
+                            statisticsCall.setUserId(eleCallSet.getUserId());
+                            statisticsCall.setRecordTime(new Date());
+                            statisticsCall.setTimeInterval(eleCallSet.getTimeInterval());
+                            statisticsCallService.insertSelective(statisticsCall);
+                        }
+                        // 表示在3秒之后开始执行，并且每2秒执行一次
+                    }, 3000, eleCallSet.getTimeInterval()*1000);
+                    SystemMap.getTimermap().put(user.getId(),timer);
+                }
+
+            }
+            if ("0".equals(eleCallSet.getSetSwitch())){
+                Timer timer1 = SystemMap.getTimermap().get(eleCallSet.getUserId());
+                if (timer1!=null){
+                    timer1.cancel();
+                }
+                SystemMap.getTimermap().remove(user.getId());
+            }
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("时间设置成功");
+            List<EleCallSet> list = new ArrayList<>();
+            list.add(eleCallSet);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+
+        }
         eleCallSet1.setUserId(user.getId());
         eleCallSet1.setUpdateTime(new Date());
-        eleCallSet1.setId(eleCallSet1.getId());
         eleCallSet1.setSetSwitch(eleCallSet.getSetSwitch());
         eleCallSet1.setTimeInterval(eleCallSet.getTimeInterval());
             int update = eleCallSetService.updateByPrimaryKeySelective(eleCallSet1);
@@ -119,44 +282,47 @@ public class CallController {
                                 sb.append("_");
                                 sb.append(eleCallSet.getUserId());
                                 //在线集合
-                                List<Tag> onlineList=new ArrayList<>();
+                                List<Person> onlineList=new ArrayList<>();
                                 //离线集合
-                                List<Tag> notOnlineList=new ArrayList<>();
-                                List<Tag>tagList1=tagService.getTagsByUsed(eleCallSet.getUserId());
-                                for (Tag tag : tagList1) {
+                                List<Person> notOnlineList=new ArrayList<>();
+                                List<Person> personList=personService.getPersonListByUserId(eleCallSet.getUserId());
+                                for (Person person :personList) {
                                     EleCall eleCall=new EleCall();
-                                    eleCall.setUserId(tag.getUserId());
-                                    eleCall.setAddress(tag.getAddress());
-                                    if (tag.getX()!=null){
-                                        eleCall.setX(tag.getX());
-                                    }
-                                    if (tag.getY()!=null){
-                                        eleCall.setY(tag.getY());
-                                    }
-                                    if (tag.getZ()!=null){
-                                        eleCall.setZ(tag.getZ());
-                                    }
+                                    eleCall.setUserId(person.getUserId());
                                     //电子点名设置人员名字,地图key,电话,logo,idcard
-                                    Person person = personService.getPersonByAddress(tag.getUserId(), tag.getAddress());
-                                    if (person!=null){
-                                        eleCall.setPersonName(person.getPersonName());
-                                        eleCall.setPersonPhone(person.getPersonPhone());
-                                        eleCall.setPersonLog(person.getImg());
-                                        eleCall.setPersonIdcard(person.getIdCard());
-                                    }
-                                    eleCall.setMapKey(tag.getMapKey());
-                                    eleCall.setIsonline(tag.getIsonline());
-                                    eleCall.setLastTime(tag.getLastonline());
+                                    eleCall.setPersonName(person.getPersonName());
+                                    eleCall.setPersonPhone(person.getPersonPhone());
+                                    eleCall.setPersonLog(person.getImg());
+                                    eleCall.setPersonIdcard(person.getIdCard());
+                                    //设置唯一标识
                                     eleCall.setTimeUserid(sb.toString());
-                                    int i = eleCallService.insertSelective(eleCall);
-                                    if (i>0){
-                                        if ("1".equals(tag.getIsonline())){
-                                            onlineList.add(tag);
-                                        }
-                                        if ("0".equals(tag.getIsonline())){
-                                            notOnlineList.add(tag);
+                                    if (person.getTagAddress()==null||"".equals(person.getTagAddress())){
+                                        notOnlineList.add(person);
+                                        eleCallService.insertSelective(eleCall);
+                                    }else {
+                                        Tag tag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                                        if (tag==null){
+                                            notOnlineList.add(person);
+                                        }else {
+                                            eleCall.setAddress(tag.getAddress());
+                                            eleCall.setMapKey(tag.getMapKey());
+                                            eleCall.setIsonline(tag.getIsonline());
+                                            eleCall.setLastTime(tag.getLastonline());
+                                            eleCall.setX(tag.getX());
+                                            eleCall.setY(tag.getY());
+                                            eleCall.setZ(tag.getZ());
+                                            int i = eleCallService.insertSelective(eleCall);
+                                            if (i>0){
+                                                if ("1".equals(tag.getIsonline())){
+                                                    onlineList.add(person);
+                                                }
+                                                if ("0".equals(tag.getIsonline())){
+                                                    notOnlineList.add(person);
+                                                }
+                                            }
                                         }
                                     }
+
                                 }
                                 StatisticsCall statisticsCall=new StatisticsCall();
                                 statisticsCall.setTotal(onlineList.size()+notOnlineList.size());
@@ -186,35 +352,47 @@ public class CallController {
                                 sb.append("_");
                                 sb.append(eleCallSet.getUserId());
                                 //在线集合
-                                List<Tag> onlineList=new ArrayList<>();
+                                List<Person> onlineList=new ArrayList<>();
                                 //离线集合
-                                List<Tag> notOnlineList=new ArrayList<>();
-                                List<Tag>tagList1=tagService.getTagsByUsed(eleCallSet.getUserId());
-                                for (Tag tag : tagList1) {
+                                List<Person> notOnlineList=new ArrayList<>();
+                                List<Person> personList=personService.getPersonListByUserId(eleCallSet.getUserId());
+                                for (Person person :personList) {
                                     EleCall eleCall=new EleCall();
-                                    eleCall.setUserId(tag.getUserId());
-                                    eleCall.setAddress(tag.getAddress());
-                                    if (tag.getX()!=null){
-                                        eleCall.setX(tag.getX());
-                                    }
-                                    if (tag.getY()!=null){
-                                        eleCall.setY(tag.getY());
-                                    }
-                                    if (tag.getZ()!=null){
-                                        eleCall.setZ(tag.getZ());
-                                    }
-                                    eleCall.setIsonline(tag.getIsonline());
-                                    eleCall.setLastTime(tag.getLastonline());
+                                    eleCall.setUserId(person.getUserId());
+                                    //电子点名设置人员名字,地图key,电话,logo,idcard
+                                    eleCall.setPersonName(person.getPersonName());
+                                    eleCall.setPersonPhone(person.getPersonPhone());
+                                    eleCall.setPersonLog(person.getImg());
+                                    eleCall.setPersonIdcard(person.getIdCard());
+                                    //设置唯一标识
                                     eleCall.setTimeUserid(sb.toString());
-                                    int i = eleCallService.insertSelective(eleCall);
-                                    if (i>0){
-                                        if ("1".equals(tag.getIsonline())){
-                                            onlineList.add(tag);
-                                        }
-                                        if ("0".equals(tag.getIsonline())){
-                                            notOnlineList.add(tag);
+                                    if (person.getTagAddress()==null||"".equals(person.getTagAddress())){
+                                        notOnlineList.add(person);
+                                        eleCallService.insertSelective(eleCall);
+                                    }else {
+                                        Tag tag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                                        if (tag==null){
+                                            notOnlineList.add(person);
+                                        }else {
+                                            eleCall.setAddress(tag.getAddress());
+                                            eleCall.setMapKey(tag.getMapKey());
+                                            eleCall.setIsonline(tag.getIsonline());
+                                            eleCall.setLastTime(tag.getLastonline());
+                                            eleCall.setX(tag.getX());
+                                            eleCall.setY(tag.getY());
+                                            eleCall.setZ(tag.getZ());
+                                            int i = eleCallService.insertSelective(eleCall);
+                                            if (i>0){
+                                                if ("1".equals(tag.getIsonline())){
+                                                    onlineList.add(person);
+                                                }
+                                                if ("0".equals(tag.getIsonline())){
+                                                    notOnlineList.add(person);
+                                                }
+                                            }
                                         }
                                     }
+
                                 }
                                 StatisticsCall statisticsCall=new StatisticsCall();
                                 statisticsCall.setTotal(onlineList.size()+notOnlineList.size());
@@ -321,44 +499,47 @@ public class CallController {
                                 sb.append("_");
                                 sb.append(eleCallSet.getUserId());
                                 //在线集合
-                                List<Tag> onlineList=new ArrayList<>();
+                                List<Person> onlineList=new ArrayList<>();
                                 //离线集合
-                                List<Tag> notOnlineList=new ArrayList<>();
-                                List<Tag>tagList1=tagService.getTagsByUsed(eleCallSet.getUserId());
-                                for (Tag tag : tagList1) {
+                                List<Person> notOnlineList=new ArrayList<>();
+                                List<Person> personList=personService.getPersonListByUserId(eleCallSet.getUserId());
+                                for (Person person :personList) {
                                     EleCall eleCall=new EleCall();
-                                    eleCall.setUserId(tag.getUserId());
-                                    eleCall.setAddress(tag.getAddress());
-                                    if (tag.getX()!=null){
-                                        eleCall.setX(tag.getX());
-                                    }
-                                    if (tag.getY()!=null){
-                                        eleCall.setY(tag.getY());
-                                    }
-                                    if (tag.getZ()!=null){
-                                        eleCall.setZ(tag.getZ());
-                                    }
+                                    eleCall.setUserId(person.getUserId());
                                     //电子点名设置人员名字,地图key,电话,logo,idcard
-                                    Person person = personService.getPersonByAddress(tag.getUserId(), tag.getAddress());
-                                    if (person!=null){
-                                        eleCall.setPersonName(person.getPersonName());
-                                        eleCall.setPersonPhone(person.getPersonPhone());
-                                        eleCall.setPersonLog(person.getImg());
-                                        eleCall.setPersonIdcard(person.getIdCard());
-                                    }
-                                    eleCall.setMapKey(tag.getMapKey());
-                                    eleCall.setIsonline(tag.getIsonline());
-                                    eleCall.setLastTime(tag.getLastonline());
+                                    eleCall.setPersonName(person.getPersonName());
+                                    eleCall.setPersonPhone(person.getPersonPhone());
+                                    eleCall.setPersonLog(person.getImg());
+                                    eleCall.setPersonIdcard(person.getIdCard());
+                                    //设置唯一标识
                                     eleCall.setTimeUserid(sb.toString());
-                                    int i = eleCallService.insertSelective(eleCall);
-                                    if (i>0){
-                                        if ("1".equals(tag.getIsonline())){
-                                            onlineList.add(tag);
-                                        }
-                                        if ("0".equals(tag.getIsonline())){
-                                            notOnlineList.add(tag);
+                                    if (person.getTagAddress()==null||"".equals(person.getTagAddress())){
+                                        notOnlineList.add(person);
+                                        eleCallService.insertSelective(eleCall);
+                                    }else {
+                                        Tag tag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                                        if (tag==null){
+                                            notOnlineList.add(person);
+                                        }else {
+                                            eleCall.setAddress(tag.getAddress());
+                                            eleCall.setMapKey(tag.getMapKey());
+                                            eleCall.setIsonline(tag.getIsonline());
+                                            eleCall.setLastTime(tag.getLastonline());
+                                            eleCall.setX(tag.getX());
+                                            eleCall.setY(tag.getY());
+                                            eleCall.setZ(tag.getZ());
+                                            int i = eleCallService.insertSelective(eleCall);
+                                            if (i>0){
+                                                if ("1".equals(tag.getIsonline())){
+                                                    onlineList.add(person);
+                                                }
+                                                if ("0".equals(tag.getIsonline())){
+                                                    notOnlineList.add(person);
+                                                }
+                                            }
                                         }
                                     }
+
                                 }
                                 StatisticsCall statisticsCall=new StatisticsCall();
                                 statisticsCall.setTotal(onlineList.size()+notOnlineList.size());
@@ -388,35 +569,47 @@ public class CallController {
                                 sb.append("_");
                                 sb.append(eleCallSet.getUserId());
                                 //在线集合
-                                List<Tag> onlineList=new ArrayList<>();
+                                List<Person> onlineList=new ArrayList<>();
                                 //离线集合
-                                List<Tag> notOnlineList=new ArrayList<>();
-                                List<Tag>tagList1=tagService.getTagsByUsed(eleCallSet.getUserId());
-                                for (Tag tag : tagList1) {
+                                List<Person> notOnlineList=new ArrayList<>();
+                                List<Person> personList=personService.getPersonListByUserId(eleCallSet.getUserId());
+                                for (Person person :personList) {
                                     EleCall eleCall=new EleCall();
-                                    eleCall.setUserId(tag.getUserId());
-                                    eleCall.setAddress(tag.getAddress());
-                                    if (tag.getX()!=null){
-                                        eleCall.setX(tag.getX());
-                                    }
-                                    if (tag.getY()!=null){
-                                        eleCall.setY(tag.getY());
-                                    }
-                                    if (tag.getZ()!=null){
-                                        eleCall.setZ(tag.getZ());
-                                    }
-                                    eleCall.setIsonline(tag.getIsonline());
-                                    eleCall.setLastTime(tag.getLastonline());
+                                    eleCall.setUserId(person.getUserId());
+                                    //电子点名设置人员名字,地图key,电话,logo,idcard
+                                    eleCall.setPersonName(person.getPersonName());
+                                    eleCall.setPersonPhone(person.getPersonPhone());
+                                    eleCall.setPersonLog(person.getImg());
+                                    eleCall.setPersonIdcard(person.getIdCard());
+                                    //设置唯一标识
                                     eleCall.setTimeUserid(sb.toString());
-                                    int i = eleCallService.insertSelective(eleCall);
-                                    if (i>0){
-                                        if ("1".equals(tag.getIsonline())){
-                                            onlineList.add(tag);
-                                        }
-                                        if ("0".equals(tag.getIsonline())){
-                                            notOnlineList.add(tag);
+                                    if (person.getTagAddress()==null||"".equals(person.getTagAddress())){
+                                        notOnlineList.add(person);
+                                        eleCallService.insertSelective(eleCall);
+                                    }else {
+                                        Tag tag = tagService.getTagByOnlyAddress(person.getTagAddress());
+                                        if (tag==null){
+                                            notOnlineList.add(person);
+                                        }else {
+                                            eleCall.setAddress(tag.getAddress());
+                                            eleCall.setMapKey(tag.getMapKey());
+                                            eleCall.setIsonline(tag.getIsonline());
+                                            eleCall.setLastTime(tag.getLastonline());
+                                            eleCall.setX(tag.getX());
+                                            eleCall.setY(tag.getY());
+                                            eleCall.setZ(tag.getZ());
+                                            int i = eleCallService.insertSelective(eleCall);
+                                            if (i>0){
+                                                if ("1".equals(tag.getIsonline())){
+                                                    onlineList.add(person);
+                                                }
+                                                if ("0".equals(tag.getIsonline())){
+                                                    notOnlineList.add(person);
+                                                }
+                                            }
                                         }
                                     }
+
                                 }
                                 StatisticsCall statisticsCall=new StatisticsCall();
                                 statisticsCall.setTotal(onlineList.size()+notOnlineList.size());

@@ -41,4 +41,6 @@ public interface PersonMapper extends IBaseDao<Person>{
     Person getPersonByPersonIdCard(String idCard);
 
     List<Person> getPersonsByNoTag(Integer id);
+
+    List<Person> getPersonListByUserId(Integer userId);
 }
