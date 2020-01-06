@@ -1377,6 +1377,7 @@ public class FrenceController {
                                       @RequestParam(defaultValue = "") Integer frenceId,
                                        @RequestParam(defaultValue = "") String setSwitch) {
 
+
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
