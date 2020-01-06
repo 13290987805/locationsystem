@@ -157,7 +157,7 @@ public class StringUtils {
 	/***
 	 * ??byte[]16��???????????????????int????
 	 * 
-	 * @param data
+	 * @param datas
 	 * @return
 	 */
 	public static int[] ByteArray2IntArray(byte[] datas) {
@@ -277,7 +277,7 @@ public class StringUtils {
 	/**
 	 * ??????bytes??????????????????
 	 * 
-	 * @param bytes
+	 * @param b
 	 * @return
 	 */
 	public static String binary2(byte b) {
@@ -403,22 +403,7 @@ public static List<double[]>  setData(String data) {
 		/*List<TagHistory> list = getHistory(start, end, address);
 		System.out.println(list.size());*/
 
-		for (int i = 0; i < list.size(); i++) {
-			// System.out.println(StringUtils.ByteArrToHex(list.get(i).getData().getBytes()).replace("
-			// ", ""));
-			TagHistory history = list.get(i);
-            //System.out.println(history.toString());
-			double[] xy = new double[2];
-			//System.out.println(history.getData());
-			xy[0]=history.getX();
-			xy[1]=history.getY();
-			/*xy = getXY(StringUtils.HexToByteArr(history.getData()));
-			if (xy != null) {
-				history.setX(xy[0]);
-				history.setY(xy[1]);
-				System.out.println("X=" + history.getX() + "Y=" + history.getY());
-			}*/
-		}
+
 		//System.out.println("整个数据长度="+list.size());
 		int ss=0;
 		for (int i = 0; i < list.size() - 7; i++) {

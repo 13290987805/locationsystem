@@ -7,6 +7,7 @@ import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.Frence;
 import com.tg.locationsystem.mapper.FrenceMapper;
 import com.tg.locationsystem.pojo.FrenceVO;
+import com.tg.locationsystem.pojo.User;
 import com.tg.locationsystem.service.IFrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,11 @@ public class FrenceService extends BaseServiceImpl<Frence> implements IFrenceSer
 
         //System.out.println("frenceVO2List长度:"+frenceVO2List.size());
         return new PageInfo<Frence>(list,3);
+    }
+
+    @Override
+    public int setSwitch(Integer id, String setSwitch) {
+        return frenceMapper.setSwitch(id,setSwitch);
     }
 
 

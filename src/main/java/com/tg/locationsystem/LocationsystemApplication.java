@@ -1176,13 +1176,15 @@ public class LocationsystemApplication  {
 		Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
 		List<Frence> userFrenceList=null;
 		for (Frence frence : frenceList) {
-			if (!frencemap.containsKey(frence)){
-				userFrenceList=new ArrayList<>();
-				userFrenceList.add(frence);
-				frencemap.put(frence.getUserId(),userFrenceList);
-			}else {
-				userFrenceList.add(frence);
-				frencemap.put(frence.getUserId(),userFrenceList);
+			if ("1".equals(frence.getSetSwitch())){
+				if (!frencemap.containsKey(frence)){
+					userFrenceList=new ArrayList<>();
+					userFrenceList.add(frence);
+					frencemap.put(frence.getUserId(),userFrenceList);
+				}else {
+					userFrenceList.add(frence);
+					frencemap.put(frence.getUserId(),userFrenceList);
+				}
 			}
 
 		}

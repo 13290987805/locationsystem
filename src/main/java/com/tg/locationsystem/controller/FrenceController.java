@@ -99,6 +99,8 @@ public class FrenceController {
         }
         //设置围栏所属管理者
         frence.setUserId(user.getId());
+        //默认打开开关
+        frence.setSetSwitch("1");
 
         int insert = frenceService.insertSelective(frence);
         if (insert > 0) {
@@ -1357,6 +1359,87 @@ public class FrenceController {
         List list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(update);
+        return resultBean;
+    }
+
+    /*
+    * 设置围栏开关
+    * */
+    @RequestMapping(value = "setFrenceSwitch",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean setFrenceSwitch(HttpServletRequest request,
+                                                  @RequestParam(defaultValue = "") String setSwitch) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (setSwitch==null||"".equals(setSwitch)){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("围栏开关参数不能为空");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        if ("1".equals(setSwitch)){
+           //设置该用户下所有围栏打开
+            int update=frenceService.setSwitch(user.getId(),setSwitch);
+            List<Frence> frenceList = frenceService.getfrenceByUserId(user.getId());
+            Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
+            frencemap.put(user.getId(),frenceList);
+            /*List<Frence> userFrenceList=null;
+            for (Frence frence : frenceList) {
+                if (!frencemap.containsKey(frence)){
+                    userFrenceList=new ArrayList<>();
+                    userFrenceList.add(frence);
+                    frencemap.put(frence.getUserId(),userFrenceList);
+                }else {
+                    userFrenceList.add(frence);
+                    frencemap.put(frence.getUserId(),userFrenceList);
+                }
+            }*/
+
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("打开围栏");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(update);
+            return resultBean;
+        }
+        if ("0".equals(setSwitch)){
+            //设置该用户下所有围栏关闭
+            int update=frenceService.setSwitch(user.getId(),setSwitch);
+            //在缓存中将围栏去除
+            SystemMap.getFrencemap().remove(user.getId());
+
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("关闭围栏");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(update);
+            return resultBean;
+        }
+
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("围栏开关设置失败");
+        List list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
         return resultBean;
     }
 }

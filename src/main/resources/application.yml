@@ -30,7 +30,10 @@ spring:
              #指明连接是否被空闲连接回收器（如果有）进行检验，如果检测失败，则连接将被从池中去除。
              #spring.datasource.time-between-eviction-runs-millis= 18800
              #在空闲连接回收器线程运行期间休眠的时间值，以毫秒为单位。如果设置为非整数，则不运行空闲连接回收器线程
-
+  #设置接口超时时间
+  mvc:
+    async:
+      request-timeout: 200000
   servlet:
     multipart:
       #是否启用http上传处理
