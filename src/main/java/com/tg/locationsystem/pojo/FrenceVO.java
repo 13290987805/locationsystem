@@ -30,6 +30,8 @@ public class FrenceVO implements Serializable {
 
     private String mapName;
 
+    private String setSwitch;
+
     public Integer getId() {
         return id;
     }
@@ -95,6 +97,14 @@ public class FrenceVO implements Serializable {
     }
 
     public FrenceVO() {
+    }
+
+    public String getSetSwitch() {
+        return setSwitch;
+    }
+
+    public void setSetSwitch(String setSwitch) {
+        this.setSwitch = setSwitch;
     }
 
     public String getMapKey() {

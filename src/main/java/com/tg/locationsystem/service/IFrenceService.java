@@ -24,5 +24,5 @@ public interface IFrenceService extends IBaseService<Frence> {
     PageInfo<Frence> getFrenceByConditionPage(Integer pageIndex, Integer pageSize, Integer id, String msg);
 
 
-    int setSwitch(Integer id, String setSwitch);
+    int setSwitch(Integer id, String setSwitch,Integer frenceId);
 }

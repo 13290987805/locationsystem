@@ -28,5 +28,5 @@ public interface FrenceMapper extends IBaseDao<Frence>{
     List<Frence> getFrenceByCondition(@Param("userid") Integer id,@Param("msg") String msg);
 
 
-    int setSwitch(@Param("userid") Integer id,@Param("setSwitch") String setSwitch);
+    int setSwitch(@Param("userid") Integer id,@Param("setSwitch") String setSwitch,@Param("frenceId") Integer frenceId);
 }

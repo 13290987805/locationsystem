@@ -1177,17 +1177,20 @@ public class LocationsystemApplication  {
 		List<Frence> userFrenceList=null;
 		for (Frence frence : frenceList) {
 			if ("1".equals(frence.getSetSwitch())){
-				if (!frencemap.containsKey(frence)){
+				if (!frencemap.containsKey(frence.getUserId())){
 					userFrenceList=new ArrayList<>();
 					userFrenceList.add(frence);
 					frencemap.put(frence.getUserId(),userFrenceList);
 				}else {
+					userFrenceList=frencemap.get(frence.getUserId());
 					userFrenceList.add(frence);
 					frencemap.put(frence.getUserId(),userFrenceList);
 				}
 			}
 
 		}
+		//System.out.println("缓存所有围栏:"+userFrenceList.size());
+
 		//把地图规则放到缓存
 		List<MapRule> mapRuleList=mapRuleService.getAllRule();
 		for (MapRule mapRule : mapRuleList) {

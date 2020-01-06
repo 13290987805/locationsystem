@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -167,6 +168,8 @@ public class FrenceController {
             frenceVO2.setData(frence.getData());
             frenceVO2.setName(frence.getName());
             frenceVO2.setMapKey(frence.getMapKey());
+            frenceVO2.setSetSwitch(frence.getSetSwitch());
+
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frence.getMapKey());
             if (map != null) {
                 frenceVO2.setMapName(map.getMapName());
@@ -306,6 +309,7 @@ public class FrenceController {
             frenceVO.setFrenceId(frenceHistory.getFrenceId());
             frenceVO.setUserId(frenceHistory.getUserId());
             frenceVO.setMapkey(frenceHistory.getMapKey());
+
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
             if (map != null) {
                 frenceVO.setMapName(map.getMapName());
@@ -518,6 +522,7 @@ public class FrenceController {
                 frenceVO2.setData(frence.getData());
                 frenceVO2.setName(frence.getName());
                 frenceVO2.setMapKey(frence.getMapKey());
+                frenceVO2.setSetSwitch(frence.getSetSwitch());
                 com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frence.getMapKey());
                 if (map!=null){
                     frenceVO2.setMapName(map.getMapName());
@@ -561,8 +566,8 @@ public class FrenceController {
         }
         msg = msg.replace(" ", "");
         msg = msg.replace("进入", "in");
-        msg = msg.replace(" 离开", "out");
-        msg = msg.replace(" 停留", "on");
+        msg = msg.replace("离开", "out");
+        msg = msg.replace("停留", "on");
 
         PageInfo<Frence> pageInfo = frenceService.getFrenceByConditionPage(pageIndex, pageSize, user.getId(), msg);
         List<FrenceVO> frenceVO2List = new ArrayList<>();
@@ -575,6 +580,7 @@ public class FrenceController {
             frenceVO2.setData(frence.getData());
             frenceVO2.setName(frence.getName());
             frenceVO2.setMapKey(frence.getMapKey());
+            frenceVO2.setSetSwitch(frence.getSetSwitch());
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frence.getMapKey());
             if (map!=null){
                 frenceVO2.setMapName(map.getMapName());
@@ -1365,10 +1371,11 @@ public class FrenceController {
     /*
     * 设置围栏开关
     * */
-    @RequestMapping(value = "setFrenceSwitch",method = RequestMethod.POST)
+    @RequestMapping(value = "setFrenceSwitch",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean setFrenceSwitch(HttpServletRequest request,
-                                                  @RequestParam(defaultValue = "") String setSwitch) {
+                                      @RequestParam(defaultValue = "") Integer frenceId,
+                                       @RequestParam(defaultValue = "") String setSwitch) {
 
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1382,7 +1389,7 @@ public class FrenceController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        if (setSwitch==null||"".equals(setSwitch)){
+        if (setSwitch==null||"".equals(setSwitch)||frenceId==null||"".equals(frenceId)){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("围栏开关参数不能为空");
@@ -1393,22 +1400,29 @@ public class FrenceController {
         }
 
         if ("1".equals(setSwitch)){
-           //设置该用户下所有围栏打开
-            int update=frenceService.setSwitch(user.getId(),setSwitch);
-            List<Frence> frenceList = frenceService.getfrenceByUserId(user.getId());
+           //设置该用户下该围栏打开
+            int update=frenceService.setSwitch(user.getId(),setSwitch,frenceId);
+            //缓存
             Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
-            frencemap.put(user.getId(),frenceList);
-            /*List<Frence> userFrenceList=null;
-            for (Frence frence : frenceList) {
-                if (!frencemap.containsKey(frence)){
-                    userFrenceList=new ArrayList<>();
-                    userFrenceList.add(frence);
-                    frencemap.put(frence.getUserId(),userFrenceList);
-                }else {
-                    userFrenceList.add(frence);
-                    frencemap.put(frence.getUserId(),userFrenceList);
+            List<Frence> frenceList = frencemap.get(user.getId());
+            Frence frence = frenceService.selectByPrimaryKey(frenceId);
+            if (frence!=null){
+                boolean Isexist=false;
+                for (Frence frence1 : frenceList) {
+                    if (frence1.getId()==frence.getId()){
+                        Isexist=true;
+                        break;
+                    }else {
+                        Isexist=false;
+                    }
                 }
-            }*/
+                if (!Isexist){
+                    frenceList.add(frence);
+                    frencemap.put(user.getId(),frenceList);
+                }
+            }
+            System.out.println("个数:"+frenceList.size());
+
 
             resultBean = new ResultBean();
             resultBean.setCode(1);
@@ -1419,10 +1433,25 @@ public class FrenceController {
             return resultBean;
         }
         if ("0".equals(setSwitch)){
-            //设置该用户下所有围栏关闭
-            int update=frenceService.setSwitch(user.getId(),setSwitch);
+            //设置该用户下该围栏关闭
+            int update=frenceService.setSwitch(user.getId(),setSwitch,frenceId);
             //在缓存中将围栏去除
-            SystemMap.getFrencemap().remove(user.getId());
+            //缓存
+            Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
+            List<Frence> frenceList = frencemap.get(user.getId());
+            Frence frence = frenceService.selectByPrimaryKey(frenceId);
+            if (frence!=null){
+                ////除去自己 
+                Iterator<Frence> iterator = frenceList.iterator();
+                while (iterator.hasNext()) {
+                    Frence f = iterator.next();
+                    if (frence.getId().equals(f.getId())) {
+                        iterator.remove();//使用迭代器的删除方法删除  
+                }
+            }
+
+            }
+            System.out.println("个数:"+frenceList.size());
 
             resultBean = new ResultBean();
             resultBean.setCode(1);

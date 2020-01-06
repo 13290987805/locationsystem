@@ -21,7 +21,7 @@
   <update id="setSwitch" >
     update frence
     set set_switch = #{setSwitch}
-    where user_id= #{userid}
+    where user_id= #{userid} AND id=#{frenceId}
   </update>
 
   <!--模糊查询围栏-->

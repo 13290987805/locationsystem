@@ -80,6 +80,18 @@ public class LocationsystemApplicationTests {
 	private int maxPoolSize;
 
 	@Test
+	public void test11() {
+		List<Frence> frenceList=new ArrayList<>();
+		Frence frence=new Frence();
+		frence.setId(1);
+		frenceList.add(frence);
+		for (int i = 1; i < 2; i++) {
+
+		}
+
+
+	}
+	@Test
 	public void test10() {
 		File file=new File("C:\\Users\\zhourongchun\\Desktop\\goods.txt");
 		String path="C:\\Users\\zhourongchun\\Desktop\\aaa.txt";

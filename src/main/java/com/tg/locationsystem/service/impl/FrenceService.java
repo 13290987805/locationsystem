@@ -72,8 +72,8 @@ public class FrenceService extends BaseServiceImpl<Frence> implements IFrenceSer
     }
 
     @Override
-    public int setSwitch(Integer id, String setSwitch) {
-        return frenceMapper.setSwitch(id,setSwitch);
+    public int setSwitch(Integer id, String setSwitch,Integer frenceId) {
+        return frenceMapper.setSwitch(id,setSwitch,frenceId);
     }
 
 
