@@ -105,6 +105,22 @@ public class Frence {
         return setSwitch;
     }
 
+    @Override
+    public String toString() {
+        return "Frence{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", polyline='" + polyline + '\'' +
+                ", phone='" + phone + '\'' +
+                ", data='" + data + '\'' +
+                ", type='" + type + '\'' +
+                ", reserved2Date=" + reserved2Date +
+                ", name='" + name + '\'' +
+                ", mapKey='" + mapKey + '\'' +
+                ", setSwitch='" + setSwitch + '\'' +
+                '}';
+    }
+
     public void setSetSwitch(String setSwitch) {
         this.setSwitch = setSwitch;
     }

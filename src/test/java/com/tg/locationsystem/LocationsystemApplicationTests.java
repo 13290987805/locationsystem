@@ -81,16 +81,22 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test11() {
-		List<Frence> frenceList=new ArrayList<>();
+		List<List<Frence>> arrayFrenceList=new ArrayList<>();
+        List<Frence> frenceList=new ArrayList<>();
 		Frence frence=new Frence();
 		frence.setId(1);
 		frenceList.add(frence);
-		for (int i = 1; i < 2; i++) {
+		arrayFrenceList.add(frenceList);
 
-		}
+		List<Frence> frenceList2=new ArrayList<>();
+		Frence frence2=new Frence();
+		frence2.setId(2);
+		frenceList2.add(frence2);
+		arrayFrenceList.add(frenceList2);
 
+        System.out.println(arrayFrenceList);
 
-	}
+    }
 	@Test
 	public void test10() {
 		File file=new File("C:\\Users\\zhourongchun\\Desktop\\goods.txt");

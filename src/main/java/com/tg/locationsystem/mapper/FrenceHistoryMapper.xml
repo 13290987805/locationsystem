@@ -136,7 +136,7 @@
       #{y,jdbcType=DOUBLE}, #{status,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, #{mapKey,jdbcType=VARCHAR}, 
       #{userId,jdbcType=INTEGER}, #{frenceId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.FrenceHistory">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.FrenceHistory" useGeneratedKeys="true" keyProperty="id">
     insert into frence_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

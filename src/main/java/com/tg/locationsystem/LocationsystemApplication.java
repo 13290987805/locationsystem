@@ -185,7 +185,7 @@ public class LocationsystemApplication  {
 										long now = System.currentTimeMillis()/1000;
 										//缓存的当前时间-系统当前时间
 										//若超过3s,刷新缓存当前时间
-										if ((nowTime-now)>3){
+										if ((now-nowTime)>3){
 											String time = sdf1.format(new Date());
 											SystemMap.getFrenceTimemap().put(tag.getAddres(),time+","+time);
 										}else {
@@ -194,7 +194,7 @@ public class LocationsystemApplication  {
 											SystemMap.getFrenceTimemap().put(tag.getAddres(),frenceTimesplit[0]+","+frenceTimesplit[1]);
 											long firstTime = sdf1.parse(frenceTimesplit[0]).getTime() / 1000;
 											//真的进入了围栏,触发了警报
-											if ((firstTime-nowTime)>5){
+											if ((nowTime-firstTime)>5){
 												//报警标识
 												String alertData=tag.getAddres()+FRENCE;
 												Map<String, String> alertmap = SystemMap.getAlertmap();
@@ -221,6 +221,46 @@ public class LocationsystemApplication  {
                                channel.writeAndFlush(tws);*/
 													//插入一条围栏记录
 													frenceHistoryService.insertSelective(frenceHistory);
+
+													//websocket通知前端有警告
+
+													AlertVO alertVO = new AlertVO();
+													//alertVO.setId(tagStatus.getId());
+													alertVO.setTagAddress(tag.getAddres());
+													alertVO.setData(String.valueOf(frence.getData()));
+													alertVO.setAlertType("5");
+													alertVO.setIsdeal("0");
+													alertVO.setMapKey(mapKey);
+
+													Tag sqltag = tagService.getTagByOnlyAddress(tag.getAddres());
+													if (sqltag.getX() != null) {
+														alertVO.setX(tag.getX());
+													}
+													if (sqltag.getY() != null) {
+														alertVO.setY(tag.getY());
+													}
+													Person person = personService.getPersonByAddress(userid, tag.getAddres());
+													if (person != null) {
+														alertVO.setType("person");
+														alertVO.setIdCard(person.getIdCard());
+														alertVO.setName(person.getPersonName());
+													}
+													Goods goods = goodsService.getGoodsByAddress(userid, tag.getAddres());
+													if (goods != null) {
+														alertVO.setType("goods");
+														alertVO.setIdCard(goods.getGoodsIdcard());
+														alertVO.setName(goods.getGoodsName());
+													}
+													alertVO.setAddTime(sdf1.format(new Date()));
+													Gson gson=new Gson();
+
+													alertVO.setId(frenceHistory.getId());
+													String jsonObject = gson.toJson(alertVO);
+													//推送
+													send(userid, jsonObject.toString());
+
+
+
 												}else {
 													if (System.currentTimeMillis()/1000-sdf1.parse(alerttime).getTime()/1000>10) {
 														alertmap.put(alertData,format);
@@ -243,6 +283,41 @@ public class LocationsystemApplication  {
 														//插入一条围栏记录
 														frenceHistoryService.insertSelective(frenceHistory);
 
+														//websocket通知前端有警告
+														AlertVO alertVO = new AlertVO();
+														//alertVO.setId(tagStatus.getId());
+														alertVO.setTagAddress(tag.getAddres());
+														alertVO.setData(String.valueOf(frence.getData()));
+														alertVO.setAlertType("5");
+														alertVO.setIsdeal("0");
+														alertVO.setMapKey(mapKey);
+
+														Tag sqltag = tagService.getTagByOnlyAddress(tag.getAddres());
+														if (sqltag.getX() != null) {
+															alertVO.setX(tag.getX());
+														}
+														if (sqltag.getY() != null) {
+															alertVO.setY(tag.getY());
+														}
+														Person person = personService.getPersonByAddress(userid, tag.getAddres());
+														if (person != null) {
+															alertVO.setType("person");
+															alertVO.setIdCard(person.getIdCard());
+															alertVO.setName(person.getPersonName());
+														}
+														Goods goods = goodsService.getGoodsByAddress(userid, tag.getAddres());
+														if (goods != null) {
+															alertVO.setType("goods");
+															alertVO.setIdCard(goods.getGoodsIdcard());
+															alertVO.setName(goods.getGoodsName());
+														}
+														alertVO.setAddTime(sdf1.format(new Date()));
+														Gson gson=new Gson();
+
+														alertVO.setId(frenceHistory.getId());
+														String jsonObject = gson.toJson(alertVO);
+														//推送
+														send(userid, jsonObject.toString());
 													}
 												}
 											}
@@ -1172,7 +1247,7 @@ public class LocationsystemApplication  {
 		}
 		//把围栏放到缓存中
 		List<Frence> frenceList=frenceService.getFrenceList();
-		System.out.println("得到所有围栏:"+frenceList.size());
+
 		Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
 		List<Frence> userFrenceList=null;
 		for (Frence frence : frenceList) {
@@ -1189,7 +1264,12 @@ public class LocationsystemApplication  {
 			}
 
 		}
-		//System.out.println("缓存所有围栏:"+userFrenceList.size());
+		int sum=0;
+		for (Integer integer : frencemap.keySet()) {
+			List<Frence> count = frencemap.get(integer);
+			sum+=count.size();
+		}
+		System.out.println("缓存所有围栏:"+userFrenceList.size());
 
 		//把地图规则放到缓存
 		List<MapRule> mapRuleList=mapRuleService.getAllRule();

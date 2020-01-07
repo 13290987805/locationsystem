@@ -240,11 +240,18 @@ public class FrenceController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        //清掉在缓存的记录
-        List<Frence> frenceList1 = SystemMap.getFrencemap().get(user.getId());
-        if (frenceList1 != null) {
-            frenceList1.remove(frence);
-            SystemMap.getFrencemap().put(user.getId(), frenceList1);
+        //在缓存中将围栏去除
+        Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
+        List<Frence> frenceList2 = frencemap.get(user.getId());
+        if (frence!=null) {
+            ////除去自己 
+            Iterator<Frence> iterator = frenceList2.iterator();
+            while (iterator.hasNext()) {
+                Frence f = iterator.next();
+                if (frence.getId().equals(f.getId())) {
+                    iterator.remove();//使用迭代器的删除方法删除  
+                }
+            }
         }
 
 
@@ -1452,7 +1459,7 @@ public class FrenceController {
             }
 
             }
-            System.out.println("个数:"+frenceList.size());
+           // System.out.println("个数:"+frenceList.size());
 
             resultBean = new ResultBean();
             resultBean.setCode(1);
