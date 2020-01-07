@@ -2,8 +2,14 @@ package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.entity.Map;
+import com.tg.locationsystem.mapper.PersonMapper;
+import com.tg.locationsystem.mapper.PersonTypeMapper;
+import com.tg.locationsystem.pojo.AreaEleCallVO;
+import com.tg.locationsystem.pojo.PersonVO;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +43,10 @@ public class CallController {
     private IEleCallService eleCallService;
     @Autowired
     private IPersonService personService;
+    @Autowired
+    private IMapService mapService;
+    @Autowired
+    private PersonTypeMapper personTypeMapper;
     DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     /*
     * 设置定时点名
@@ -797,6 +807,124 @@ public class CallController {
         resultBean.setMsg("操作成功");
         resultBean.setData(eleCallList);
         resultBean.setSize(eleCallList.size());
+        return resultBean;
+    }
+
+    /*
+    *
+    * 区域电子点名
+    * */
+    @RequestMapping(value = "getEleCallByArea",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getEleCallByArea(HttpServletRequest request,
+                                      @RequestParam(defaultValue = "")String area,
+                                       @RequestParam(defaultValue = "")String MapKey) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if ("".equals(area)||"".equals(MapKey)){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("参数错误");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        Map map = mapService.getMapByUuid(MapKey);
+        if (map==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该地图不存在");
+            List<Map> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Tag> tagList = tagService.getTagsByMapUUIDAndUsed(MapKey);
+        List<Tag> AreaList =new ArrayList<>();
+        for (Tag tag : tagList) {
+            double[] p={tag.getX(),tag.getY()};
+            List<double[]> poly = StringUtils.setData(area);
+            String s = StringUtils.rayCasting(p, poly);
+            if ("in".equals(s)){
+                Person person = personService.getPersonByOnlyAddress(tag.getAddress());
+                if (person!=null){
+                    AreaList.add(tag);
+                }
+
+            }
+        }
+        List<PersonVO> onLineList=new ArrayList<>();
+       List<PersonVO> NotonLineList=new ArrayList<>();
+        for (Tag tag : AreaList) {
+            if ("1".equals(tag.getIsonline())){
+                Person person = personService.getPersonByOnlyAddress(tag.getAddress());
+                if (person!=null){
+                    PersonVO personVO=new PersonVO();
+                    personVO.setId(person.getId());
+                    personVO.setIdCard(person.getIdCard());
+                    personVO.setImg(person.getImg());
+                    personVO.setPersonHeight(person.getPersonHeight());
+                    personVO.setPersonPhone(person.getPersonPhone());
+                    personVO.setPersonName(person.getPersonName());
+                    personVO.setPersonSex(person.getPersonSex());
+                    personVO.setTagAddress(person.getTagAddress());
+                    personVO.setUserId(person.getUserId());
+                    personVO.setPersonTypeid(person.getPersonTypeid());
+                    //人员类型名字
+                    PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+                    if (personType!=null){
+                        personVO.setPersonTypeName(personType.getTypeName());
+                    }
+                    onLineList.add(personVO);
+                }
+            }else {
+                Person person = personService.getPersonByOnlyAddress(tag.getAddress());
+                if (person!=null){
+                    PersonVO personVO=new PersonVO();
+                    personVO.setId(person.getId());
+                    personVO.setIdCard(person.getIdCard());
+                    personVO.setImg(person.getImg());
+                    personVO.setPersonHeight(person.getPersonHeight());
+                    personVO.setPersonPhone(person.getPersonPhone());
+                    personVO.setPersonName(person.getPersonName());
+                    personVO.setPersonSex(person.getPersonSex());
+                    personVO.setTagAddress(person.getTagAddress());
+                    personVO.setUserId(person.getUserId());
+                    personVO.setPersonTypeid(person.getPersonTypeid());
+                    //人员类型名字
+                    PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+                    if (personType!=null){
+                        personVO.setPersonTypeName(personType.getTypeName());
+                    }
+                    NotonLineList.add(personVO);
+                }
+            }
+        }
+        AreaEleCallVO areaEleCallVO=new AreaEleCallVO();
+        areaEleCallVO.setTotal(tagList.size());
+        areaEleCallVO.setOnLineTotal(onLineList.size());
+        areaEleCallVO.setOnLineTotal(NotonLineList.size());
+        areaEleCallVO.setOnLineList(onLineList);
+        areaEleCallVO.setNotonLineList(NotonLineList);
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List<AreaEleCallVO> list=new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
         return resultBean;
     }
 }

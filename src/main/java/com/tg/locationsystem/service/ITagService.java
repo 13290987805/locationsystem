@@ -51,4 +51,6 @@ public interface ITagService extends IBaseService<Tag> {
     List<Tag> getTagsByUsed(Integer userId);
 
     List<Tag> getTagsByMapUUID(String mapUUID);
+
+    List<Tag> getTagsByMapUUIDAndUsed(String mapKey);
 }

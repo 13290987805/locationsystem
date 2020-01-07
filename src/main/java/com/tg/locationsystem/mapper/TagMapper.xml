@@ -20,6 +20,15 @@
     id, address, x, y, used, user_id, tag_typeId, lastOnline, isOnline, z, electric, 
     address_broadcast, map_key
   </sql>
+  <!--//得到地图下所有已使用的标签-->
+  <select id="getTagsByMapUUIDAndUsed"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    WHERE   map_key=#{mapUUID}
+    AND used='1'
+  </select>
+
 
   <!--得到地图下所有的标签-->
   <select id="getTagsByMapUUID"  resultMap="BaseResultMap">
