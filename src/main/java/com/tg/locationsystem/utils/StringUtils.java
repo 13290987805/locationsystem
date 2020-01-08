@@ -2,7 +2,6 @@ package com.tg.locationsystem.utils;
 
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tg.locationsystem.entity.Tag;
@@ -382,7 +381,7 @@ public static List<double[]>  setData(String data) {
     return pos;
 }
 
-	private  static String getPath(List<TagHistory> list) {
+	public static String getPath(List<TagHistory> list) {
 		String d = "M";
 		TagHistory tag;
 		for (int i = 0; i < list.size(); i++) {
@@ -403,22 +402,7 @@ public static List<double[]>  setData(String data) {
 		/*List<TagHistory> list = getHistory(start, end, address);
 		System.out.println(list.size());*/
 
-		for (int i = 0; i < list.size(); i++) {
-			// System.out.println(StringUtils.ByteArrToHex(list.get(i).getData().getBytes()).replace("
-			// ", ""));
-			TagHistory history = list.get(i);
-            //System.out.println(history.toString());
-			double[] xy = new double[2];
-			//System.out.println(history.getData());
-			xy[0]=history.getX();
-			xy[1]=history.getY();
-			/*xy = getXY(StringUtils.HexToByteArr(history.getData()));
-			if (xy != null) {
-				history.setX(xy[0]);
-				history.setY(xy[1]);
-				System.out.println("X=" + history.getX() + "Y=" + history.getY());
-			}*/
-		}
+
 		//System.out.println("整个数据长度="+list.size());
 		int ss=0;
 		for (int i = 0; i < list.size() - 7; i++) {

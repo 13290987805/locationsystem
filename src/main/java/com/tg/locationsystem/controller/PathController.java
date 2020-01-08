@@ -1,10 +1,8 @@
 package com.tg.locationsystem.controller;
 
+import com.tg.locationsystem.config.KalmanFilter2;
 import com.tg.locationsystem.entity.*;
-import com.tg.locationsystem.pojo.Path;
-import com.tg.locationsystem.pojo.PathMap;
-import com.tg.locationsystem.pojo.PathVO;
-import com.tg.locationsystem.pojo.ResultBean;
+import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -218,6 +216,7 @@ public class PathController {
         }
     }
 
+
     /* 
      * 查看人员或物品在某个地图的轨迹
      * */
@@ -393,4 +392,152 @@ public class PathController {
         }
 
     }
+
+
+    /*
+     * 查看人员或物品在某个地图的轨迹
+     * */
+    @RequestMapping(value = "queryPathByMap1",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean queryPathByMap1(@Valid DayPathMap dayPathMap, BindingResult result,
+                                  HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //有必填项没填
+        if (result.hasErrors()) {
+            List<String> errorlist = new ArrayList<>();
+            result.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                // 属性
+                String field = fieldError.getField();
+                // 错误信息
+                String message = field + ":" + fieldError.getDefaultMessage();
+                //System.out.println(field + ":" + message);
+                errorlist.add(message);
+            });
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("信息未填完整");
+            resultBean.setData(errorlist);
+            resultBean.setSize(errorlist.size());
+            return resultBean;
+        }
+
+        Map map = mapService.getMapByUuid(dayPathMap.getMapkey());
+        if (map == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该地图不存在");
+            List<Map> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        String[] split = dayPathMap.getDate().split("-");
+        StringBuffer sb2 = new StringBuffer();
+        for (int i = 0; i < split.length; i++) {
+            sb2.append(split[i]);
+        }
+        String tableName = "tag_history_" + sb2.toString();
+        int i = tagHistoryService.existTable(tableName);
+        if (i==0){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("没有当天的数据");
+            List<DayPathMap> list = new ArrayList<>();
+            list.add(dayPathMap);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //根据标签address得到历史轨迹集合
+        List<TagHistory> tagHistories=tagHistoryService.getTagHistoryByAddAndMap(tableName,dayPathMap.getPersonidcard(),dayPathMap.getMapkey());
+        if (tagHistories.size()==0) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该标签不存在或当天已离线");
+            List<Path> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+//        int pIndex = 0;
+        TagHistory startPosition = tagHistories.get(0);
+//        List<TagHistory> offLine[] = new ArrayList[15];
+//        offLine[pIndex] = new ArrayList<>();
+//        offLine[pIndex].add(startPosition);
+//        for (int j = 1; j < tagHistories.size(); j++) {
+//            TagHistory thisTag = tagHistories.get(j);
+//            if (((thisTag.getTime().getTime()-startPosition.getTime().getTime())/1000) > 30){
+//                pIndex++;
+//                offLine[pIndex] = new ArrayList<>();
+//                offLine[pIndex].add(thisTag);
+//            }else {
+//                offLine[pIndex].add(thisTag);
+//            }
+//            startPosition = thisTag;
+//        }
+        //String tag_history = StringUtils.getTag_history(tagHistories);
+//        List<PathVO> pathVOList = new ArrayList<>();
+//        for (int j = 0; j < offLine.length; j++) {
+//            PathVO pathVO=new PathVO();
+//            if (offLine[j] != null){
+//                String stsrt=sdf.format(offLine[j].get(0).getTime());
+//                String end=sdf.format(offLine[j].get(offLine[j].size()-1).getTime());
+//                pathVO.setPath(StringUtils.getPath(offLine[j]));
+//                pathVO.setStartTime(stsrt);
+//                pathVO.setEndTime(end);
+//                pathVO.setTagHistoryList(offLine[j]);
+//                pathVOList.add(pathVO);
+//            }
+//        }
+        KalmanFilter2.init();
+        List<List<TagHistory>> historyList = new ArrayList<>();
+        List<TagHistory> offLine = new ArrayList<>();
+        offLine.add(startPosition);
+        historyList.add(offLine);
+        for (TagHistory thisTag: tagHistories) {
+            if (((thisTag.getTime().getTime()-startPosition.getTime().getTime())/1000) > 30){
+                offLine = new ArrayList<>();
+                startPosition = KalmanFilter2.printM(startPosition,thisTag);
+                offLine.add(startPosition);
+                historyList.add(offLine);
+            }else {
+                startPosition = KalmanFilter2.printM(startPosition,thisTag);
+                offLine.add(startPosition);
+            }
+            //startPosition = thisTag;
+        }
+        List<PathVO> pathVOList = new ArrayList<>();
+        for (int j = 0; j < historyList.size(); j++) {
+            PathVO pathVO = new PathVO();
+            String stsrt = sdf.format(historyList.get(j).get(0).getTime());
+            String end = sdf.format(historyList.get(j).get(historyList.get(j).size()-1).getTime());
+            pathVO.setPath(StringUtils.getPath(historyList.get(j)));
+            pathVO.setStartTime(stsrt);
+            pathVO.setEndTime(end);
+            pathVO.setTagHistoryList(historyList.get(j));
+            pathVOList.add(pathVO);
+        }
+
+
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("轨迹查询成功");
+        resultBean.setData(pathVOList);
+        resultBean.setSize(pathVOList.size());
+        return resultBean;
     }
+}
