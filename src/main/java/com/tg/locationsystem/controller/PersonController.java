@@ -262,7 +262,7 @@ public class PersonController {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
-       /* if (user==null){
+        if (user==null){
             resultBean = new ResultBean();
             resultBean.setCode(5);
             resultBean.setMsg("还未登录");
@@ -270,7 +270,7 @@ public class PersonController {
             resultBean.setData(list);
             resultBean.setSize(list.size());
             return resultBean;
-        }*/
+        }
 
         PageInfo<Person> pageInfo=personService.getPersonsByUserId(pageIndex,pageSize,user.getId());
         List<PersonVO> personVOList=new ArrayList<>();

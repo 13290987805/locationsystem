@@ -4,20 +4,20 @@ import Jama.Matrix;
 import com.tg.locationsystem.entity.TagHistory;
 
 public class KalmanFilter2 {
-	private static Matrix predictPosition = new Matrix(4, 1);
-	private static double controlVlaue;
-	private static Matrix matrixB = new Matrix(4, 1, 0);
-	private static Matrix matrixA;
-	private static Matrix matrixH;
-	private static Matrix matrixQ;
-	private static Matrix matrixR;
-	private static Matrix matrixP = Matrix.random(4, 4);
-	private static Matrix matrixK = new Matrix(4, 2, 0);
-	private final static double CQ = 0.001;
-    private final static double CR = 0.01;
-	
-	public static void init() {
-		controlVlaue = 0;
+	private Matrix predictPosition = new Matrix(4, 1);
+	private double controlVlaue;
+	private Matrix matrixB = new Matrix(4, 1, 0);
+	private Matrix matrixA;
+	private Matrix matrixH;
+	private Matrix matrixQ;
+	private Matrix matrixR;
+	private Matrix matrixP = Matrix.random(4, 4);
+	private Matrix matrixK = new Matrix(4, 2, 0);
+	private final double CQ = 0.001;
+    private final double CR = 0.01;
+
+	private KalmanFilter2() {
+		this.controlVlaue = 0;
 		double[][] A = {{1,0,1,0},{0,1,0,1},{0,0,1,0},{0,0,0,1}};
 		matrixA = new Matrix(A, 4, 4);
 		double[][] H = {{1,0,0,0},{0,1,0,0}};
@@ -27,9 +27,14 @@ public class KalmanFilter2 {
 		matrixQ = new Matrix(Q, 4, 4);
 		matrixR = new Matrix(R, 2, 2);
 	}
-	
+	private static class SingletonHolder{
+		private static KalmanFilter2 singleton = new KalmanFilter2();
+	}
+	public static KalmanFilter2 getInstance() {
+		return SingletonHolder.singleton;
+	}
 	//匀速模型
-    public static Matrix kalmanFilter(Matrix prePosition,Matrix measuredPosition){
+    private Matrix kalmanFilter(Matrix prePosition,Matrix measuredPosition){
     	//预估位置
     	predictPosition = matrixA.times(prePosition).plus(matrixB.times(controlVlaue));
     	//误差矩阵（协方差）
@@ -46,7 +51,7 @@ public class KalmanFilter2 {
 		return estimatePosition;
     }
     
-    public static TagHistory printM(TagHistory prePosition, TagHistory measuredPosition) {
+    public TagHistory printM(TagHistory prePosition, TagHistory measuredPosition) {
     	
     	double[] ad = {measuredPosition.getX(), measuredPosition.getY()};
     	Matrix meaPositionMatrix = new Matrix(ad,2);
@@ -66,8 +71,6 @@ public class KalmanFilter2 {
 		t.setTime(measuredPosition.getTime());
 		t.setId(measuredPosition.getId());
 		return t;
-		
-		
 	}
 	
 }

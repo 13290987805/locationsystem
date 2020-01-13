@@ -48,4 +48,6 @@ public interface TagMapper extends IBaseDao<Tag>{
     List<Tag> getTagsByUsed(Integer userId);
 //得到地图下所有的标签
     List<Tag> getTagsByMapUUID(String mapUUID);
+    //得到地图下所有已使用的标签
+    List<Tag> getTagsByMapUUIDAndUsed(String mapKey);
 }

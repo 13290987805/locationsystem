@@ -3,10 +3,7 @@ package com.tg.locationsystem.controller;
 import com.tg.locationsystem.service.IHeartRateHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,18 +21,18 @@ import java.io.OutputStream;
 public class testController {
     @Autowired
     private IHeartRateHistoryService heartRateHistoryService;
-
     /*
     * 得到请求者的ip
     * */
-    @RequestMapping(value = "test")
+    @GetMapping(value = "/{id}")
     @ResponseBody
     public String AddTag(HttpServletRequest request,
-                         @RequestParam(defaultValue = "")String data ){
+                         @PathVariable("id") String id){
         /*String ip = TestUtil.getIP(request);
         return ip;*/
-        System.out.println(data);
-        return data;
+        String msg="success:"+id;
+        System.out.println(msg);
+        return msg;
 
     }
     /*

@@ -11,10 +11,18 @@
     <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="set_switch" jdbcType="VARCHAR" property="setSwitch" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, polyline, phone, data, type, reserved2_date, name, map_key
+    id, user_id, polyline, phone, data, type, reserved2_date, name, map_key, set_switch
   </sql>
+
+  <!--打开围栏开关-->
+  <update id="setSwitch" >
+    update frence
+    set set_switch = #{setSwitch}
+    where user_id= #{userid} AND id=#{frenceId}
+  </update>
 
   <!--模糊查询围栏-->
   <select id="getFrenceByCondition"  resultMap="BaseResultMap">
@@ -49,7 +57,6 @@
     WHERE   user_id=#{id}
   </select>
 
-
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -63,12 +70,12 @@
   <insert id="insert" parameterType="com.tg.locationsystem.entity.Frence">
     insert into frence (id, user_id, polyline, 
       phone, data, type, 
-      reserved2_date, name, map_key
-      )
+      reserved2_date, name, map_key, 
+      set_switch)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{polyline,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{reserved2Date,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}
-      )
+      #{reserved2Date,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, 
+      #{setSwitch,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Frence" useGeneratedKeys="true" keyProperty="id">
     insert into frence
@@ -100,6 +107,9 @@
       <if test="mapKey != null">
         map_key,
       </if>
+      <if test="setSwitch != null">
+        set_switch,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -128,6 +138,9 @@
       </if>
       <if test="mapKey != null">
         #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="setSwitch != null">
+        #{setSwitch,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -158,6 +171,9 @@
       <if test="mapKey != null">
         map_key = #{mapKey,jdbcType=VARCHAR},
       </if>
+      <if test="setSwitch != null">
+        set_switch = #{setSwitch,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -170,7 +186,8 @@
       type = #{type,jdbcType=VARCHAR},
       reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
       name = #{name,jdbcType=VARCHAR},
-      map_key = #{mapKey,jdbcType=VARCHAR}
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      set_switch = #{setSwitch,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -593,9 +593,8 @@ public class MapController {
             resultBean.setSize(errorlist.size());
             return resultBean;
         }
-
-        CleConfig configByMapKey = cleConfigService.getConfigByMapKey(cleconfigVO.getMapKey());
-        if (configByMapKey==null){
+        Map map = mapService.getMapByUuid(cleconfigVO.getMapKey());
+        if(map==null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("该地图为空");
@@ -604,6 +603,7 @@ public class MapController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+
         String key = SystemMap.getCleAndKeyMap().get(cleconfigVO.getMapKey());
         if (key==null||"".equals(key)){
             resultBean = new ResultBean();
@@ -614,11 +614,22 @@ public class MapController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        //更新数据库数据
-        configByMapKey.setChannel(cleconfigVO.getChannel());
-        configByMapKey.setSendTime(cleconfigVO.getSendTime());
-        configByMapKey.setAskTime(cleconfigVO.getAskTime());
-        cleConfigService.updateByPrimaryKeySelective(configByMapKey);
+        CleConfig configByMapKey =null;
+        configByMapKey= cleConfigService.getConfigByMapKey(cleconfigVO.getMapKey());
+        if (configByMapKey==null){
+            //插入数据库
+            configByMapKey.setChannel(cleconfigVO.getChannel());
+            configByMapKey.setSendTime(cleconfigVO.getSendTime());
+            configByMapKey.setAskTime(cleconfigVO.getAskTime());
+            configByMapKey.setMapKey(cleconfigVO.getMapKey());
+            cleConfigService.insertSelective(configByMapKey);
+        }else {
+            //更新数据库数据
+            configByMapKey.setChannel(cleconfigVO.getChannel());
+            configByMapKey.setSendTime(cleconfigVO.getSendTime());
+            configByMapKey.setAskTime(cleconfigVO.getAskTime());
+            cleConfigService.updateByPrimaryKeySelective(configByMapKey);
+        }
 
         //todo 配置信息发送给cle
         bean.CleConfig config=new bean.CleConfig();

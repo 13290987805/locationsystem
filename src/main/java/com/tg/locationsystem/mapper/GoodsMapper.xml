@@ -16,6 +16,9 @@
     id, goods_name, user_id, goods_typeId, tag_address, img, add_time, goods_idCard, 
     reserved2_string
   </sql>
+
+
+
   <!--根据物品idcard得到物品-->
   <select id="getGoodsByGoodsIdCard"  resultMap="BaseResultMap">
     select

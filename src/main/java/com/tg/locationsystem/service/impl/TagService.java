@@ -321,5 +321,11 @@ public class TagService extends BaseServiceImpl<Tag> implements ITagService{
         return tagMapper.getTagsByMapUUID(mapUUID);
     }
 
+    @Override
+    public List<Tag> getTagsByMapUUIDAndUsed(String mapKey) {
+        //得到地图下所有已使用的标签
+        return tagMapper.getTagsByMapUUIDAndUsed(mapKey);
+    }
+
 
 }

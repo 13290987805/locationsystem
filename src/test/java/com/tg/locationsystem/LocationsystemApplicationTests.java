@@ -14,6 +14,7 @@ import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.PngToSvg;
 import com.tg.locationsystem.utils.RuleUtil;
 import com.tg.locationsystem.utils.TestUtil;
+import com.tg.locationsystem.utils.filewriteutil;
 import net.sf.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,17 +80,76 @@ public class LocationsystemApplicationTests {
 	private int maxPoolSize;
 
 	@Test
-	public void test10() {
-		List<Integer> list=new ArrayList<>();
-		list.add(177);
-		list.add(178);
-		int update=tagStatusService.updateBatch(1,list);
-		if (update>0){
-			System.out.println("成功");
-		}else {
-			System.out.println("失败");
-		}
+	public void test11() {
+		List<List<Frence>> arrayFrenceList=new ArrayList<>();
+        List<Frence> frenceList=new ArrayList<>();
+		Frence frence=new Frence();
+		frence.setId(1);
+		frenceList.add(frence);
+		arrayFrenceList.add(frenceList);
+
+		List<Frence> frenceList2=new ArrayList<>();
+		Frence frence2=new Frence();
+		frence2.setId(2);
+		frenceList2.add(frence2);
+		arrayFrenceList.add(frenceList2);
+
+        System.out.println(arrayFrenceList);
+
     }
+	@Test
+	public void test10() {
+		File file=new File("C:\\Users\\zhourongchun\\Desktop\\goods.txt");
+		String path="C:\\Users\\zhourongchun\\Desktop\\aaa.txt";
+		String[] result=new String[16];
+		StringBuffer sb=new StringBuffer();
+		BufferedReader reader=null;
+		String temp=null;
+		int line=1;
+		try{
+			reader=new BufferedReader(new FileReader(file));
+			while((temp=reader.readLine())!=null){
+				System.out.println("line"+line+":"+temp);
+				String[] split = temp.split("");
+				System.out.println(split.length);
+				result[0]=split[14];
+				result[1]=split[15];
+				result[2]=split[12];
+				result[3]=split[13];
+				result[4]=split[10];
+				result[5]=split[11];
+				result[6]=split[8];
+				result[7]=split[9];
+				result[8]=split[6];
+				result[9]=split[7];
+				result[10]=split[4];
+				result[11]=split[5];
+				result[12]=split[2];
+				result[13]=split[3];
+				result[14]=split[0];
+				result[15]=split[1];
+				for (int i = 0; i < result.length; i++) {
+					sb.append(result[i]);
+				}
+				filewriteutil.filewrite(sb.toString(),path);
+				sb.setLength(0);
+				line++;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			if(reader!=null){
+				try{
+					reader.close();
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 
 	@Test

@@ -20,7 +20,7 @@
     <include refid="Base_Column_List" />
     from statistics_call
     WHERE   user_id=#{id}
-    order by id desc
+    ORDER BY id DESC
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">

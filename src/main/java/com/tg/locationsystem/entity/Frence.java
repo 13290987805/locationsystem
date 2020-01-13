@@ -1,8 +1,11 @@
 package com.tg.locationsystem.entity;
 
+import org.apache.ibatis.annotations.Param;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 public class Frence {
     private Integer id;
@@ -23,6 +26,8 @@ public class Frence {
     private String name;
     @NotBlank(message = "围栏所属地图不能为空")
     private String mapKey;
+
+    private String setSwitch;
 
     public Integer getId() {
         return id;
@@ -95,4 +100,45 @@ public class Frence {
     public void setMapKey(String mapKey) {
         this.mapKey = mapKey == null ? null : mapKey.trim();
     }
+
+    public String getSetSwitch() {
+        return setSwitch;
+    }
+
+    @Override
+    public String toString() {
+        return "Frence{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", polyline='" + polyline + '\'' +
+                ", phone='" + phone + '\'' +
+                ", data='" + data + '\'' +
+                ", type='" + type + '\'' +
+                ", reserved2Date=" + reserved2Date +
+                ", name='" + name + '\'' +
+                ", mapKey='" + mapKey + '\'' +
+                ", setSwitch='" + setSwitch + '\'' +
+                '}';
+    }
+
+    public void setSetSwitch(String setSwitch) {
+        this.setSwitch = setSwitch;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

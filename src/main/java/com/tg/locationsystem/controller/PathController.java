@@ -502,7 +502,7 @@ public class PathController {
 //                pathVOList.add(pathVO);
 //            }
 //        }
-        KalmanFilter2.init();
+
         List<List<TagHistory>> historyList = new ArrayList<>();
         List<TagHistory> offLine = new ArrayList<>();
         offLine.add(startPosition);
@@ -510,11 +510,11 @@ public class PathController {
         for (TagHistory thisTag: tagHistories) {
             if (((thisTag.getTime().getTime()-startPosition.getTime().getTime())/1000) > 30){
                 offLine = new ArrayList<>();
-                startPosition = KalmanFilter2.printM(startPosition,thisTag);
+                startPosition = KalmanFilter2.getInstance().printM(startPosition,thisTag);
                 offLine.add(startPosition);
                 historyList.add(offLine);
             }else {
-                startPosition = KalmanFilter2.printM(startPosition,thisTag);
+                startPosition = KalmanFilter2.getInstance().printM(startPosition,thisTag);
                 offLine.add(startPosition);
             }
             //startPosition = thisTag;
