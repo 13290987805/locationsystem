@@ -1413,6 +1413,10 @@ public class FrenceController {
             //缓存
             Map<Integer, List<Frence>> frencemap = SystemMap.getFrencemap();
             List<Frence> frenceList = frencemap.get(user.getId());
+            if (frenceList==null){
+                frenceList=new ArrayList<>();
+            }
+
             Frence frence = frenceService.selectByPrimaryKey(frenceId);
             if (frence!=null){
                 boolean Isexist=false;

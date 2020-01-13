@@ -195,14 +195,15 @@ public class LocationsystemApplication  {
 											long firstTime = sdf1.parse(frenceTimesplit[0]).getTime() / 1000;
 											//真的进入了围栏,触发了警报
 											if ((nowTime-firstTime)>5){
-												//报警标识
+											/*	//报警标识
 												String alertData=tag.getAddres()+FRENCE;
 												Map<String, String> alertmap = SystemMap.getAlertmap();
 												String alerttime = alertmap.get(alertData);
 												//最新时间
-												String format = sdf1.format(new Date());
-												if (alerttime==null||"".equals(alerttime)){
-													alertmap.put(alertData,format);
+												String format = sdf1.format(new Date());*/
+
+													SystemMap.getFrenceTimemap().put(tag.getAddres(),time+","+time);
+
 													FrenceHistory frenceHistory = new FrenceHistory();
 													//frenceHistory.setTagAddress(tag.getAddres());
 													String peridcard = SystemMap.getTagAndPersonMap().get(tag.getAddres());
@@ -259,67 +260,6 @@ public class LocationsystemApplication  {
 													//推送
 													send(userid, jsonObject.toString());
 
-
-
-												}else {
-													if (System.currentTimeMillis()/1000-sdf1.parse(alerttime).getTime()/1000>10) {
-														alertmap.put(alertData,format);
-														FrenceHistory frenceHistory = new FrenceHistory();
-														//frenceHistory.setTagAddress(tag.getAddres());
-														String peridcard = SystemMap.getTagAndPersonMap().get(tag.getAddres());
-														frenceHistory.setPersonIdcard(peridcard);
-														frenceHistory.setX(tag.getX());
-														frenceHistory.setY(tag.getY());
-														frenceHistory.setStatus("0");
-														frenceHistory.setTime(new Date());
-														frenceHistory.setUserId(userid);
-														frenceHistory.setFrenceId(frence.getId());
-														frenceHistory.setMapKey(mapKey);
-														//websocket通知前端有警告
-                            /*   String tagStatusjson = net.sf.json.JSONObject.fromObject(frenceHistory).toString();
-                               Channel channel = SystemMap.getChannelmap().get(userid);
-                               TextWebSocketFrame tws = new TextWebSocketFrame(tagStatusjson);
-                               channel.writeAndFlush(tws);*/
-														//插入一条围栏记录
-														frenceHistoryService.insertSelective(frenceHistory);
-
-														//websocket通知前端有警告
-														AlertVO alertVO = new AlertVO();
-														//alertVO.setId(tagStatus.getId());
-														alertVO.setTagAddress(tag.getAddres());
-														alertVO.setData(String.valueOf(frence.getData()));
-														alertVO.setAlertType("5");
-														alertVO.setIsdeal("0");
-														alertVO.setMapKey(mapKey);
-
-														Tag sqltag = tagService.getTagByOnlyAddress(tag.getAddres());
-														if (sqltag.getX() != null) {
-															alertVO.setX(tag.getX());
-														}
-														if (sqltag.getY() != null) {
-															alertVO.setY(tag.getY());
-														}
-														Person person = personService.getPersonByAddress(userid, tag.getAddres());
-														if (person != null) {
-															alertVO.setType("person");
-															alertVO.setIdCard(person.getIdCard());
-															alertVO.setName(person.getPersonName());
-														}
-														Goods goods = goodsService.getGoodsByAddress(userid, tag.getAddres());
-														if (goods != null) {
-															alertVO.setType("goods");
-															alertVO.setIdCard(goods.getGoodsIdcard());
-															alertVO.setName(goods.getGoodsName());
-														}
-														alertVO.setAddTime(sdf1.format(new Date()));
-														Gson gson=new Gson();
-
-														alertVO.setId(frenceHistory.getId());
-														String jsonObject = gson.toJson(alertVO);
-														//推送
-														send(userid, jsonObject.toString());
-													}
-												}
 											}
 										}
 									} catch (ParseException e) {
@@ -1269,7 +1209,7 @@ public class LocationsystemApplication  {
 			List<Frence> count = frencemap.get(integer);
 			sum+=count.size();
 		}
-		System.out.println("缓存所有围栏:"+userFrenceList.size());
+		System.out.println("缓存所有围栏:"+sum);
 
 		//把地图规则放到缓存
 		List<MapRule> mapRuleList=mapRuleService.getAllRule();

@@ -1525,6 +1525,8 @@ public ResultBean getAllAlertSet(HttpServletRequest request) {
         if (!SystemMap.getCutList().contains(user.getId())){
             SystemMap.getCutList().add(user.getId());
         }
+
+
     }
     HeartRateSet heartRateSet=null;
     heartRateSet = heartRateSetService.getHeartRateSet(user.getId());

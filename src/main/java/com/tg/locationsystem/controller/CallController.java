@@ -811,13 +811,13 @@ public class CallController {
     }
 
     /*
-    *
-    * 区域电子点名
-    * */
+     *
+     * 区域电子点名
+     * */
     @RequestMapping(value = "getEleCallByArea",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean getEleCallByArea(HttpServletRequest request,
-                                      @RequestParam(defaultValue = "")String area,
+                                       @RequestParam(defaultValue = "")String area,
                                        @RequestParam(defaultValue = "")String MapKey) {
 
         ResultBean resultBean;
@@ -866,7 +866,7 @@ public class CallController {
             }
         }
         List<PersonVO> onLineList=new ArrayList<>();
-       List<PersonVO> NotonLineList=new ArrayList<>();
+        List<PersonVO> NotonLineList=new ArrayList<>();
         for (Tag tag : AreaList) {
             if ("1".equals(tag.getIsonline())){
                 Person person = personService.getPersonByOnlyAddress(tag.getAddress());
@@ -913,9 +913,9 @@ public class CallController {
             }
         }
         AreaEleCallVO areaEleCallVO=new AreaEleCallVO();
-        areaEleCallVO.setTotal(tagList.size());
+        areaEleCallVO.setTotal(AreaList.size());
         areaEleCallVO.setOnLineTotal(onLineList.size());
-        areaEleCallVO.setOnLineTotal(NotonLineList.size());
+        areaEleCallVO.setNotonLineTotal(NotonLineList.size());
         areaEleCallVO.setOnLineList(onLineList);
         areaEleCallVO.setNotonLineList(NotonLineList);
 
@@ -923,6 +923,7 @@ public class CallController {
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
         List<AreaEleCallVO> list=new ArrayList<>();
+        list.add(areaEleCallVO);
         resultBean.setData(list);
         resultBean.setSize(list.size());
         return resultBean;
