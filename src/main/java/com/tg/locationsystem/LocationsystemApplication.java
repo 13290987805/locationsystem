@@ -581,117 +581,124 @@ public class LocationsystemApplication  {
 				if (usermap.get(tagAdd)!=null){
 
 					Tag tag = tagService.getTagByOnlyAddress(tagAdd);
+					//是否触发电量报警
+					if ((tag_info.getBattery()<MAX_BATTERY)){
+						String batteryString = String.valueOf(battery);
+						if (!batteryString.equals(tag.getElectric())){
+							//websocket通知前端有警告
+							Integer userid = SystemMap.getUsermap().get(tagAdd);
+							AlertVO alertVO = new AlertVO();
+							//alertVO.setId(tagStatus.getId());
+							alertVO.setTagAddress(tagAdd);
+							alertVO.setData(String.valueOf(tag_info.getBattery()));
+							alertVO.setAlertType("4");
+							alertVO.setIsdeal("0");
+							alertVO.setMapKey(mapKey);
+
+							if (tag.getX() != null) {
+								alertVO.setX(tag.getX());
+							}
+							if (tag.getY() != null) {
+								alertVO.setY(tag.getY());
+							}
+							Person person = personService.getPersonByAddress(userid, tagAdd);
+							if (person != null) {
+								alertVO.setType("person");
+								alertVO.setIdCard(person.getIdCard());
+								alertVO.setName(person.getPersonName());
+							}
+							Goods goods = goodsService.getGoodsByAddress(userid, tagAdd);
+							if (goods != null) {
+								alertVO.setType("goods");
+								alertVO.setIdCard(goods.getGoodsIdcard());
+								alertVO.setName(goods.getGoodsName());
+							}
+							alertVO.setAddTime(sdf.format(new Date()));
+							Gson gson=new Gson();
+
+
+							//报警标识
+							String alertData=tagAdd+BATTERY;
+							Map<String, String> alertmap = SystemMap.getAlertmap();
+							String time = alertmap.get(alertData);
+
+							//最新时间
+							String format = sdf.format(new Date());
+							if (time==null||"".equals(time)){
+								alertmap.put(alertData,format);
+								TagStatus tagStatus = new TagStatus();
+								peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
+								tagStatus.setPersonIdcard(peridcard);
+								tagStatus.setAddTime(new Date());
+								tagStatus.setAlertType("4");
+								tagStatus.setData(String.valueOf(tag_info.getBattery()));
+								tagStatus.setIsdeal("0");
+								tagStatus.setMapKey(mapkey);
+								tagStatus.setX(tag.getX());
+								tagStatus.setY(tag.getY());
+								tagStatus.setZ(tag.getZ());
+
+								if (usermap.get(tagAdd) != null) {
+									tagStatus.setUserId(usermap.get(tagAdd));
+								}
+								//插入数据库
+								tagStatusService.insertSelective(tagStatus);
+
+								alertVO.setId(tagStatus.getId());
+								String jsonObject = gson.toJson(alertVO);
+
+								if (SystemMap.getBatteryList().contains(SystemMap.getUsermap().get(tagAdd))){
+									//推送
+									send(userid, jsonObject.toString());
+								}
+
+
+
+							}else {
+								try {
+									if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
+										alertmap.put(alertData,format);
+										TagStatus tagStatus = new TagStatus();
+										peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
+										tagStatus.setPersonIdcard(peridcard);
+										tagStatus.setAddTime(new Date());
+										tagStatus.setAlertType("4");
+										tagStatus.setData(String.valueOf(tag_info.getBattery()));
+										tagStatus.setIsdeal("0");
+										tagStatus.setMapKey(mapkey);
+										tagStatus.setX(tag.getX());
+										tagStatus.setY(tag.getY());
+										tagStatus.setZ(tag.getZ());
+
+										if (usermap.get(tagAdd) != null) {
+											tagStatus.setUserId(usermap.get(tagAdd));
+										}
+										//插入数据库
+										tagStatusService.insertSelective(tagStatus);
+
+										alertVO.setId(tagStatus.getId());
+										String jsonObject = gson.toJson(alertVO);
+
+										if (SystemMap.getBatteryList().contains(SystemMap.getUsermap().get(tagAdd))){
+											//推送
+											send(userid, jsonObject.toString());
+										}
+									}
+								} catch (ParseException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+
+					}
+					//更新电量
 					tag.setElectric(String.valueOf(battery));
 					//更新新数据库
 					tagService.updateByPrimaryKeySelective(tag);
-					//是否触发电量报警
-					if ((tag_info.getBattery()<MAX_BATTERY)){
-						//websocket通知前端有警告
-						Integer userid = SystemMap.getUsermap().get(tagAdd);
-						AlertVO alertVO = new AlertVO();
-						//alertVO.setId(tagStatus.getId());
-						alertVO.setTagAddress(tagAdd);
-						alertVO.setData(String.valueOf(tag_info.getBattery()));
-						alertVO.setAlertType("4");
-						alertVO.setIsdeal("0");
-						alertVO.setMapKey(mapKey);
-
-						if (tag.getX() != null) {
-							alertVO.setX(tag.getX());
-						}
-						if (tag.getY() != null) {
-							alertVO.setY(tag.getY());
-						}
-						Person person = personService.getPersonByAddress(userid, tagAdd);
-						if (person != null) {
-							alertVO.setType("person");
-							alertVO.setIdCard(person.getIdCard());
-							alertVO.setName(person.getPersonName());
-						}
-						Goods goods = goodsService.getGoodsByAddress(userid, tagAdd);
-						if (goods != null) {
-							alertVO.setType("goods");
-							alertVO.setIdCard(goods.getGoodsIdcard());
-							alertVO.setName(goods.getGoodsName());
-						}
-						alertVO.setAddTime(sdf.format(new Date()));
-						Gson gson=new Gson();
-
-
-						//报警标识
-						String alertData=tagAdd+BATTERY;
-						Map<String, String> alertmap = SystemMap.getAlertmap();
-						String time = alertmap.get(alertData);
-
-						//最新时间
-						String format = sdf.format(new Date());
-						if (time==null||"".equals(time)){
-							alertmap.put(alertData,format);
-							TagStatus tagStatus = new TagStatus();
-							peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
-							tagStatus.setPersonIdcard(peridcard);
-							tagStatus.setAddTime(new Date());
-							tagStatus.setAlertType("4");
-							tagStatus.setData(String.valueOf(tag_info.getBattery()));
-							tagStatus.setIsdeal("0");
-							tagStatus.setMapKey(mapkey);
-							tagStatus.setX(tag.getX());
-							tagStatus.setY(tag.getY());
-							tagStatus.setZ(tag.getZ());
-
-							if (usermap.get(tagAdd) != null) {
-								tagStatus.setUserId(usermap.get(tagAdd));
-							}
-							//插入数据库
-							tagStatusService.insertSelective(tagStatus);
-
-							alertVO.setId(tagStatus.getId());
-							String jsonObject = gson.toJson(alertVO);
-
-							if (SystemMap.getBatteryList().contains(SystemMap.getUsermap().get(tagAdd))){
-								//推送
-								send(userid, jsonObject.toString());
-							}
-
-
-
-						}else {
-							try {
-								if (System.currentTimeMillis()/1000-sdf.parse(time).getTime()/1000>ALERT_TIME){
-									alertmap.put(alertData,format);
-									TagStatus tagStatus = new TagStatus();
-									peridcard = SystemMap.getTagAndPersonMap().get(tagAdd);
-									tagStatus.setPersonIdcard(peridcard);
-									tagStatus.setAddTime(new Date());
-									tagStatus.setAlertType("4");
-									tagStatus.setData(String.valueOf(tag_info.getBattery()));
-									tagStatus.setIsdeal("0");
-									tagStatus.setMapKey(mapkey);
-									tagStatus.setX(tag.getX());
-									tagStatus.setY(tag.getY());
-									tagStatus.setZ(tag.getZ());
-
-									if (usermap.get(tagAdd) != null) {
-										tagStatus.setUserId(usermap.get(tagAdd));
-									}
-									//插入数据库
-									tagStatusService.insertSelective(tagStatus);
-
-									alertVO.setId(tagStatus.getId());
-									String jsonObject = gson.toJson(alertVO);
-
-									if (SystemMap.getBatteryList().contains(SystemMap.getUsermap().get(tagAdd))){
-										//推送
-										send(userid, jsonObject.toString());
-									}
-								}
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-						}
-					}
 
 				}
+
+
 				if (tag_info.getHeart_rate()>0){
 					//插入心率历史记录表
 					HeartRateHistory heartRateHistory = new HeartRateHistory();
@@ -1353,7 +1360,7 @@ public class LocationsystemApplication  {
 	public ConfigurableServletWebServerFactory webServerFactory() {
 		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
 		factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector ->
-				connector.setProperty("relaxedQueryChars", "|{}[]\\"));
+				connector.setProperty("relaxedQueryChars", "|{}[]\\%"));
 		return factory;
 	}
 	}

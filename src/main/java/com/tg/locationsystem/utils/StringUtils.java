@@ -382,20 +382,29 @@ public static List<double[]>  setData(String data) {
 }
 
 	public static String getPath(List<TagHistory> list) {
-		String d = "M";
+	StringBuffer sb=new StringBuffer("M");
+		//String d = "M";
 		TagHistory tag;
 		for (int i = 0; i < list.size(); i++) {
 			tag = list.get(i);
 			// System.out.println("X="+tag.getX()+"Y="+tag.getY());
 			if (i != list.size() - 1) {
-				d += (tag.getX()) + " " + (tag.getY()) + "L ";
+				//d += (tag.getX()) + " " + (tag.getY()) + "L ";
+				sb.append(tag.getX());
+				sb.append(" ");
+				sb.append(tag.getY());
+				sb.append("L");
 			} else {
-				d += (tag.getX()) + " " + (tag.getY());
+				//d += (tag.getX()) + " " + (tag.getY());
+				sb.append(tag.getX());
+				sb.append(" ");
+				sb.append(tag.getY());
 			}
 		}
 		// d="M0 0 H50 A20 20 0 1 0 100 50 v25 C50 125 0 85 0 85L150 50";
 
-		return d;
+		//return d;
+		return sb.toString();
 	}
 
 	public static String getTag_history(List<TagHistory> list) {

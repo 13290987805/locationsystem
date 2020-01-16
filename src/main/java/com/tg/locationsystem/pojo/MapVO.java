@@ -28,6 +28,17 @@ public class MapVO implements Serializable {
 
     private String sendTime;
 
+    @NotBlank(message = "像素长不能为空")
+    private String pixelX;
+    @NotBlank(message = "像素宽不能为空")
+    private String pixelY;
+    @NotBlank(message = "实际长不能为空")
+    private String realityX;
+    @NotBlank(message = "实际宽不能为空")
+    private String realityY;
+
+    private String proportion;
+
     public Integer getId() {
         return id;
     }
@@ -106,6 +117,46 @@ public class MapVO implements Serializable {
 
     public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
+    }
+
+    public String getPixelX() {
+        return pixelX;
+    }
+
+    public void setPixelX(String pixelX) {
+        this.pixelX = pixelX;
+    }
+
+    public String getPixelY() {
+        return pixelY;
+    }
+
+    public void setPixelY(String pixelY) {
+        this.pixelY = pixelY;
+    }
+
+    public String getRealityX() {
+        return realityX;
+    }
+
+    public void setRealityX(String realityX) {
+        this.realityX = realityX;
+    }
+
+    public String getRealityY() {
+        return realityY;
+    }
+
+    public void setRealityY(String realityY) {
+        this.realityY = realityY;
+    }
+
+    public String getProportion() {
+        return proportion;
+    }
+
+    public void setProportion(String proportion) {
+        this.proportion = proportion;
     }
 
     public MapVO() {

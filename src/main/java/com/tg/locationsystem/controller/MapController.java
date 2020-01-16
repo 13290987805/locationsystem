@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +120,14 @@ public class MapController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+
+        //todo
+        //实际长宽手动填,像素长宽自动获取
+     /*   BufferedImage sourceImg = ImageIO.read(in);
+        int y = sourceImg.getHeight();
+        int x = sourceImg.getWidth();
+      */
+
 
         //判断输入是否正确
         if (!StringUtils.isNumeric(addMapVO.getPixelX())||!StringUtils.isNumeric(addMapVO.getPixelY())
@@ -322,6 +332,11 @@ public class MapController {
             mapVO.setRemark(map.getRemark());
             mapVO.setUserId(map.getUserId());
             mapVO.setMapName(map.getMapName());
+            mapVO.setPixelX(map.getPixelX());
+            mapVO.setPixelY(map.getPixelY());
+            mapVO.setRealityX(map.getRealityX());
+            mapVO.setRealityY(map.getRealityY());
+            mapVO.setProportion(map.getProportion());
             StringBuffer sb=new StringBuffer();
             File file = new File(map.getMapData());// svg文件
             BufferedReader br = null;// 构造一个BufferedReader类来读取文件

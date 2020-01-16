@@ -1,5 +1,6 @@
 package com.tg.locationsystem.controller;
 
+import com.tg.locationsystem.config.KalmanFilter2;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
@@ -460,8 +461,10 @@ public class PathController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+        //System.out.println("date1"+sdf.format(new Date()));
         //根据标签address得到历史轨迹集合
         List<TagHistory> tagHistories=tagHistoryService.getTagHistoryByAddAndMap(tableName,dayPathMap.getPersonidcard(),dayPathMap.getMapkey());
+        //System.out.println("date2"+sdf.format(new Date()));
         if (tagHistories.size()==0) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -506,30 +509,36 @@ public class PathController {
         List<TagHistory> offLine = new ArrayList<>();
         offLine.add(startPosition);
         historyList.add(offLine);
+        //System.out.println("date3"+sdf.format(new Date()));
         for (TagHistory thisTag: tagHistories) {
             if (((thisTag.getTime().getTime()-startPosition.getTime().getTime())/1000) > 30){
                 offLine = new ArrayList<>();
-                //startPosition = KalmanFilter2.getInstance().printM(startPosition,thisTag);
+                startPosition = KalmanFilter2.getInstance().printM(startPosition,thisTag);
                 offLine.add(startPosition);
                 historyList.add(offLine);
             }else {
-                //startPosition = KalmanFilter2.getInstance().printM(startPosition,thisTag);
+                startPosition = KalmanFilter2.getInstance().printM(startPosition,thisTag);
                 offLine.add(startPosition);
             }
             startPosition = thisTag;
         }
+        //System.out.println("date4"+sdf.format(new Date()));
         List<PathVO> pathVOList = new ArrayList<>();
-        for (int j = 0; j < historyList.size(); j++) {
+
+
+       for (int j = 0; j < historyList.size(); j++) {
             PathVO pathVO = new PathVO();
             String stsrt = sdf.format(historyList.get(j).get(0).getTime());
             String end = sdf.format(historyList.get(j).get(historyList.get(j).size()-1).getTime());
+           // System.out.println("date41="+j+"="+sdf.format(new Date()));
             pathVO.setPath(StringUtils.getPath(historyList.get(j)));
+            //System.out.println("date42="+j+"="+sdf.format(new Date()));
             pathVO.setStartTime(stsrt);
             pathVO.setEndTime(end);
             pathVO.setTagHistoryList(historyList.get(j));
             pathVOList.add(pathVO);
         }
-
+        //System.out.println("date5"+sdf.format(new Date()));
 
 
         resultBean = new ResultBean();
