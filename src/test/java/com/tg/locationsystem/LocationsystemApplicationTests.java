@@ -11,10 +11,7 @@ import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
 import com.tg.locationsystem.pojo.TestVO;
 import com.tg.locationsystem.service.*;
-import com.tg.locationsystem.utils.PngToSvg;
-import com.tg.locationsystem.utils.RuleUtil;
-import com.tg.locationsystem.utils.TestUtil;
-import com.tg.locationsystem.utils.filewriteutil;
+import com.tg.locationsystem.utils.*;
 import net.sf.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +25,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,6 +76,59 @@ public class LocationsystemApplicationTests {
 	@Value("${async.executor.thread.max_pool_size}")
 	private int maxPoolSize;
 
+	@Test
+	public void test15() {
+
+	}
+
+	@Test
+	public void test14() {
+		String area="17.10 3.28,16.70 11.80,23.66 12.08,23.90 3.56,17.06 3.32,17.06 3.32,17.10 3.28";
+		String mapkey="656543db-20cf-4fbc-9081-2588f124cacf";
+		List<Tag> tagList = tagService.getTagsByMapUUIDAndUsed(mapkey);
+		List<Tag> AreaList =new ArrayList<>();
+		for (Tag tag : tagList) {
+			System.out.println("id:"+tag.getId());
+			double[] p={tag.getX(),tag.getY()};
+			List<double[]> poly = StringUtils.setData(area);
+			String s = StringUtils.rayCasting(p, poly);
+			if ("in".equals(s)){
+				Person person = personService.getPersonByOnlyAddress(tag.getAddress());
+				if (person!=null){
+					AreaList.add(tag);
+				}
+
+			}
+		}
+		System.out.println("区域人数:"+AreaList.size());
+
+	/*	double[] p={23,7.1};
+		List<double[]> poly = StringUtils.setData(area);
+		String s = StringUtils.rayCasting(p, poly);
+		System.out.println("结果:"+s);*/
+
+	}
+
+
+	@Test
+	public void test13() {
+		byte[] c={0x01,0x64};
+		int a=(c[0]&0xff)* 256+(c[1]&0xff);
+		int b=c[1]&0xff;
+		int d=a+b;
+		System.out.println(a+"---->"+b);
+		System.out.println(d);
+
+
+	}
+	@Test
+	public void test12() {
+		String IdCard="350628199410241234";
+		Map<String, String> birAgeSex = TestUtil.getBirAgeSex(IdCard);
+		System.out.println(birAgeSex.get("birthday"));
+		System.out.println("结果:"+birAgeSex);
+
+	}
 	@Test
 	public void test11() {
 		List<List<Frence>> arrayFrenceList=new ArrayList<>();

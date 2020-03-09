@@ -62,6 +62,9 @@ public class SystemMap {
     //缓存标签mac (第一次触发时间,当前时间)
     private static Map<String,String> frenceTimemap = new ConcurrentHashMap();
 
+    //缓存摄像头唯一标识(uuid)
+    private static Map<Integer,String> cameramap = new ConcurrentHashMap();
+
     public static Map<String, Integer> getCountmap() {
         return countmap;
     }
@@ -196,6 +199,15 @@ public class SystemMap {
 
     public static void setFrenceTimemap(Map<String, String> frenceTimemap) {
         SystemMap.frenceTimemap = frenceTimemap;
+    }
+
+
+    public static Map<Integer, String> getCameramap() {
+        return cameramap;
+    }
+
+    public static void setCameramap(Map<Integer, String> cameramap) {
+        SystemMap.cameramap = cameramap;
     }
 
     public static void setMapRuleMap(Map<String, String> mapRuleMap) {

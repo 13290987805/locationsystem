@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.CameraMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.Camera">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="x" jdbcType="DOUBLE" property="x" />
+    <result column="y" jdbcType="DOUBLE" property="y" />
+    <result column="z" jdbcType="DOUBLE" property="z" />
+    <result column="camera_brand" jdbcType="VARCHAR" property="cameraBrand" />
+    <result column="camera_model_number" jdbcType="VARCHAR" property="cameraModelNumber" />
+    <result column="camera_stream_media_address" jdbcType="VARCHAR" property="cameraStreamMediaAddress" />
+    <result column="camera_port" jdbcType="VARCHAR" property="cameraPort" />
+    <result column="camera_ip" jdbcType="VARCHAR" property="cameraIp" />
+    <result column="camera_username" jdbcType="VARCHAR" property="cameraUsername" />
+    <result column="camera_pwd" jdbcType="VARCHAR" property="cameraPwd" />
+    <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, x, y, z, camera_brand, camera_model_number, camera_stream_media_address, camera_port, 
+    camera_ip, camera_username, camera_pwd, map_key, remark, create_time
+  </sql>
+
+  <!--查看某地图下的所有摄像头-->
+  <select id="getCaneraByMapKey"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from camera
+    WHERE map_key=#{mapKey}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from camera
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from camera
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.Camera">
+    insert into camera (id, x, y, z, 
+      camera_brand, camera_model_number, camera_stream_media_address, 
+      camera_port, camera_ip, camera_username, 
+      camera_pwd, map_key, remark, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, #{z,jdbcType=DOUBLE}, 
+      #{cameraBrand,jdbcType=VARCHAR}, #{cameraModelNumber,jdbcType=VARCHAR}, #{cameraStreamMediaAddress,jdbcType=VARCHAR}, 
+      #{cameraPort,jdbcType=VARCHAR}, #{cameraIp,jdbcType=VARCHAR}, #{cameraUsername,jdbcType=VARCHAR}, 
+      #{cameraPwd,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Camera" useGeneratedKeys="true" keyProperty="id">
+    insert into camera
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="z != null">
+        z,
+      </if>
+      <if test="cameraBrand != null">
+        camera_brand,
+      </if>
+      <if test="cameraModelNumber != null">
+        camera_model_number,
+      </if>
+      <if test="cameraStreamMediaAddress != null">
+        camera_stream_media_address,
+      </if>
+      <if test="cameraPort != null">
+        camera_port,
+      </if>
+      <if test="cameraIp != null">
+        camera_ip,
+      </if>
+      <if test="cameraUsername != null">
+        camera_username,
+      </if>
+      <if test="cameraPwd != null">
+        camera_pwd,
+      </if>
+      <if test="mapKey != null">
+        map_key,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="z != null">
+        #{z,jdbcType=DOUBLE},
+      </if>
+      <if test="cameraBrand != null">
+        #{cameraBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraModelNumber != null">
+        #{cameraModelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraStreamMediaAddress != null">
+        #{cameraStreamMediaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraPort != null">
+        #{cameraPort,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraIp != null">
+        #{cameraIp,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraUsername != null">
+        #{cameraUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraPwd != null">
+        #{cameraPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Camera">
+    update camera
+    <set>
+      <if test="x != null">
+        x = #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="z != null">
+        z = #{z,jdbcType=DOUBLE},
+      </if>
+      <if test="cameraBrand != null">
+        camera_brand = #{cameraBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraModelNumber != null">
+        camera_model_number = #{cameraModelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraStreamMediaAddress != null">
+        camera_stream_media_address = #{cameraStreamMediaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraPort != null">
+        camera_port = #{cameraPort,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraIp != null">
+        camera_ip = #{cameraIp,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraUsername != null">
+        camera_username = #{cameraUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="cameraPwd != null">
+        camera_pwd = #{cameraPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="mapKey != null">
+        map_key = #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.Camera">
+    update camera
+    set x = #{x,jdbcType=DOUBLE},
+      y = #{y,jdbcType=DOUBLE},
+      z = #{z,jdbcType=DOUBLE},
+      camera_brand = #{cameraBrand,jdbcType=VARCHAR},
+      camera_model_number = #{cameraModelNumber,jdbcType=VARCHAR},
+      camera_stream_media_address = #{cameraStreamMediaAddress,jdbcType=VARCHAR},
+      camera_port = #{cameraPort,jdbcType=VARCHAR},
+      camera_ip = #{cameraIp,jdbcType=VARCHAR},
+      camera_username = #{cameraUsername,jdbcType=VARCHAR},
+      camera_pwd = #{cameraPwd,jdbcType=VARCHAR},
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

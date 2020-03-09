@@ -12,6 +12,8 @@ import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.handler.NettyServerHandler;
 import com.tg.locationsystem.pojo.AlertVO;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.CameraUtil.CommandManager;
+import com.tg.locationsystem.utils.CameraUtil.CommandManagerImpl;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import interfacer.NetWorkCallback;
@@ -91,7 +93,8 @@ public class LocationsystemApplication  {
 	public static final String FRENCE="_frence";
 
 	public static  SkylabSDK skylabSDK=new SkylabSDK(3600,3601);
-
+	//调用摄像头的对象
+	public static CommandManager manager=new CommandManagerImpl(10);
 	@Autowired
 	public void setDatastore(ITagService tagService, IFrenceService frenceService,
 							 IHeartRateSetService  heartRateSetService,IEleCallSetService eleCallSetService,

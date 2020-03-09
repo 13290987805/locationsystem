@@ -20,7 +20,7 @@ import org.apache.commons.codec.binary.Base64;
 
 public class PngToSvg {
 
-    public static boolean png2svg(String img,String svg) throws FileNotFoundException,IOException {
+    public static boolean png2svg(String img,String svg) throws IOException {
         File in = new File(img);
         BufferedImage sourceImg = ImageIO.read(in);
         int h = sourceImg.getHeight();
@@ -34,7 +34,7 @@ public class PngToSvg {
         sb.append(w);
         sb.append("px\" height=\""+h+"px\"");
         sb.append("\r\n");
-        sb.append("viewBox=\"0 0 "+w+" "+h+"\" enable-background=\"new 0 0 "+w+" "+h+"\" xml:space=\"preserve\">");
+        sb.append("viewBox=\"0 0 "+w+" "+h+"\" enable-backgrou nd=\"new 0 0 "+w+" "+h+"\" xml:space=\"preserve\">");
         sb.append("\r\n");
         sb.append("<image id=\"image0\" width=\""+w+"\" height=\""+h+"\" x=\"0\" y=\"0\" href=\"data:image/png;base64,");
         Base64 base64 = new Base64();
