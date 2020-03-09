@@ -29,6 +29,8 @@ public class Frence {
 
     private String setSwitch;
 
+    private String cameraIds;
+
     public Integer getId() {
         return id;
     }
@@ -103,6 +105,14 @@ public class Frence {
 
     public String getSetSwitch() {
         return setSwitch;
+    }
+
+    public String getCameraIds() {
+        return cameraIds;
+    }
+
+    public void setCameraIds(String cameraIds) {
+        this.cameraIds = cameraIds;
     }
 
     @Override
