@@ -29,4 +29,5 @@ public interface FrenceMapper extends IBaseDao<Frence>{
 
 
     int setSwitch(@Param("userid") Integer id,@Param("setSwitch") String setSwitch,@Param("frenceId") Integer frenceId);
+
 }
