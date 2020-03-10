@@ -1,11 +1,12 @@
 package com.tg.locationsystem.mapper;
 
+import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.Camera;
 
 import java.util.List;
 
-public interface CameraMapper extends IBaseService<Camera>{
+public interface CameraMapper extends IBaseDao<Camera> {
     int deleteByPrimaryKey(Integer id);
 
     int insert(Camera record);
@@ -19,4 +20,6 @@ public interface CameraMapper extends IBaseService<Camera>{
     int updateByPrimaryKey(Camera record);
 
     List<Camera> getCaneraByMapKey(String mapKey);
+
+    Camera getCameraByIp(String cameraIp);
 }

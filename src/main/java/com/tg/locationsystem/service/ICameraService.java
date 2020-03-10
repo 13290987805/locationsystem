@@ -14,4 +14,6 @@ public interface ICameraService extends IBaseService<Camera> {
     PageInfo<Camera> getCaneraByMapKeyPage(String mapKey, Integer pageIndex, Integer pageSize);
 
     List<Camera> getCameraByMapKey(String mapKey);
+
+    Camera getCameraByIp(String cameraIp);
 }

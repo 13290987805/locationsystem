@@ -86,6 +86,18 @@ public class CameraController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+
+        Camera sqlCamera=cameraService.getCameraByIp(camera.getCameraIp());
+        if (sqlCamera!=null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该摄像头已经存在");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
         camera.setCreateTime(new Date());
 
         //rtmp://localhost/live/192.168.3.40
@@ -271,7 +283,7 @@ public class CameraController {
 
 /*
 * 停止摄像头
-*
+*单个
 * */
 @RequestMapping(value = "stopCamera",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
@@ -321,7 +333,7 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
         return resultBean;
     }else {
         resultBean = new ResultBean();
-        resultBean.setCode(1);
+        resultBean.setCode(-1);
         resultBean.setMsg("停止调用失败");
         List<Camera> list = new ArrayList<>();
         list.add(camera);
@@ -333,13 +345,55 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
 
 }
 
+    /*
+     * 停止摄像头
+     *全部
+     * */
+    @RequestMapping(value = "stopAllCamera",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResultBean stopAllCamera(HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
 
+        //停止调用摄像头命令
+
+        int stop = LocationsystemApplication.manager.stopAll();
+        if (stop>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("摄像头停止调用");
+            List<Camera> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("停止调用失败");
+            List<Camera> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+
+    }
 
     /*
     * 查看某地图下的所有摄像头
     * 分页
     * */
-    @RequestMapping(value = "getCameraByMapKeyPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "getCameraByMapKeyPage",method = {RequestMethod.GET})
     @ResponseBody
     public ResultBean getCameraByMapKeyPage(@RequestParam("") String mapKey,HttpServletRequest request ,
                                         @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -384,7 +438,7 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
      * 查看某地图下的所有摄像头
      * 不分页
      * */
-    @RequestMapping(value = "getCameraByMapKey",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "getCameraByMapKey",method = {RequestMethod.GET})
     @ResponseBody
     public ResultBean getCameraByMapKey(@RequestParam("") String mapKey,HttpServletRequest request) {
         ResultBean resultBean;
@@ -419,4 +473,66 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
         resultBean.setSize(cameraList.size());
         return resultBean;
     }
-}
+
+    /*
+    * 删除摄像头信息
+    * */
+    @RequestMapping(value = "deleteCamera",method = {RequestMethod.POST})
+    @ResponseBody
+    public ResultBean deleteCamera(@RequestParam("") Integer CameraId,HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if ("".equals(CameraId) || CameraId == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("摄像头id不能为空");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //该摄像头是否存在
+        Camera camera = cameraService.selectByPrimaryKey(CameraId);
+        if (camera==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("摄像头不存在");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        int delete = cameraService.deleteByPrimaryKey(CameraId);
+        if (delete>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("摄像头删除成功");
+            List<Camera> list = new ArrayList<>();
+            list.add(camera);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("摄像头删除失败");
+            List<Camera> list = new ArrayList<>();
+            list.add(camera);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+    }
+
+
+    }

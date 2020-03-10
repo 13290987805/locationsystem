@@ -23,6 +23,14 @@
     camera_ip, camera_username, camera_pwd, map_key, remark, create_time, data
   </sql>
 
+  <!--根据摄像头ip得到摄像头对象-->
+  <select id="getCameraByIp"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from camera
+    WHERE camera_ip=#{cameraIp}
+  </select>
+
   <!--查看某地图下的所有摄像头-->
   <select id="getCaneraByMapKey"  resultMap="BaseResultMap">
     select
