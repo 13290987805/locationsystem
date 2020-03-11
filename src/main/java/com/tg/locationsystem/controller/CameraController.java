@@ -176,7 +176,7 @@ public class CameraController {
             return resultBean;
         }
         Camera existCamera = cameraService.selectByMapKeyAndCameraIp(camera.getMapKey(),camera.getCameraIp());
-        if (existCamera != null){
+        if (existCamera != null && existCamera.getId() != camera.getId()){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("同一地图不能出现Ip相同的设备。");
@@ -263,7 +263,7 @@ public class CameraController {
         map.put("appName", id);
         //map.put("input", "rtsp://admin:Z1234567@" + ip + ":554");
         map.put("input", sb.toString());
-        map.put("output", "rtmp://192.168.1.193/live/");
+        map.put("output", "rtmp://localhost/live/");
         map.put("codec", "libx264");
         map.put("fmt", "flv");
         map.put("fps", "60");
