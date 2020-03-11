@@ -19,4 +19,6 @@ public interface CameraMapper extends IBaseDao<Camera>{
     int updateByPrimaryKey(Camera record);
 
     List<Camera> getCaneraByMapKey(String mapKey);
+
+    Camera selectByMapKeyAndCameraIp(String mapKey, String cameraIp);
 }

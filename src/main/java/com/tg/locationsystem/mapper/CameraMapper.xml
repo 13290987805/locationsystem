@@ -30,6 +30,14 @@
     WHERE map_key=#{mapKey}
   </select>
 
+  <!--查找某地图下存在某Ip的摄像头-->
+  <select id="selectByMapKeyAndCameraIp"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from camera
+    WHERE map_key=#{mapKey} and camera_ip=#{cameraIp}
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

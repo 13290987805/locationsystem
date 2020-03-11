@@ -3,13 +3,10 @@ package com.tg.locationsystem.controller;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
 import com.tg.locationsystem.entity.Camera;
-import com.tg.locationsystem.entity.EleCallSet;
-import com.tg.locationsystem.entity.Goods;
 import com.tg.locationsystem.entity.Myuser;
+import com.tg.locationsystem.entity.TagStatus;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.ICameraService;
-import com.tg.locationsystem.utils.CameraUtil.CommandManager;
-import com.tg.locationsystem.utils.CameraUtil.CommandManagerImpl;
 import com.tg.locationsystem.utils.IPUtil;
 import com.tg.locationsystem.utils.SystemMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +78,16 @@ public class CameraController {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("摄像头ip有误,请检查");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        Camera existCamera = cameraService.selectByMapKeyAndCameraIp(camera.getMapKey(),camera.getCameraIp());
+        if (existCamera != null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("同一地图不能出现Ip相同的设备。");
             List list = new ArrayList<>();
             resultBean.setData(list);
             resultBean.setSize(list.size());
@@ -168,6 +175,16 @@ public class CameraController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+        Camera existCamera = cameraService.selectByMapKeyAndCameraIp(camera.getMapKey(),camera.getCameraIp());
+        if (existCamera != null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("同一地图不能出现Ip相同的设备。");
+            List list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
         int update = cameraService.updateByPrimaryKeySelective(camera);
 
         if (update > 0) {
@@ -196,8 +213,8 @@ public class CameraController {
     * */
     @RequestMapping(value = "startCamera",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public ResultBean startCamera(@RequestParam("") Integer careraId,HttpServletRequest request) {
-        ResultBean resultBean;
+    public ResultBean startCamera(@RequestParam("") Integer cameraId,HttpServletRequest request) {
+            ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
         if (user == null) {
@@ -209,7 +226,7 @@ public class CameraController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        if ("".equals(careraId)||careraId==null){
+        if ("".equals(cameraId)||cameraId==null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("摄像头id参数不能为空");
@@ -218,7 +235,7 @@ public class CameraController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Camera camera = cameraService.selectByPrimaryKey(careraId);
+        Camera camera = cameraService.selectByPrimaryKey(cameraId);
         if (camera==null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -230,7 +247,7 @@ public class CameraController {
         }
         //String ip ="192.168.3.40";
         String ip=camera.getCameraIp();
-        String id = SystemMap.getCameramap().get(careraId);
+        String id = SystemMap.getCameramap().get(cameraId);
         if (id==null||"".equals(id)){
             String address = camera.getCameraStreamMediaAddress();
             id=address.substring(22);
@@ -246,14 +263,14 @@ public class CameraController {
         map.put("appName", id);
         //map.put("input", "rtsp://admin:Z1234567@" + ip + ":554");
         map.put("input", sb.toString());
-        map.put("output", "rtmp://localhost/live/");
+        map.put("output", "rtmp://192.168.1.193/live/");
         map.put("codec", "libx264");
         map.put("fmt", "flv");
         map.put("fps", "60");
         map.put("rs", "640x360");
         map.put("twoPart", "0");
         //String ids=manager.start(map);
-        String ids=LocationsystemApplication.manager.start(map);
+        LocationsystemApplication.manager.start(map);
         //System.out.println(ids);
 
 
@@ -275,7 +292,7 @@ public class CameraController {
 * */
 @RequestMapping(value = "stopCamera",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
-public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletRequest request) {
+public ResultBean stopCamera(@RequestParam("") Integer cameraId,HttpServletRequest request) {
     ResultBean resultBean;
     Myuser user = (Myuser) request.getSession().getAttribute("user");
     //未登录
@@ -288,7 +305,7 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
         resultBean.setSize(list.size());
         return resultBean;
     }
-    if ("".equals(careraId) || careraId == null) {
+    if ("".equals(cameraId) || cameraId == null) {
         resultBean = new ResultBean();
         resultBean.setCode(-1);
         resultBean.setMsg("摄像头id参数不能为空");
@@ -297,7 +314,7 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
         resultBean.setSize(list.size());
         return resultBean;
     }
-    Camera camera = cameraService.selectByPrimaryKey(careraId);
+    Camera camera = cameraService.selectByPrimaryKey(cameraId);
     if (camera == null) {
         resultBean = new ResultBean();
         resultBean.setCode(-1);
@@ -307,7 +324,7 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
         resultBean.setSize(list.size());
         return resultBean;
     }
-    String uuid = SystemMap.getCameramap().get(careraId);
+    String uuid = SystemMap.getCameramap().get(cameraId);
     //停止调用摄像头命令
     boolean stop = LocationsystemApplication.manager.stop(uuid);
     if (stop){
@@ -418,5 +435,53 @@ public ResultBean stopCamera(@RequestParam("") Integer careraId,HttpServletReque
         resultBean.setData(cameraList);
         resultBean.setSize(cameraList.size());
         return resultBean;
+    }
+    /*
+     * 删除摄像头
+     *
+     * */
+    @RequestMapping(value = "delCamera",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean delCamera(Integer cameraId,HttpServletRequest request) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (cameraId==null||"".equals(cameraId)){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("id不能为空");
+            List<TagStatus> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        int delete = cameraService.deleteByPrimaryKey(cameraId);
+        if (delete>0){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List list=new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }else {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("删除失败");
+            List<TagStatus> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
     }
 }
