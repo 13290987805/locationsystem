@@ -5,7 +5,7 @@ import com.tg.locationsystem.entity.Camera;
 
 import java.util.List;
 
-public interface CameraMapper extends IBaseDao<Camera>{
+public interface CameraMapper extends IBaseDao<Camera> {
     int deleteByPrimaryKey(Integer id);
 
     int insert(Camera record);
@@ -21,4 +21,6 @@ public interface CameraMapper extends IBaseDao<Camera>{
     List<Camera> getCaneraByMapKey(String mapKey);
 
     Camera selectByMapKeyAndCameraIp(String mapKey, String cameraIp);
+
+    Camera getCameraByIp(String cameraIp);
 }

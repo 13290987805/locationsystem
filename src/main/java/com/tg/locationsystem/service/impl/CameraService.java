@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.Camera;
+import com.tg.locationsystem.entity.Goods;
 import com.tg.locationsystem.mapper.CameraMapper;
 import com.tg.locationsystem.service.ICameraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class CameraService extends BaseServiceImpl<Camera> implements ICameraSer
     @Override
     public Camera selectByMapKeyAndCameraIp(String mapKey, String cameraIp) {
         return cameraMapper.selectByMapKeyAndCameraIp(mapKey,cameraIp);
+    }
+
+    @Override
+    public Camera getCameraByIp(String cameraIp) {
+        return cameraMapper.getCameraByIp(cameraIp);
     }
 }

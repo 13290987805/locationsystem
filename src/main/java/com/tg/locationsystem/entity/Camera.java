@@ -70,6 +70,11 @@ public class Camera implements Serializable{
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+/*
+* 摄像头区域范围
+* */
+    private String data;
+
     public Integer getId() {
         return id;
     }
@@ -176,6 +181,14 @@ public class Camera implements Serializable{
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     public Date getCreateTime() {
         return createTime;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     public void setCreateTime(Date createTime) {

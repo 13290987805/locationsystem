@@ -16,11 +16,20 @@
     <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
   </resultMap>
   <sql id="Base_Column_List">
     id, x, y, z, camera_brand, camera_model_number, camera_stream_media_address, camera_port, 
-    camera_ip, camera_username, camera_pwd, map_key, remark, create_time
+    camera_ip, camera_username, camera_pwd, map_key, remark, create_time, data
   </sql>
+
+  <!--根据摄像头ip得到摄像头对象-->
+  <select id="getCameraByIp"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from camera
+    WHERE camera_ip=#{cameraIp}
+  </select>
 
   <!--查看某地图下的所有摄像头-->
   <select id="getCaneraByMapKey"  resultMap="BaseResultMap">
@@ -53,14 +62,14 @@
       camera_brand, camera_model_number, camera_stream_media_address, 
       camera_port, camera_ip, camera_username, 
       camera_pwd, map_key, remark, 
-      create_time)
+      create_time, data)
     values (#{id,jdbcType=INTEGER}, #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, #{z,jdbcType=DOUBLE}, 
       #{cameraBrand,jdbcType=VARCHAR}, #{cameraModelNumber,jdbcType=VARCHAR}, #{cameraStreamMediaAddress,jdbcType=VARCHAR}, 
       #{cameraPort,jdbcType=VARCHAR}, #{cameraIp,jdbcType=VARCHAR}, #{cameraUsername,jdbcType=VARCHAR}, 
       #{cameraPwd,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{data,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Camera" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Camera">
     insert into camera
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -104,6 +113,9 @@
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="data != null">
+        data,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -149,6 +161,9 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="data != null">
+        #{data,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.Camera">
@@ -193,6 +208,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="data != null">
+        data = #{data,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -210,7 +228,8 @@
       camera_pwd = #{cameraPwd,jdbcType=VARCHAR},
       map_key = #{mapKey,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      data = #{data,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
