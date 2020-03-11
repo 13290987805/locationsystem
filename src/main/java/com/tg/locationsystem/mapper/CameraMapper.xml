@@ -17,11 +17,20 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="data" jdbcType="VARCHAR" property="data" />
+    <result column="save_time" jdbcType="INTEGER" property="saveTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, x, y, z, camera_brand, camera_model_number, camera_stream_media_address, camera_port, 
-    camera_ip, camera_username, camera_pwd, map_key, remark, create_time, data
+    camera_ip, camera_username, camera_pwd, map_key, remark, create_time, data, save_time
   </sql>
+
+
+  <!--得到所有的摄像头-->
+  <select id="getCameraList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from camera
+  </select>
 
   <!--根据摄像头ip得到摄像头对象-->
   <select id="getCameraByIp"  resultMap="BaseResultMap">
@@ -62,12 +71,14 @@
       camera_brand, camera_model_number, camera_stream_media_address, 
       camera_port, camera_ip, camera_username, 
       camera_pwd, map_key, remark, 
-      create_time, data)
+      create_time, data, save_time
+      )
     values (#{id,jdbcType=INTEGER}, #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, #{z,jdbcType=DOUBLE}, 
       #{cameraBrand,jdbcType=VARCHAR}, #{cameraModelNumber,jdbcType=VARCHAR}, #{cameraStreamMediaAddress,jdbcType=VARCHAR}, 
       #{cameraPort,jdbcType=VARCHAR}, #{cameraIp,jdbcType=VARCHAR}, #{cameraUsername,jdbcType=VARCHAR}, 
       #{cameraPwd,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{data,jdbcType=VARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{data,jdbcType=VARCHAR}, #{saveTime,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Camera" useGeneratedKeys="true" keyProperty="id">
     insert into camera
@@ -117,6 +128,9 @@
       <if test="data != null">
         data,
       </if>
+      <if test="saveTime != null">
+        save_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -163,6 +177,9 @@
       </if>
       <if test="data != null">
         #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="saveTime != null">
+        #{saveTime,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -211,6 +228,9 @@
       <if test="data != null">
         data = #{data,jdbcType=VARCHAR},
       </if>
+      <if test="saveTime != null">
+        save_time = #{saveTime,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -229,7 +249,8 @@
       map_key = #{mapKey,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      data = #{data,jdbcType=VARCHAR}
+      data = #{data,jdbcType=VARCHAR},
+      save_time = #{saveTime,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

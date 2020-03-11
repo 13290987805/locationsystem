@@ -78,7 +78,8 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test15() {
-
+		String path = "C:\\video\\000.mp4";
+		System.out.println(path.substring(9));
 	}
 
 	@Test
@@ -88,19 +89,19 @@ public class LocationsystemApplicationTests {
 		List<Tag> tagList = tagService.getTagsByMapUUIDAndUsed(mapkey);
 		List<Tag> AreaList =new ArrayList<>();
 		for (Tag tag : tagList) {
-			System.out.println("id:"+tag.getId());
-			double[] p={tag.getX(),tag.getY()};
+			System.out.println("id:" + tag.getId());
+			double[] p = {tag.getX(), tag.getY()};
 			List<double[]> poly = StringUtils.setData(area);
 			String s = StringUtils.rayCasting(p, poly);
-			if ("in".equals(s)){
+			if ("in".equals(s)) {
 				Person person = personService.getPersonByOnlyAddress(tag.getAddress());
-				if (person!=null){
+				if (person != null) {
 					AreaList.add(tag);
 				}
 
 			}
 		}
-		System.out.println("区域人数:"+AreaList.size());
+		System.out.println("区域人数:" + AreaList.size());
 
 	/*	double[] p={23,7.1};
 		List<double[]> poly = StringUtils.setData(area);

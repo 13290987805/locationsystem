@@ -75,6 +75,11 @@ public class Camera implements Serializable{
 * */
     private String data;
 
+    /*
+    * 摄像头视频保存时间
+    * */
+    private Integer saveTime;
+
     public Integer getId() {
         return id;
     }
@@ -121,6 +126,14 @@ public class Camera implements Serializable{
 
     public void setCameraModelNumber(String cameraModelNumber) {
         this.cameraModelNumber = cameraModelNumber == null ? null : cameraModelNumber.trim();
+    }
+
+    public Integer getSaveTime() {
+        return saveTime;
+    }
+
+    public void setSaveTime(Integer saveTime) {
+        this.saveTime = saveTime;
     }
 
     public String getCameraStreamMediaAddress() {

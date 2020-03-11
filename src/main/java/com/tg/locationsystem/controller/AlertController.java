@@ -95,6 +95,7 @@ private IEleCallSetService eleCallSetService;
             tagStatusVO.setUserId(tagStatus.getUserId());
             tagStatusVO.setMapkey(tagStatus.getMapKey());
             tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+            tagStatusVO.setVedio(tagStatus.getVedio());
             //type name
             Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
             if (person!=null){
@@ -188,6 +189,7 @@ private IEleCallSetService eleCallSetService;
                 tagStatusVO.setUserId(tagStatus.getUserId());
                 tagStatusVO.setMapkey(tagStatus.getMapKey());
                 tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+                tagStatusVO.setVedio(tagStatus.getVedio());
                 if ("0".equals(tagStatus.getIsdeal())){
                     tagStatusVO.setIsdeal("未处理");
                 }
@@ -269,6 +271,7 @@ private IEleCallSetService eleCallSetService;
             tagStatusVO.setX(tagStatus.getX());
             tagStatusVO.setY(tagStatus.getY());
             tagStatusVO.setZ(tagStatus.getZ());
+            tagStatusVO.setVedio(tagStatus.getVedio());
             if ("0".equals(tagStatus.getIsdeal())){
                 tagStatusVO.setIsdeal("未处理");
             }
@@ -662,6 +665,7 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
             tagStatusVO.setUserId(tagStatus.getUserId());
             tagStatusVO.setMapkey(tagStatus.getMapKey());
             tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+            tagStatusVO.setVedio(tagStatus.getVedio());
             if ("0".equals(tagStatus.getIsdeal())){
                 tagStatusVO.setIsdeal("未处理");
             }
@@ -739,6 +743,7 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
         tagStatusVO.setUserId(tagStatus.getUserId());
         tagStatusVO.setMapkey(tagStatus.getMapKey());
         tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+        tagStatusVO.setVedio(tagStatus.getVedio());
         if ("0".equals(tagStatus.getIsdeal())){
             tagStatusVO.setIsdeal("未处理");
         }
@@ -914,6 +919,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
         tagStatusVO.setUserId(tagStatus.getUserId());
         tagStatusVO.setMapkey(tagStatus.getMapKey());
         tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+        tagStatusVO.setVedio(tagStatus.getVedio());
         //type name
         Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
         if (person!=null){
@@ -1611,6 +1617,7 @@ public ResultBean getTagStatusBySomeCondition(HttpServletRequest request,
             tagStatusVO.setUserId(tagStatus.getUserId());
             tagStatusVO.setMapkey(tagStatus.getMapKey());
             tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+            tagStatusVO.setVedio(tagStatus.getVedio());
             if ("0".equals(tagStatus.getIsdeal())){
                 tagStatusVO.setIsdeal("未处理");
             }
@@ -1811,6 +1818,7 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
         tagStatusVO.setUserId(tagStatus.getUserId());
         tagStatusVO.setMapkey(tagStatus.getMapKey());
         tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+        tagStatusVO.setVedio(tagStatus.getVedio());
         //type name
         Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
         if (person!=null){

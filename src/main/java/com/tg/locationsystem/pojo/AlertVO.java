@@ -37,6 +37,7 @@ public class AlertVO implements Serializable {
     private String mapKey;
 
 
+
     public AlertVO() {
     }
 

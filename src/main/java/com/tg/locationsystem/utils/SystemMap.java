@@ -65,6 +65,18 @@ public class SystemMap {
     //缓存摄像头唯一标识(uuid)
     private static Map<Integer,String> cameramap = new ConcurrentHashMap();
 
+    //缓存推过流的摄像头
+    private static Map<Integer,String> StreamCameramap = new ConcurrentHashMap();
+
+
+    public static Map<Integer, String> getStreamCameramap() {
+        return StreamCameramap;
+    }
+
+    public static void setStreamCameramap(Map<Integer, String> streamCameramap) {
+        StreamCameramap = streamCameramap;
+    }
+
     public static Map<String, Integer> getCountmap() {
         return countmap;
     }

@@ -61,9 +61,10 @@ public class LocationsystemApplication  {
 	private static IMapRuleService mapRuleService  ;//Service层类
 	private static IHeartRateHistoryService heartRateHistoryService  ;//Service层类
 	private static IAlertSetService alertSetService  ;//Service层类
+	private static ICameraService cameraService ;//Service层类
 
 	static DateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	public static DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	//最远距离
 	public static final double MIN_DISTANCE=0.5;
 	//最近距离
@@ -102,7 +103,7 @@ public class LocationsystemApplication  {
 							 IStationService stationService,IMapService mapService, IFrenceHistoryService frenceHistoryService,
 							 ITagStatusService tagStatusService,IPersonService personService,IGoodsService goodsService,
 							 IHeartRateHistoryService heartRateHistoryService,IMapRuleService mapRuleService,
-							 IAlertSetService alertSetService ) {
+							 IAlertSetService alertSetService,ICameraService cameraService ) {
 		//TagbindingApplication
 		LocationsystemApplication.tagService = tagService;
 		LocationsystemApplication.frenceService = frenceService;
@@ -119,6 +120,7 @@ public class LocationsystemApplication  {
 		LocationsystemApplication.heartRateHistoryService = heartRateHistoryService;
 		LocationsystemApplication.mapRuleService = mapRuleService;
 		LocationsystemApplication.alertSetService = alertSetService;
+		LocationsystemApplication.cameraService = cameraService;
 	}
 	public  static Tag tag1=new Tag();
 	public static void main(String[] args) throws Exception {
@@ -262,6 +264,39 @@ public class LocationsystemApplication  {
 													String jsonObject = gson.toJson(alertVO);
 													//推送
 													send(userid, jsonObject.toString());
+
+													//保存视频
+													if (frence.getCameraIds()!=null&&!"".equals(frence.getCameraIds())){
+														String cameraIds = frence.getCameraIds();
+														Camera camera = cameraService.selectByPrimaryKey(Integer.parseInt(cameraIds));
+														if (camera!=null){
+	//ffmpeg -i rtsp://admin:Z1234567@192.168.3.39:554-vcodeclibx264 -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 C:\\Users\\92962\\Pictures\\temp\\out%03d.mp4
+															StringBuffer sb=new StringBuffer("ffmpeg -i ");
+															String id = SystemMap.getCameramap().get(camera.getId());
+															if (id==null||"".equals(id)){
+																String address = camera.getCameraStreamMediaAddress();
+																id=address.substring(22);
+																SystemMap.getCameramap().put(camera.getId(),id);
+															}
+															String string="rtsp://"+camera.getCameraUsername()+":"+camera.getCameraPwd()+"@" + camera.getCameraIp() + ":554";
+															sb.append(string);
+															sb.append("-vcodeclibx264");
+															sb.append(" -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an ");
+															sb.append(camera.getCameraStreamMediaAddress());
+															sb.append("  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 ");
+															//位置视频名称
+															String format = simpleDateFormat.format(new Date());
+															format=format+"_"+id+".mp4";
+															//位置
+															sb.append("C:\\video\\");
+															sb.append(format);
+															//调用摄像头
+															LocationsystemApplication.manager.start(id,sb.toString());
+
+
+														}
+
+													}
 
 											}
 										}
@@ -1321,6 +1356,16 @@ public class LocationsystemApplication  {
 			}, 3000, eleCallSet.getTimeInterval()*1000*60);
 			timermap.put(eleCallSet.getUserId(),timer);
 		}
+
+		//把摄像头放到缓存
+		List<Camera> cameraList=cameraService.getCameraList();
+		Map<Integer, String> cameramap = SystemMap.getCameramap();
+		for (Camera camera : cameraList) {
+			String address = camera.getCameraStreamMediaAddress();
+			String uuid=address.substring(22);
+			cameramap.put(camera.getId(),uuid);
+		}
+
 
 	}
 

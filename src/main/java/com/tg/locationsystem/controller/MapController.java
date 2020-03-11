@@ -3,6 +3,7 @@ package com.tg.locationsystem.controller;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
 import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.pojo.AddMapVO;
 import com.tg.locationsystem.pojo.CleconfigVO;
 import com.tg.locationsystem.pojo.MapVO;
@@ -24,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -257,15 +260,15 @@ public class MapController {
                 return resultBean;
             }
         }
-//        MapRule mapRule=new MapRule();
-//        mapRule.setMapKey(uuid);
-//        //地图规则
-//        String rule = SVGUtil.readSVG(map.getMapData());
-//        mapRule.setMapRule(rule);
-//
-//        //将规则放入缓存
-//        SystemMap.getMapRuleMap().put(uuid,rule);
-//        int insertMapRule = mapRuleService.insertSelective(mapRule);
+      /*  MapRule mapRule=new MapRule();
+        mapRule.setMapKey(uuid);
+        //地图规则
+        String rule = SVGUtil.readSVG(map.getMapData());
+        mapRule.setMapRule(rule);
+
+        //将规则放入缓存
+        SystemMap.getMapRuleMap().put(uuid,rule);
+        int insertMapRule = mapRuleService.insertSelective(mapRule);*/
 
         int insertMap = mapService.insertSelective(map);
 

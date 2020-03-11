@@ -37,6 +37,8 @@ public class TagStatusVO implements Serializable {
     private String mapkey;
     private String isdeal;
 
+    private String vedio;
+
     public String getImg() {
         return img;
     }
@@ -60,6 +62,14 @@ public class TagStatusVO implements Serializable {
     public void setY(double y) {
 
         this.y = y;
+    }
+
+    public String getVedio() {
+        return vedio;
+    }
+
+    public void setVedio(String vedio) {
+        this.vedio = vedio;
     }
 
     public String getIsdeal() {
