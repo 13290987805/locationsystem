@@ -44,6 +44,10 @@ public class TagController {
     @Autowired
     private IPersonService personService;
     @Autowired
+    private IGoodsTypeService goodsTypeService;
+    @Autowired
+    private IPersonTypeService personTypeService;
+    @Autowired
     private PersonMapper personMapper;
     @Autowired
     private GoodsMapper goodsMapper;
@@ -807,7 +811,7 @@ public class TagController {
                     location.setPersonName(person.getPersonName());
                     location.setPersonPhone(person.getPersonPhone());
                     location.setPersonSex(person.getPersonSex());
-                    location.setPersonTypeid(person.getPersonTypeid());
+                    location.setPersonType(personTypeService.selectByPrimaryKey(person.getPersonTypeid()));
                     location.setUserId(person.getUserId());
                     location.setTagAddress(person.getTagAddress());
 
@@ -828,7 +832,7 @@ public class TagController {
                     location.setAddTime(goods.getAddTime());
                     location.setGoodsName(goods.getGoodsName());
                     location.setImg(goods.getImg());
-                    location.setGoodsTypeid(goods.getGoodsTypeid());
+                    location.setGoodsType(goodsTypeService.selectByPrimaryKey(goods.getGoodsTypeid()));
                     location.setUserId(goods.getUserId());
                     location.setTagAddress(goods.getTagAddress());
                     location.setGoodsIdcard(goods.getGoodsIdcard());
@@ -916,7 +920,7 @@ public class TagController {
                     location.setPersonName(person.getPersonName());
                     location.setPersonPhone(person.getPersonPhone());
                     location.setPersonSex(person.getPersonSex());
-                    location.setPersonTypeid(person.getPersonTypeid());
+                    location.setPersonType(personTypeService.selectByPrimaryKey(person.getPersonTypeid()));
                     location.setUserId(person.getUserId());
                     location.setTagAddress(person.getTagAddress());
 
@@ -937,7 +941,7 @@ public class TagController {
                     location.setAddTime(goods.getAddTime());
                     location.setGoodsName(goods.getGoodsName());
                     location.setImg(goods.getImg());
-                    location.setGoodsTypeid(goods.getGoodsTypeid());
+                    location.setGoodsType(goodsTypeService.selectByPrimaryKey(goods.getGoodsTypeid()));
                     location.setUserId(goods.getUserId());
                     location.setTagAddress(goods.getTagAddress());
                     location.setGoodsIdcard(goods.getGoodsIdcard());
@@ -1024,7 +1028,7 @@ public class TagController {
                     location.setPersonName(person.getPersonName());
                     location.setPersonPhone(person.getPersonPhone());
                     location.setPersonSex(person.getPersonSex());
-                    location.setPersonTypeid(person.getPersonTypeid());
+                    location.setPersonType(personTypeService.selectByPrimaryKey(person.getPersonTypeid()));
                     location.setUserId(person.getUserId());
                     location.setTagAddress(person.getTagAddress());
 
@@ -1045,7 +1049,7 @@ public class TagController {
                     location.setAddTime(goods.getAddTime());
                     location.setGoodsName(goods.getGoodsName());
                     location.setImg(goods.getImg());
-                    location.setGoodsTypeid(goods.getGoodsTypeid());
+                    location.setGoodsType(goodsTypeService.selectByPrimaryKey(goods.getGoodsTypeid()));
                     location.setUserId(goods.getUserId());
                     location.setTagAddress(goods.getTagAddress());
                     location.setGoodsIdcard(goods.getGoodsIdcard());
@@ -1280,7 +1284,7 @@ public class TagController {
                     location.setPersonName(person.getPersonName());
                     location.setPersonPhone(person.getPersonPhone());
                     location.setPersonSex(person.getPersonSex());
-                    location.setPersonTypeid(person.getPersonTypeid());
+                    location.setPersonType(personTypeService.selectByPrimaryKey(person.getPersonTypeid()));
                     location.setUserId(person.getUserId());
                     location.setTagAddress(person.getTagAddress());
 
@@ -1302,7 +1306,7 @@ public class TagController {
                     location.setAddTime(goods.getAddTime());
                     location.setGoodsName(goods.getGoodsName());
                     location.setImg(goods.getImg());
-                    location.setGoodsTypeid(goods.getGoodsTypeid());
+                    location.setGoodsType(goodsTypeService.selectByPrimaryKey(goods.getGoodsTypeid()));
                     location.setUserId(goods.getUserId());
                     location.setTagAddress(goods.getTagAddress());
                     location.setGoodsIdcard(goods.getGoodsIdcard());

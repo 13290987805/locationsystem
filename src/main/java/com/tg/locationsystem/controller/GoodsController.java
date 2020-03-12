@@ -287,7 +287,7 @@ public ResultBean getGoods(HttpServletRequest request,
                 location.setAddTime(goods.getAddTime());
                 location.setGoodsName(goods.getGoodsName());
                 location.setImg(goods.getImg());
-                location.setGoodsTypeid(goods.getGoodsTypeid());
+                location.setGoodsType(goodsTypeService.selectByPrimaryKey(goods.getGoodsTypeid()));
                 location.setUserId(goods.getUserId());
                 location.setTagAddress(goods.getTagAddress());
                 location.setGoodsIdcard(goods.getGoodsIdcard());

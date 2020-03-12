@@ -1,5 +1,6 @@
 package com.tg.locationsystem.pojo;
 
+import com.tg.locationsystem.entity.PersonType;
 import com.tg.locationsystem.entity.Tag;
 
 import javax.validation.constraints.NotBlank;
@@ -20,7 +21,7 @@ public class Location implements Serializable {
 
     private Integer userId;
     @NotBlank(message = "人员类型不能为空")
-    private Integer personTypeid;
+    private PersonType personType;
     @NotBlank(message = "人员身高不能为空")
     private String personHeight;
     @NotBlank(message = "人员唯一标识不能为空")
@@ -29,8 +30,6 @@ public class Location implements Serializable {
     private String tagAddress;
 
     private String img;
-
-    private String personType;
 
     private Date reserved2Date;
     @NotBlank(message = "人员号码不能为空")
@@ -73,14 +72,6 @@ public class Location implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getPersonTypeid() {
-        return personTypeid;
-    }
-
-    public void setPersonTypeid(Integer personTypeid) {
-        this.personTypeid = personTypeid;
-    }
-
     public String getPersonHeight() {
         return personHeight;
     }
@@ -113,11 +104,11 @@ public class Location implements Serializable {
         this.img = img;
     }
 
-    public String getPersonType() {
+    public PersonType getPersonType() {
         return personType;
     }
 
-    public void setPersonType(String personType) {
+    public void setPersonType(PersonType personType) {
         this.personType = personType;
     }
 

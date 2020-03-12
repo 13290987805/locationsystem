@@ -1,5 +1,6 @@
 package com.tg.locationsystem.pojo;
 
+import com.tg.locationsystem.entity.GoodsType;
 import com.tg.locationsystem.entity.Tag;
 
 import javax.validation.constraints.NotBlank;
@@ -17,7 +18,7 @@ public class GoodsLocation implements Serializable {
 
     private Integer userId;
     @NotBlank(message = "物品类型名不能为空")
-    private Integer goodsTypeid;
+    private GoodsType goodsType;
 
     private String tagAddress;
 
@@ -60,12 +61,12 @@ public class GoodsLocation implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getGoodsTypeid() {
-        return goodsTypeid;
+    public GoodsType getGoodsType() {
+        return goodsType;
     }
 
-    public void setGoodsTypeid(Integer goodsTypeid) {
-        this.goodsTypeid = goodsTypeid;
+    public void setGoodsType(GoodsType goodsTypeid) {
+        this.goodsType = goodsTypeid;
     }
 
     public String getTagAddress() {

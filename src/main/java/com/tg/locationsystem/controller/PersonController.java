@@ -348,7 +348,7 @@ public class PersonController {
                 location.setPersonName(person.getPersonName());
                 location.setPersonPhone(person.getPersonPhone());
                 location.setPersonSex(person.getPersonSex());
-                location.setPersonTypeid(person.getPersonTypeid());
+                location.setPersonType(personTypeService.selectByPrimaryKey(person.getPersonTypeid()));
                 location.setUserId(person.getUserId());
                 location.setTagAddress(person.getTagAddress());
 
