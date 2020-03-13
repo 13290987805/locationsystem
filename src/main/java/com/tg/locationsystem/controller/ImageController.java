@@ -42,7 +42,7 @@ public class ImageController {
             url=url.replace("\\\\","/");
         }
 
-        FileInputStream hFile = null;      //得到文件大小
+               FileInputStream hFile = null;      //得到文件大小
         try {
             hFile = new FileInputStream(url);
             int i=hFile.available();

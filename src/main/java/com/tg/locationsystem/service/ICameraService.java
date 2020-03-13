@@ -18,4 +18,6 @@ public interface ICameraService extends IBaseService<Camera> {
     Camera selectByMapKeyAndCameraIp(String mapKey, String cameraIp);
 
     Camera getCameraByIp(String cameraIp);
+
+    List<Camera> getCameraList();
 }

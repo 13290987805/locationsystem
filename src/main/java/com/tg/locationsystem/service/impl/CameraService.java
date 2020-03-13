@@ -51,4 +51,9 @@ public class CameraService extends BaseServiceImpl<Camera> implements ICameraSer
     public Camera getCameraByIp(String cameraIp) {
         return cameraMapper.getCameraByIp(cameraIp);
     }
+
+    @Override
+    public List<Camera> getCameraList() {
+        return cameraMapper.getCameraList();
+    }
 }

@@ -28,6 +28,8 @@ public class TagStatus implements Serializable{
 
     private Double z;
 
+    private String vedio;
+
     public Integer getId() {
         return id;
     }
@@ -114,5 +116,13 @@ public class TagStatus implements Serializable{
 
     public void setZ(Double z) {
         this.z = z;
+    }
+
+    public String getVedio() {
+        return vedio;
+    }
+
+    public void setVedio(String vedio) {
+        this.vedio = vedio;
     }
 }
