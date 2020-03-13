@@ -316,6 +316,7 @@ public class FrenceController {
             frenceVO.setFrenceId(frenceHistory.getFrenceId());
             frenceVO.setUserId(frenceHistory.getUserId());
             frenceVO.setMapkey(frenceHistory.getMapKey());
+            frenceVO.setVedio(frenceHistory.getVedio());
 
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
             if (map != null) {
@@ -785,6 +786,8 @@ public class FrenceController {
             frenceVO.setFrenceId(frenceHistory.getFrenceId());
             frenceVO.setUserId(frenceHistory.getUserId());
             frenceVO.setMapkey(frenceHistory.getMapKey());
+            frenceVO.setVedio(frenceHistory.getVedio());
+
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
             if (map!=null){
                 frenceVO.setMapName(map.getMapName());
@@ -866,6 +869,8 @@ public class FrenceController {
             frenceVO.setFrenceId(frenceHistory.getFrenceId());
             frenceVO.setUserId(frenceHistory.getUserId());
             frenceVO.setMapkey(frenceHistory.getMapKey());
+            frenceVO.setVedio(frenceHistory.getVedio());
+
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
             if (map!=null){
                 frenceVO.setMapName(map.getMapName());
@@ -955,6 +960,8 @@ public class FrenceController {
                          frenceVO.setFrenceId(frenceHistory.getFrenceId());
                          frenceVO.setUserId(frenceHistory.getUserId());
                          frenceVO.setMapkey(frenceHistory.getMapKey());
+                         frenceVO.setVedio(frenceHistory.getVedio());
+
                          com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
                          if (map!=null){
                              frenceVO.setMapName(map.getMapName());
@@ -1066,6 +1073,8 @@ public class FrenceController {
                     frenceVO.setFrenceId(frenceHistory.getFrenceId());
                     frenceVO.setUserId(frenceHistory.getUserId());
                     frenceVO.setMapkey(frenceHistory.getMapKey());
+                    frenceVO.setVedio(frenceHistory.getVedio());
+
                     com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
                     if (map!=null){
                         frenceVO.setMapName(map.getMapName());
@@ -1280,6 +1289,8 @@ public class FrenceController {
             frenceVO.setFrenceId(frenceHistory.getFrenceId());
             frenceVO.setUserId(frenceHistory.getUserId());
             frenceVO.setMapkey(frenceHistory.getMapKey());
+            frenceVO.setVedio(frenceHistory.getVedio());
+
             com.tg.locationsystem.entity.Map map = mapService.getMapByUuid(frenceHistory.getMapKey());
             if (map != null) {
                 frenceVO.setMapName(map.getMapName());
