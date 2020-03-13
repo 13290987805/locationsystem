@@ -1,11 +1,10 @@
 package com.tg.locationsystem.utils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,6 +84,48 @@ public class TestUtil {
         map.put("sexCode", sexCode);
         return map;
     }
+    //  ffmpeg能解析的格式：（asx，asf，mpg，wmv，3gp，mp4，mov，avi，flv等）
+    public static String processFLV(String inputPath) {
+/*
+      if (!checkfile(inputPath)){
+          _log.warn(inputPath+" is not file");
+          return false;
+         }
+*/
+        List<String> commend = new java.util.ArrayList<String>();
 
-}
+//        commend.add("e:\\videoconver\\ffmpeg\\ffmpeg ");//可以设置环境变量从而省去这行
+        commend.add("ffmpeg");
+        commend.add("-i");
+        commend.add(inputPath);
+
+        try {
+
+            ProcessBuilder builder = new ProcessBuilder();
+            builder.command(commend);
+            builder.redirectErrorStream(true);
+            Process p = builder.start();
+
+            //1. start
+            BufferedReader buf = null; // 保存ffmpeg的输出结果流
+            String line = null;
+            //read the standard output
+
+            buf = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            StringBuffer sb = new StringBuffer();
+            while ((line = buf.readLine()) != null) {
+                System.out.println(line);
+                sb.append(line);
+                continue;
+            }
+            int ret = p.waitFor();//这里线程阻塞，将等待外部转换进程运行成功运行结束后，才往下执行
+            //1. end
+            return sb.toString();
+        } catch (Exception e) {
+//            System.out.println(e);
+            return null;
+        }
+     }
+    }
 

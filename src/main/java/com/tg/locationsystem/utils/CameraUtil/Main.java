@@ -29,18 +29,18 @@ public class Main {
 
 
         StringBuffer sb=new StringBuffer("");
-        sb.append("ffmpeg -i rtsp://admin:Z1234567@192.168.3.40:554-vcodeclibx264");
+        sb.append("ffmpeg -i rtsp://admin:Z1234567@192.168.3.39:554-vcodeclibx264");
         sb.append(" -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an ");
         sb.append("rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 ");
         sb.append("C:\\video\\%03d.mp4");
         System.out.println("sb:"+sb.toString());
 
-        String comm="ffmpeg -i rtsp://admin:Z1234567@192.168.3.40:554-vcodeclibx264 -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 C:\\video\\out%03d.mp4.mp4";
+        String comm="ffmpeg -i rtsp://admin:Z1234567@192.168.3.39:554-vcodeclibx264 -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 C:\\video\\out%03d.mp4.mp4";
         String conn="ffmpeg -i rtsp://admin:Z1234567@192.168.3.40:554-vcodeclibx264 -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 C:\\video\\%03d.mp4";
 
 
 
-        String start = manager.start(id, conn);
+        String start = manager.start(id, comm);
         System.out.println("start:"+start);
     }
 }
