@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--  controlslist="nodownload" 去掉下载按钮 -->
+<!--<video controls="true" controlslist="nodownload"></video>-->
+<video controls="true" ></video>
+</body>
+<script type="text/javascript">
+    //禁用掉video的右键菜单
+    var video=document.getElementsByTagName("video")[0];
+    video.οncοntextmenu=function(){
+        return false;
+    }
+    var url="/static/vedio/002.mp4";  //电脑上视频文件的绝对路径
+    video.src="/vedio/queryVedio?VedioUrl="+url;   //告诉服务器要播放视频文件的路径
+</script>
+</html>

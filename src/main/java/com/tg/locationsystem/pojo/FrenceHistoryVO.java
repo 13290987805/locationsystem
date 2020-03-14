@@ -41,6 +41,8 @@ public class FrenceHistoryVO implements Serializable {
 
     private String mapName;
 
+    private String vedio;
+
     public String getImg() {
         return img;
     }
@@ -183,4 +185,11 @@ public class FrenceHistoryVO implements Serializable {
     public FrenceHistoryVO() {
     }
 
+    public String getVedio() {
+        return vedio;
+    }
+
+    public void setVedio(String vedio) {
+        this.vedio = vedio;
+    }
 }

@@ -16,6 +16,7 @@ import com.tg.locationsystem.utils.CameraUtil.CommandManager;
 import com.tg.locationsystem.utils.CameraUtil.CommandManagerImpl;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
+import com.tg.locationsystem.utils.UploadFileUtil;
 import interfacer.NetWorkCallback;
 import interfacer.UWBCallback;
 import io.netty.bootstrap.ServerBootstrap;
@@ -268,35 +269,58 @@ public class LocationsystemApplication  {
 													//保存视频
 													if (frence.getCameraIds()!=null&&!"".equals(frence.getCameraIds())){
 														String cameraIds = frence.getCameraIds();
-														Camera camera = cameraService.selectByPrimaryKey(Integer.parseInt(cameraIds));
-														if (camera!=null){
-	//ffmpeg -i rtsp://admin:Z1234567@192.168.3.39:554-vcodeclibx264 -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 C:\\Users\\92962\\Pictures\\temp\\out%03d.mp4
-															StringBuffer sb=new StringBuffer("ffmpeg -i ");
-															String id = SystemMap.getCameramap().get(camera.getId());
-															if (id==null||"".equals(id)){
-																String address = camera.getCameraStreamMediaAddress();
-																id=address.substring(22);
-																SystemMap.getCameramap().put(camera.getId(),id);
-															}
-															String string="rtsp://"+camera.getCameraUsername()+":"+camera.getCameraPwd()+"@" + camera.getCameraIp() + ":554";
-															sb.append(string);
-															sb.append("-vcodeclibx264");
-															sb.append(" -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an ");
-															sb.append(camera.getCameraStreamMediaAddress());
-															sb.append("  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 ");
-															//位置视频名称
-															String format = simpleDateFormat.format(new Date());
-															format=format+"_"+id+".mp4";
-															//位置
-															sb.append("C:\\video\\");
-															sb.append(format);
-															//调用摄像头
-															LocationsystemApplication.manager.start(id,sb.toString());
+                                                        String[] ids = cameraIds.split(",");
+                                                        StringBuffer addr=new StringBuffer();
+                                                        for (String id : ids) {
+                                                            Camera camera = cameraService.selectByPrimaryKey(Integer.parseInt(id));
+                                                            if (camera!=null){
+                                                                //ffmpeg -i rtsp://admin:Z1234567@192.168.3.39:554-vcodeclibx264 -b:v 400k -s 640x360 -r 25 -acodec libfaac -b:a 64k -f flv -an rtmp://localhost/live/fourfour  -c copy -map 0 -f segment -segment_time 10 -segment_format mp4 C:\\Users\\92962\\Pictures\\temp\\out%03d.mp4
+                                                                StringBuffer sb=new StringBuffer("ffmpeg -y -i ");
+                                                                String uuid = SystemMap.getCameramap().get(camera.getId());
+                                                                if (uuid==null||"".equals(uuid)){
+                                                                    String address = camera.getCameraStreamMediaAddress();
+                                                                    id=address.substring(22);
+                                                                    SystemMap.getCameramap().put(camera.getId(),uuid);
+                                                                }
+                                                                String string="rtsp://"+camera.getCameraUsername()+":"+camera.getCameraPwd()+"@" + camera.getCameraIp() + ":554";
+                                                                sb.append(string);
+                                                                sb.append("/h264/ch1/main/av_stream?videoCodecType=H.264 ");
+                                                         		sb.append("-g 52 -f mp4 -movflags frag_keyframe+empty_moov");
+                                                                //位置视频名称
+                                                                String format = simpleDateFormat.format(new Date());
+                                                                format=format+"_"+id+".mp4";
+                                                                String path="C:\\video\\"+format+",";
+                                                                addr.append(path);
+                                                                //位置
+																String dir="C:\\video\\";
+																UploadFileUtil.isChartPathExist(dir);
+                                                                sb.append("C:\\video\\");
+                                                                sb.append(format);
+                                                                //调用摄像头
+                                                                LocationsystemApplication.manager.start(uuid,sb.toString());
+                                                                //10s后关闭摄像头
+																new Runnable() {
+																	@Override
+																	public void run() {
+																		try {
+																			Thread.sleep(10000);
+																			LocationsystemApplication.manager.stop(SystemMap.getCameramap().get(camera.getId()));
+																		} catch (InterruptedException e) {
+																			System.out.println("关闭摄像头错误");
+																			e.printStackTrace();
+																		}
+																	}
+																};
 
+                                                            }
+                                                        }
+                                                        //更新报警的视频地址
+                                                        FrenceHistory frenceHistory1 = frenceHistoryService.selectByPrimaryKey(frenceHistory.getId());
+                                                        frenceHistory1.setVedio(addr.toString());
+                                                        //更新
+                                                        frenceHistoryService.updateByPrimaryKeySelective(frenceHistory1);
 
-														}
-
-													}
+                                                    }
 
 											}
 										}

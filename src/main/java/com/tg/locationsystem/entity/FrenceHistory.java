@@ -24,6 +24,8 @@ public class FrenceHistory implements Serializable{
 
     private Integer frenceId;
 
+    private String vedio;
+
     public Integer getId() {
         return id;
     }
@@ -58,6 +60,14 @@ public class FrenceHistory implements Serializable{
 
     public String getStatus() {
         return status;
+    }
+
+    public String getVedio() {
+        return vedio;
+    }
+
+    public void setVedio(String vedio) {
+        this.vedio = vedio;
     }
 
     public void setStatus(String status) {

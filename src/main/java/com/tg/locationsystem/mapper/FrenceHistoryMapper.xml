@@ -11,17 +11,18 @@
     <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="frence_id" jdbcType="INTEGER" property="frenceId" />
+    <result column="vedio" jdbcType="VARCHAR" property="vedio" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, person_idcard, x, y, status, time, map_key, user_id, frence_id
+    id, person_idcard, x, y, status, time, map_key, user_id, frence_id, vedio
   </sql>
 
-    <!--将所有未处理围栏告警设成已处理-->
-    <update id="setAllFrenceHistoryDeal" parameterType="java.util.List" >
-        UPDATE frence_history
-        SET status = '1' WHERE user_id=#{userid} AND status='0'
+  <!--将所有未处理围栏告警设成已处理-->
+  <update id="setAllFrenceHistoryDeal" parameterType="java.util.List" >
+    UPDATE frence_history
+    SET status = '1' WHERE user_id=#{userid} AND status='0'
 
-    </update>
+  </update>
 
   <!--查看用户所有的已处理或者未处理的围栏报警-->
   <select id="getAllFrenceHistoryByIsDeal"  resultMap="BaseResultMap">
@@ -45,26 +46,26 @@
 
 
 
-    <select id="getFrenceHistoryByFrenceIdAndPersonName"  resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from frence_history
-        WHERE   frence_id=#{frenceId}
-        AND person_idcard IN
-        <foreach collection="list" item="idcard" open="(" close=")" separator=",">
-            #{idcard}
-        </foreach>
-    </select>
+  <select id="getFrenceHistoryByFrenceIdAndPersonName"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE   frence_id=#{frenceId}
+    AND person_idcard IN
+    <foreach collection="list" item="idcard" open="(" close=")" separator=",">
+      #{idcard}
+    </foreach>
+  </select>
 
-    <select id="getFrenceHistoryByPersonIdCardss"  resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from frence_history
-        WHERE    person_idcard IN
-        <foreach collection="list" item="idcard" open="(" close=")" separator=",">
-          #{idcard}
-        </foreach>
-    </select>
+  <select id="getFrenceHistoryByPersonIdCardss"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from frence_history
+    WHERE    person_idcard IN
+    <foreach collection="list" item="idcard" open="(" close=")" separator=",">
+      #{idcard}
+    </foreach>
+  </select>
 
 
   <select id="getFrenceHistorysByPersonIdCard"  resultMap="BaseResultMap">
@@ -131,12 +132,14 @@
   <insert id="insert" parameterType="com.tg.locationsystem.entity.FrenceHistory">
     insert into frence_history (id, person_idcard, x, 
       y, status, time, map_key, 
-      user_id, frence_id)
+      user_id, frence_id, vedio
+      )
     values (#{id,jdbcType=INTEGER}, #{personIdcard,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, 
       #{y,jdbcType=DOUBLE}, #{status,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, #{mapKey,jdbcType=VARCHAR}, 
-      #{userId,jdbcType=INTEGER}, #{frenceId,jdbcType=INTEGER})
+      #{userId,jdbcType=INTEGER}, #{frenceId,jdbcType=INTEGER}, #{vedio,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.FrenceHistory" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.FrenceHistory"  useGeneratedKeys="true" keyProperty="id">
     insert into frence_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -165,6 +168,9 @@
       </if>
       <if test="frenceId != null">
         frence_id,
+      </if>
+      <if test="vedio != null">
+        vedio,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -195,6 +201,9 @@
       <if test="frenceId != null">
         #{frenceId,jdbcType=INTEGER},
       </if>
+      <if test="vedio != null">
+        #{vedio,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.FrenceHistory">
@@ -224,6 +233,9 @@
       <if test="frenceId != null">
         frence_id = #{frenceId,jdbcType=INTEGER},
       </if>
+      <if test="vedio != null">
+        vedio = #{vedio,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -236,7 +248,8 @@
       time = #{time,jdbcType=TIMESTAMP},
       map_key = #{mapKey,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
-      frence_id = #{frenceId,jdbcType=INTEGER}
+      frence_id = #{frenceId,jdbcType=INTEGER},
+      vedio = #{vedio,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

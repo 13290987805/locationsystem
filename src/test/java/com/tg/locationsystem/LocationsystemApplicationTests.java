@@ -2,33 +2,31 @@ package com.tg.locationsystem;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.entity.Frence;
+import com.tg.locationsystem.entity.Person;
+import com.tg.locationsystem.entity.Tag;
+import com.tg.locationsystem.entity.TagTest;
 import com.tg.locationsystem.mapper.FrenceHistoryMapper;
 import com.tg.locationsystem.mapper.MyuserMapper;
 import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
-import com.tg.locationsystem.pojo.TestVO;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
-import net.sf.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ws.schild.jave.*;
 
-import java.awt.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -77,9 +75,53 @@ public class LocationsystemApplicationTests {
 	private int maxPoolSize;
 
 	@Test
-	public void test15() {
-		String path = "C:\\video\\000.mp4";
-		System.out.println(path.substring(9));
+	public void test16() throws IOException {
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		String format = "C:\\video\\"+simpleDateFormat.format(new Date());
+		format=format+"_";
+		format=format+UUID.randomUUID().toString()+".mp4";
+		File file=new File(format);
+		if (!file.exists()){
+			file.createNewFile();
+		}
+		System.out.println("成功");
+
+	}
+	@Test
+	public void test15()  throws EncoderException {
+		File source = new File("C:\\Users\\zhourongchun\\Desktop\\locationJar\\locationsystem\\src\\main\\resources\\static\\vedio\\002.mp4"); //源avi格式视频
+		File target = new File("C:\\Users\\zhourongchun\\Desktop\\locationJar\\locationsystem\\src\\main\\resources\\static\\vedio\\003.mp4");//转换后的mp4格式视频
+		 VideoAttributes video = new VideoAttributes();
+		 video.setCodec("libx264");//视频编码格式
+		 video.setBitRate(new Integer(320000));
+		 video.setFrameRate(new Integer(15));//数字设置小了，视频会卡顿
+		video.setFaststart(true);
+		EncodingAttributes attrs = new EncodingAttributes();
+		attrs.setVideoAttributes(video);
+		Encoder encoder = new Encoder();
+		MultimediaObject multimediaObject = new MultimediaObject(source);
+		encoder.encode(multimediaObject, target, attrs);//转换开始。。。
+
+
+	/*	File source = new File("source.avi");
+		File target = new File("target.mp4");
+		AudioAttributes audio = new AudioAttributes();
+		audio.setCodec("libmp3lame");
+		audio.setBitRate(new Integer(56000));
+		audio.setChannels(new Integer(1));
+		audio.setSamplingRate(new Integer(22050));
+		VideoAttributes video = new VideoAttributes();
+		video.setCodec("libx264");
+		EncodingAttributes attrs = new EncodingAttributes();
+		attrs.setFormat("mp4");  //h264编码
+		attrs.setAudioAttributes(audio);
+		attrs.setVideoAttributes(video);
+		Encoder encoder = new Encoder();
+		encoder.encode(source, target, attrs);
+*/
+
+
+
 	}
 
 	@Test

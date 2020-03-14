@@ -659,9 +659,9 @@ public class MapController {
     }
 
     /*
-     *
-     * 查看地图cle配置
-     * */
+    *
+    * 查看地图cle配置
+    * */
     @RequestMapping(value = "getConfigByMapKey",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public ResultBean getConfigByMapKey(@RequestParam("") String MapKey,HttpServletRequest request
@@ -717,4 +717,5 @@ public class MapController {
         resultBean.setSize(list.size());
         return resultBean;
     }
+
 }
