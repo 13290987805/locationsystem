@@ -3,11 +3,7 @@ package com.tg.locationsystem.controller;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
 import com.tg.locationsystem.entity.*;
-import com.tg.locationsystem.maprule.SVGUtil;
-import com.tg.locationsystem.pojo.AddMapVO;
-import com.tg.locationsystem.pojo.CleconfigVO;
-import com.tg.locationsystem.pojo.MapVO;
-import com.tg.locationsystem.pojo.ResultBean;
+import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.ICleConfigService;
 import com.tg.locationsystem.service.IMapRuleService;
 import com.tg.locationsystem.service.IMapService;
@@ -25,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -496,12 +490,14 @@ public class MapController {
             sb.append(s);
         }
         br.close();
-
+        MapDataVo mapDataVo = new MapDataVo();
+        mapDataVo.setMapData(sb.toString());
+        mapDataVo.setMapProportion(map.getProportion());
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
-        List<String> list=new ArrayList<>();
-        list.add(sb.toString());
+        List<MapDataVo> list=new ArrayList<>();
+        list.add(mapDataVo);
         resultBean.setData(list);
         resultBean.setSize(list.size());
         return resultBean;
@@ -657,6 +653,66 @@ public class MapController {
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
         List<Map> list=new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+
+    /*
+     *
+     * 查看地图cle配置
+     * */
+    @RequestMapping(value = "getConfigByMapKey",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResultBean getConfigByMapKey(@RequestParam("") String MapKey,HttpServletRequest request
+    ) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (MapKey == null || "".equals(MapKey)) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("参数有误,地图key不能为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        Map map = mapService.getMapByUuid(MapKey);
+        if (map == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该地图为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        CleConfig config = cleConfigService.getConfigByMapKey(MapKey);
+        if (config==null){
+            config=new CleConfig();
+            config.setMapKey(MapKey);
+            config.setAskTime("10");
+            config.setSendTime("10");
+            config.setChannel("2");
+            cleConfigService.insertSelective(config);
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List<CleConfig> list=new ArrayList<>();
+        list.add(config);
         resultBean.setData(list);
         resultBean.setSize(list.size());
         return resultBean;
