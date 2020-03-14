@@ -42,7 +42,7 @@
     values (#{id,jdbcType=INTEGER}, #{mapKey,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, 
       #{askTime,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.CleConfig">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.CleConfig" useGeneratedKeys="true" keyProperty="id">
     insert into cle_config
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

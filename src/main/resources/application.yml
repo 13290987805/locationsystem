@@ -53,7 +53,7 @@ server:
     remote-ip-header: x-forward-for
     uri-encoding: utf-8
     max-threads: 1000
-  connection-timeout: 20000
+  connection-timeout: 60000
 
 
 logging:

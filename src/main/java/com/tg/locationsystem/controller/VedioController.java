@@ -29,6 +29,7 @@ public class VedioController {
 
     /*
     * 视频下载
+    *
     * */
     @RequestMapping(value = "downVedio",method = RequestMethod.GET)
     public void   querygoodsTypeImg(@RequestParam("VedioUrl") String url, HttpServletResponse response,

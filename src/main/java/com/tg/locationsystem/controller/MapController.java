@@ -661,4 +661,65 @@ public class MapController {
         resultBean.setSize(list.size());
         return resultBean;
     }
+
+    /*
+    *
+    * 查看地图cle配置
+    * */
+    @RequestMapping(value = "getConfigByMapKey",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResultBean getConfigByMapKey(@RequestParam("") String MapKey,HttpServletRequest request
+    ) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (MapKey == null || "".equals(MapKey)) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("参数有误,地图key不能为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        Map map = mapService.getMapByUuid(MapKey);
+        if (map == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该地图为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        CleConfig config = cleConfigService.getConfigByMapKey(MapKey);
+        if (config==null){
+            config=new CleConfig();
+            config.setMapKey(MapKey);
+            config.setAskTime("10");
+            config.setSendTime("10");
+            config.setChannel("2");
+            cleConfigService.insertSelective(config);
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List<CleConfig> list=new ArrayList<>();
+        list.add(config);
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+
 }
