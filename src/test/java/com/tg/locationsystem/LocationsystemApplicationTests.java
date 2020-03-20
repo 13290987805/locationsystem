@@ -12,6 +12,7 @@ import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
+import com.tg.locationsystem.pojo.TestVO;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ws.schild.jave.*;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,16 +77,13 @@ public class LocationsystemApplicationTests {
 	private int maxPoolSize;
 
 	@Test
-	public void test16() throws IOException {
-		DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-		String format = "C:\\video\\"+simpleDateFormat.format(new Date());
-		format=format+"_";
-		format=format+UUID.randomUUID().toString()+".mp4";
-		File file=new File(format);
-		if (!file.exists()){
-			file.createNewFile();
-		}
-		System.out.println("成功");
+	public void test16() throws Exception {
+	//ALTER TABLE post/*post:表名*/ ADD COLUMN h_id/*h_id:列名*/ INT;
+		Object objects = tableMapper.TEST_VO2(23);
+
+			TestVO test= (TestVO) objects;
+			System.out.println(test.toString());
+
 
 	}
 	@Test
