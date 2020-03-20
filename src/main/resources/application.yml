@@ -1,8 +1,13 @@
 spring:
+  influx:
+    url: http://localhost:8086
+    user: admin
+    password: admin
+    database: historyData
   datasource:
     url: jdbc:mysql://localhost:3306/location_system?useUnicode=trueuse&characterEncoding=UTF-8useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
     username: root
-    password: 123456
+    password: root123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     #以下为连接池的相关参数配置

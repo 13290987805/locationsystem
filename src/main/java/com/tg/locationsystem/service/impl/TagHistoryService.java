@@ -39,8 +39,8 @@ public class TagHistoryService extends BaseServiceImpl<TagHistory> implements IT
     }
 
     @Override
-    public List<TagHistory> getHistoryTest(String format, String add) {
-        return tagHistoryMapper.getHistoryTest(format,add) ;
+    public List<TagHistory> getHistoryTest(String format) {
+        return tagHistoryMapper.getHistoryTest(format) ;
     }
 
     @Override

@@ -101,7 +101,13 @@
             <artifactId>netty-all</artifactId>
             <version>5.0.0.Alpha1</version>
         </dependency>
-
+        <!--netty依赖-->
+       <!-- <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId> &lt;!&ndash; Use 'netty-all' for 4.0 or above &ndash;&gt;
+            <version>4.1.10.Final</version>
+            <scope>compile</scope>
+        </dependency>-->
         <!-- swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -235,6 +241,11 @@
             <groupId>gov.nist.math</groupId>
             <artifactId>jama</artifactId>
             <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.influxdb</groupId>
+            <artifactId>influxdb-java</artifactId>
+            <version>2.10</version>
         </dependency>
 
         <!--jave-->
