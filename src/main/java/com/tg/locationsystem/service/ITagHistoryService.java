@@ -15,7 +15,7 @@ public interface ITagHistoryService extends IBaseService<TagHistory> {
     List<TagHistory> getHistoryByAddAndTime(String format,String tagAddress, String startTime, String endTime);
 
 
-    List<TagHistory> getHistoryTest(String format, String s);
+    List<TagHistory> getHistoryTest(String format);
 
     int existTable(String format);
 

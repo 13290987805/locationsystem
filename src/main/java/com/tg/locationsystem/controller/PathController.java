@@ -4,7 +4,11 @@ import com.tg.locationsystem.config.KalmanFilter2;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.DateUtil;
 import com.tg.locationsystem.utils.StringUtils;
+import com.tg.locationsystem.utils.influxDBUtil.InfluxDBConnection;
+import org.influxdb.dto.QueryResult;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,8 +43,11 @@ public class PathController {
     private IMapService mapService;
     @Autowired
     private ITagService tagService;
+    @Autowired
+    private InfluxDBConnection influxDBConnection;
     private  SimpleDateFormat sdf =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     /*
     * 查看人员或物品轨迹
     * */
@@ -540,12 +548,154 @@ public class PathController {
         }
         //System.out.println("date5"+sdf.format(new Date()));
 
-
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("轨迹查询成功");
         resultBean.setData(pathVOList);
         resultBean.setSize(pathVOList.size());
         return resultBean;
+    }
+
+
+    @RequestMapping(value = "queryPathByMap2",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean queryPathByMap2(@Valid TimePathMap timePathMap, BindingResult result,
+                                      HttpServletRequest request) throws ParseException {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //有必填项没填
+        if (result.hasErrors()) {
+            List<String> errorlist = new ArrayList<>();
+            result.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                // 属性
+                String field = fieldError.getField();
+                // 错误信息
+                String message = field + ":" + fieldError.getDefaultMessage();
+                //System.out.println(field + ":" + message);
+                errorlist.add(message);
+            });
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("信息未填完整");
+            resultBean.setData(errorlist);
+            resultBean.setSize(errorlist.size());
+            return resultBean;
+        }
+
+        Map map = mapService.getMapByUuid(timePathMap.getMapkey());
+        if (map == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该地图不存在");
+            List<Map> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        String measurement = "tagHistory" + timePathMap.getTagAddr();
+        String mapKey = timePathMap.getMapkey();
+        String personIdcard = timePathMap.getPersonidcard();
+        Date startTime = DateUtil.utcToLocal(sdf.parse(timePathMap.getStartTime()));
+        Date endTime = DateUtil.utcToLocal(sdf.parse(timePathMap.getEndTime()));
+        if (startTime.getTime() >= endTime.getTime()){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("开始时间不能晚于结束时间");
+            List<TimePathMap> list = new ArrayList<>();
+            list.add(timePathMap);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        String sqlCommand = "select * from \""+measurement+"\" where time>"+startTime.getTime()*1000000+" and time < "+endTime.getTime()*1000000+" and mapKey='"+mapKey+"' and personIdcard='"+personIdcard+"'";
+        QueryResult results = influxDBConnection.query(sqlCommand);
+        if(results.getResults() == null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该标签不存在或无轨迹记录");
+            List<TimePathMap> list = new ArrayList<>();
+            list.add(timePathMap);
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<TagHistoryVO> tagHistories = new ArrayList<TagHistoryVO>();
+        for (QueryResult.Result qresult : results.getResults()) {
+            List<QueryResult.Series> series= qresult.getSeries();
+            for (QueryResult.Series serie : series) {
+//				Map<String, String> tags = serie.getTags();
+                List<List<Object>>  values = serie.getValues();
+                List<String> columns = serie.getColumns();
+                tagHistories.addAll(getQueryData(columns, values));
+            }
+        }
+        TagHistoryVO startPosition = tagHistories.get(0);
+        List<List<TagHistoryVO>> historyList = new ArrayList<>();
+        List<TagHistoryVO> offLine = new ArrayList<>();
+        offLine.add(startPosition);
+        historyList.add(offLine);
+        for (TagHistoryVO thisTag: tagHistories) {
+            if (((thisTag.getTime().getTime()-startPosition.getTime().getTime())/1000) > 30){
+                offLine = new ArrayList<>();
+                startPosition = KalmanFilter2.getInstance().printM2(startPosition,thisTag);
+                offLine.add(startPosition);
+                historyList.add(offLine);
+            }else {
+                startPosition = KalmanFilter2.getInstance().printM2(startPosition,thisTag);
+                offLine.add(startPosition);
+            }
+            startPosition = thisTag;
+        }
+        List<PathVO1> pathVOList = new ArrayList<>();
+
+
+        for (int j = 0; j < historyList.size(); j++) {
+            PathVO1 pathVO = new PathVO1();
+            String stsrt = sdf.format(historyList.get(j).get(0).getTime());
+            String end = sdf.format(historyList.get(j).get(historyList.get(j).size()-1).getTime());
+            pathVO.setPath(StringUtils.getPath1(historyList.get(j)));
+            pathVO.setStartTime(stsrt);
+            pathVO.setEndTime(end);
+            pathVO.setTagHistoryList(historyList.get(j));
+            pathVOList.add(pathVO);
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("轨迹查询成功");
+        resultBean.setData(pathVOList);
+        resultBean.setSize(pathVOList.size());
+        return resultBean;
+    }
+
+    /***整理列名、行数据***/
+    private List<TagHistoryVO> getQueryData(List<String> columns, List<List<Object>> values) throws ParseException {
+        List<TagHistoryVO> lists = new ArrayList<TagHistoryVO>();
+        for (List<Object> list : values) {
+            TagHistoryVO info = new TagHistoryVO();
+            BeanWrapperImpl bean = new BeanWrapperImpl(info);
+            for(int i=0; i< list.size(); i++){
+                String propertyName = columns.get(i);//字段名
+                Object value = list.get(i);//相应字段值
+                if (propertyName.equals("time")) {
+                    value = sdf2.parse(value.toString());
+                }
+                bean.setPropertyValue(propertyName, value);
+            }
+            lists.add(info);
+        }
+        return lists;
     }
 }

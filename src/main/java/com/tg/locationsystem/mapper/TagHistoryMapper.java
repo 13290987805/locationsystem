@@ -23,7 +23,7 @@ public interface TagHistoryMapper extends IBaseDao<TagHistory>{
 
     List<TagHistory> getHistoryByAddAndTime(@Param("format") String format, @Param("tagAddress") String tagAddress, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    List<TagHistory> getHistoryTest(@Param("format")String format, @Param("address")String add);
+    List<TagHistory> getHistoryTest(@Param("format")String format);
 
     int existTable(String format);
 

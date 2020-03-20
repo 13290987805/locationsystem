@@ -2,6 +2,7 @@ package com.tg.locationsystem.config;
 
 import Jama.Matrix;
 import com.tg.locationsystem.entity.TagHistory;
+import com.tg.locationsystem.entity.TagHistoryVO;
 
 public class KalmanFilter2 {
 	private Matrix predictPosition = new Matrix(4, 1);
@@ -72,5 +73,24 @@ public class KalmanFilter2 {
 		t.setId(measuredPosition.getId());
 		return t;
 	}
-	
+	public TagHistoryVO printM2(TagHistoryVO prePosition, TagHistoryVO measuredPosition) {
+
+		double[] ad = {measuredPosition.getX(), measuredPosition.getY()};
+		Matrix meaPositionMatrix = new Matrix(ad,2);
+		double xV = 0.1;
+		double yV = 0.1;
+		double[] pre = {prePosition.getX(), prePosition.getY(),xV,yV};
+		Matrix prePositionMatrix = new Matrix(pre,4);
+
+		Matrix tMatrix = kalmanFilter(prePositionMatrix, meaPositionMatrix);
+		double x = tMatrix.get(0, 0);
+		double y = tMatrix.get(1, 0);
+		TagHistoryVO t = new TagHistoryVO();
+		t.setX(x);
+		t.setY(y);
+		t.setMapKey(measuredPosition.getMapKey());
+		t.setPersonIdcard(measuredPosition.getPersonIdcard());
+		t.setTime(measuredPosition.getTime());
+		return t;
+	}
 }

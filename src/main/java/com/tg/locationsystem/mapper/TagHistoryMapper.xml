@@ -124,7 +124,6 @@
         select
         <include refid="Base_Column_List"/>
         from ${format}
-        WHERE person_idcard=${address}
     </select>
 
 
