@@ -14,11 +14,21 @@
     <result column="person_type" jdbcType="VARCHAR" property="personType" />
     <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
     <result column="person_phone" jdbcType="VARCHAR" property="personPhone" />
+    <result column="dep_id" jdbcType="INTEGER" property="depId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, person_name, person_sex, user_id, person_typeId, person_height, id_card, tag_address, 
-    img, person_type, reserved2_date, person_phone
+    id, person_name, person_sex, user_id, person_typeId, person_height, id_card, tag_address,
+    img, person_type, reserved2_date, person_phone, series_num, dep_id
   </sql>
+
+  <!--根据组织部门id得到人员集合-->
+  <select id="getPersonsByDepId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE    user_id=#{userid}
+    AND dep_id=#{depId}
+  </select>
 
 
   <!--得到所有的登录用户下的人员-->

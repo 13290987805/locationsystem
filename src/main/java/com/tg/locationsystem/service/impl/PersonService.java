@@ -103,5 +103,10 @@ public class PersonService extends BaseServiceImpl<Person> implements IPersonSer
         return personMapper.getPersonListByUserId(userId);
     }
 
+    @Override
+    public List<Person> getPersonsByDepId(Integer userid, Integer depId) {
+        return personMapper.getPersonsByDepId(userid,depId);
+    }
+
 
 }

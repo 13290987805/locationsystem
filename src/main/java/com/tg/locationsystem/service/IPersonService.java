@@ -34,4 +34,6 @@ public interface IPersonService extends IBaseService<Person>{
 
 
     List<Person> getPersonListByUserId(Integer userId);
+
+    List<Person> getPersonsByDepId(Integer id, Integer depId);
 }

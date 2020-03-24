@@ -2,10 +2,7 @@ package com.tg.locationsystem;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tg.locationsystem.entity.Frence;
-import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.entity.Tag;
-import com.tg.locationsystem.entity.TagTest;
+import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.FrenceHistoryMapper;
 import com.tg.locationsystem.mapper.MyuserMapper;
 import com.tg.locationsystem.mapper.PersonMapper;
@@ -15,6 +12,8 @@ import com.tg.locationsystem.maprule.ThroughWall;
 import com.tg.locationsystem.pojo.TestVO;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
+import com.tg.locationsystem.utils.test.BuildTree;
+import com.tg.locationsystem.utils.test.Tree;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -68,6 +68,8 @@ public class LocationsystemApplicationTests {
 	private PersonMapper personMapper;
 	@Autowired
 	private FrenceHistoryMapper frenceHistoryMapper;
+	@Autowired
+	private IDepService depService;
 
 
 	DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -76,14 +78,36 @@ public class LocationsystemApplicationTests {
 	@Value("${async.executor.thread.max_pool_size}")
 	private int maxPoolSize;
 
+    @Test
+    public void test17() throws Exception {
+        /*List<Integer> ids=depService.getDepIdsByParentId(1,4);
+        System.out.println(ids);*/
+
+    }
 	@Test
 	public void test16() throws Exception {
 	//ALTER TABLE post/*post:表名*/ ADD COLUMN h_id/*h_id:列名*/ INT;
-		Object objects = tableMapper.TEST_VO2(23);
+		List<Dep> depList=depService.getDepsByUserId(1);
+		List<Tree<com.tg.locationsystem.utils.test.Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
 
-			TestVO test= (TestVO) objects;
-			System.out.println(test.toString());
+		for (Dep dep : depList) {
+			Tree<com.tg.locationsystem.utils.test.Test> tree = new Tree<com.tg.locationsystem.utils.test.Test>();
+			tree.setId(String.valueOf(dep.getId()));
+			tree.setParentId(String.valueOf(dep.getPid()));
+			tree.setTitle(dep.getName());
+			List<Map<String, Object>> lmp = new ArrayList<Map<String, Object>>();
+			Map<String, Object> mp = new HashMap<String, Object>();
+            /*mp.put("COSTDEVICE_NUMBER", "");
+            mp.put("PRICE_PER", "");
+            mp.put("ORDER_INDEX", "");
+            mp.put("ADJUST_DATE", "");
+            mp.put("IS_LEAF", "");*/
+			lmp.add(mp);
+			trees.add(tree);
+		}
+		Tree<com.tg.locationsystem.utils.test.Test> t = BuildTree.build(trees);
 
+		System.out.println(new Gson().toJson(t));
 
 	}
 	@Test

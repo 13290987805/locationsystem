@@ -22,7 +22,7 @@ public class InfluxDbConfig {
     @Bean
     public InfluxDBConnection influxDbUtils() {
         //System.out.println(influxDBUrl + userName + password + database);
-        return new InfluxDBConnection(userName, password, influxDBUrl, database, "oneDay");
+        return new InfluxDBConnection(userName, password, influxDBUrl, database, "oneYear");
     }
 }
 

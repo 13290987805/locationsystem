@@ -492,6 +492,12 @@ public class MapController {
         br.close();
         MapDataVo mapDataVo = new MapDataVo();
         mapDataVo.setMapData(sb.toString());
+        //若该比例不存在,默认为 1
+        if (map.getProportion()==null||"".equals(map.getProportion())){
+            map.setProportion("1");
+            //
+            mapService.updateByPrimaryKey(map);
+        }
         mapDataVo.setMapProportion(map.getProportion());
         resultBean = new ResultBean();
         resultBean.setCode(1);

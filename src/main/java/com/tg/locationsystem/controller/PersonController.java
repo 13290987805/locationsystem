@@ -51,6 +51,8 @@ public class PersonController {
     private IFrenceHistoryService frenceHistoryService;
     @Autowired
     private IHeartRateHistoryService heartRateHistoryService;
+    @Autowired
+    private IDepService depService;
 
     /*
     * 添加人员
@@ -234,6 +236,14 @@ public class PersonController {
                 if (personType != null) {
                     personVO.setPersonTypeName(personType.getTypeName());
                 }
+                //人员所属组织
+                if (person.getDepId()!=null){
+                    Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                    if (dep!=null){
+                        personVO.setDepName(dep.getName());
+                    }
+                }
+
                 personVOList.add(personVO);
             }
             resultBean = new ResultBean();
@@ -290,6 +300,13 @@ public class PersonController {
             PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
+            }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                }
             }
             personVOList.add(personVO);
         }
@@ -599,6 +616,13 @@ public class PersonController {
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
             }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                }
+            }
             personVOList.add(personVO);
         }
         PageInfo<PersonVO> page= new PageInfo<>(personVOList);
@@ -671,6 +695,13 @@ public class PersonController {
             PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
+            }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                }
             }
             personVOList.add(personVO);
         }
@@ -1192,6 +1223,13 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
                 if (personType!=null){
                     personVO.setPersonTypeName(personType.getTypeName());
                 }
+                //人员所属组织
+                if (person.getDepId()!=null){
+                    Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                    if (dep!=null){
+                        personVO.setDepName(dep.getName());
+                    }
+                }
                 personVOList.add(personVO);
             }
             PageInfo<PersonVO> page= new PageInfo<>(personVOList);
@@ -1246,6 +1284,13 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
             PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
             if (personType != null) {
                 personVO.setPersonTypeName(personType.getTypeName());
+            }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                }
             }
             personVOList.add(personVO);
         }
@@ -1322,6 +1367,13 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
             PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
+            }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                }
             }
             personVOList.add(personVO);
         }

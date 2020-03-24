@@ -5,7 +5,6 @@ import com.tg.locationsystem.entity.FrenceHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface FrenceHistoryMapper extends IBaseDao<FrenceHistory>{
     int deleteByPrimaryKey(Integer id);
@@ -28,7 +27,7 @@ public interface FrenceHistoryMapper extends IBaseDao<FrenceHistory>{
 
     int deleteHistoryByFrenceId(Integer frenceid);
 
-    List<FrenceHistory> getFrenceHistoryByPersonIdCard(@Param("userid") Integer id,@Param("idCard") String idCard);
+    List<FrenceHistory> getFrenceHistoryByPersonIdCard(@Param("userid") Integer id, @Param("idCard") String idCard);
 
     List<FrenceHistory> getFrenceHistorysByPersonIdCard(@Param("userid") Integer id, @Param("idCard") String idCard);
 

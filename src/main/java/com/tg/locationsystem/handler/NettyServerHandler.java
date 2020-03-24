@@ -89,7 +89,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         nettyServerHandler.heartRateSetService=this.heartRateSetService;
         nettyServerHandler.personService=this.personService;
         nettyServerHandler.goodsService=this.goodsService;
-
     }
 
     public static Tag getTagByOnlyAddress(String aAddress){
