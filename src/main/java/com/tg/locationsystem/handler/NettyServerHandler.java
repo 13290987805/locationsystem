@@ -2,32 +2,27 @@ package com.tg.locationsystem.handler;
 
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.AlertVO;
-import com.tg.locationsystem.pojo.DateJsonValueProcessor;
 import com.tg.locationsystem.service.*;
+
+
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
-import com.tg.locationsystem.utils.filewriteutil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.ReferenceCountUtil;
-import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author hyy

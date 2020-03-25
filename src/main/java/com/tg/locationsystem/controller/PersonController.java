@@ -108,7 +108,7 @@ public class PersonController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Tag usetag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag usetag = tagService.getTagByAddress(person.getTagAddress());
         if ("1".equals(usetag.getUsed())){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -124,7 +124,7 @@ public class PersonController {
         if (person.getTagAddress()==null){
             person.setTagAddress("");
         }
-        Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(person.getTagAddress());
         if (tag!=null){
             tag.setUsed("1");
             //更新标签表
@@ -369,7 +369,7 @@ public class PersonController {
                 location.setUserId(person.getUserId());
                 location.setTagAddress(person.getTagAddress());
 
-                Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+                Tag tag = tagService.getTagByAddress(person.getTagAddress());
                 if (tag!=null){
                     location.setTag(tag);
                 }
@@ -746,7 +746,7 @@ public ResultBean deletePerson(HttpServletRequest request,
     if (delete>0){
 
         //更新标签,使标签变为未使用状态
-        Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(person.getTagAddress());
         if (tag!=null){
             tag.setUsed("0");
             int updatetag = tagService.updateByPrimaryKeySelective(tag);

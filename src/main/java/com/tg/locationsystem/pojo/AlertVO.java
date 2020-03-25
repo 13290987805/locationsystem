@@ -1,12 +1,8 @@
 package com.tg.locationsystem.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tg.locationsystem.entity.Goods;
-import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.entity.Tag;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author hyy

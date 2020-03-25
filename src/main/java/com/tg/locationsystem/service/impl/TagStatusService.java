@@ -4,17 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
-import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.entity.TagStatus;
 import com.tg.locationsystem.mapper.*;
 import com.tg.locationsystem.pojo.QueryTagStatusVO;
-import com.tg.locationsystem.pojo.TagStatusVO;
-import com.tg.locationsystem.pojo.TagVO;
-import com.tg.locationsystem.service.ITagService;
 import com.tg.locationsystem.service.ITagStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

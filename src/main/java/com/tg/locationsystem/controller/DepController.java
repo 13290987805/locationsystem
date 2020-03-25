@@ -1,13 +1,11 @@
 package com.tg.locationsystem.controller;
 
 import com.google.gson.Gson;
-import com.tg.locationsystem.entity.Dep;
-import com.tg.locationsystem.entity.Frence;
-import com.tg.locationsystem.entity.Myuser;
-import com.tg.locationsystem.entity.Person;
+import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.IDepService;
 import com.tg.locationsystem.service.IPersonService;
+import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.test.BuildTree;
 import com.tg.locationsystem.utils.test.Test;
 import com.tg.locationsystem.utils.test.Tree;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
+import java.util.Map;
 
 /**
  * @author hyy
@@ -242,5 +241,85 @@ public ResultBean deleteDep(@RequestParam("") Integer DepId, HttpServletRequest 
     resultBean.setData(list);
     resultBean.setSize(list.size());
     return resultBean;
+}
+
+/*
+* 修改组织部门每次
+* */
+@RequestMapping(value = "updateDep",method = {RequestMethod.POST,RequestMethod.GET})
+@ResponseBody
+public ResultBean updateDep(@Valid Dep dep, BindingResult result, HttpServletRequest request
+) {
+    ResultBean resultBean;
+    Myuser user = (Myuser) request.getSession().getAttribute("user");
+    //未登录
+    if (user == null) {
+        resultBean = new ResultBean();
+        resultBean.setCode(5);
+        resultBean.setMsg("还未登录");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    //有必填项没填
+    if (result.hasErrors()) {
+        List<String> errorlist = new ArrayList<>();
+        result.getAllErrors().forEach((error) -> {
+            FieldError fieldError = (FieldError) error;
+            // 属性
+            String field = fieldError.getField();
+            // 错误信息
+            String message = field + ":" + fieldError.getDefaultMessage();
+            //System.out.println(field + ":" + message);
+            errorlist.add(message);
+        });
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("信息未填完整");
+        resultBean.setData(errorlist);
+        resultBean.setSize(errorlist.size());
+        return resultBean;
+    }
+    if (dep.getId() == null || "".equals(dep.getId())) {
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("参数有误,部门id不能为空");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    //是否存在该组织部门
+    Dep sqldDep = depService.selectByPrimaryKey(dep.getId());
+    if (sqldDep == null) {
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("该部门不存在");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    int update = depService.updateByPrimaryKeySelective(dep);
+
+    if (update>0){
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("部门名称修改成功");
+        List<Dep> list = new ArrayList<>();
+        list.add(dep);
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }else {
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("部门名称修改失败");
+        List<Dep> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
 }
 }

@@ -97,7 +97,7 @@ public class TagController {
         }
 
         //标签已经存在
-        Tag mytag=tagService.getTagByAddress(tag.getAddress(),user.getId());
+        Tag mytag=tagService.getTagByAddress(tag.getAddress());
         if (mytag!=null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);

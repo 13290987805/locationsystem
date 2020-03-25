@@ -49,7 +49,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     //处理服务端返回的数据
-    @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
         try {
             // System.out.println("22ctx: "+ctx);
@@ -168,5 +167,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             /* ReferenceCountUtil.release(msg);*/
         }
     }
+
 
 }

@@ -9,7 +9,6 @@ import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TableMapper;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
-import com.tg.locationsystem.pojo.TestVO;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
 import com.tg.locationsystem.utils.test.BuildTree;
@@ -23,11 +22,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ws.schild.jave.*;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
