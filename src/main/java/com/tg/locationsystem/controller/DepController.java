@@ -136,6 +136,16 @@ public class DepController {
         List<Dep> depList=depService.getDepsByUserId(user.getId());
         List<Tree<Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
 
+
+        if (depList.size()==0||depList==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List<Tree> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
         for (Dep dep : depList) {
             Tree<com.tg.locationsystem.utils.test.Test> tree = new Tree<com.tg.locationsystem.utils.test.Test>();
             tree.setId(String.valueOf(dep.getId()));

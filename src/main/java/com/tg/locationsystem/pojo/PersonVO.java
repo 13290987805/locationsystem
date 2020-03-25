@@ -38,6 +38,8 @@ public class PersonVO implements Serializable {
 
     private String depName;
 
+    private Integer depId;
+
     public Integer getId() {
         return id;
     }
@@ -143,6 +145,14 @@ public class PersonVO implements Serializable {
     }
 
     public PersonVO() {
+    }
+
+    public Integer getDepId() {
+        return depId;
+    }
+
+    public void setDepId(Integer depId) {
+        this.depId = depId;
     }
 
     public String getDepName() {
