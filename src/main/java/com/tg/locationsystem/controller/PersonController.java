@@ -1425,7 +1425,10 @@ public ResultBean getPersonsByDepId(HttpServletRequest request,
         resultBean.setSize(list.size());
         return resultBean;
     }
-    PageInfo<Person> pageInfo=personService.getPersonsByDepIdPage(user.getId(),depId,pageIndex,pageSize);
+    //得到该组织id下的子节点
+    List<Integer> depIds = depService.getDepIdsByParentId(user.getId(), depId);
+    depIds.add(depId);
+    PageInfo<Person> pageInfo=personService.getPersonsByDepIdPage(user.getId(),depIds,pageIndex,pageSize);
 
     List<PersonVO> personVOList=new ArrayList<>();
     for (Person person : pageInfo.getList()) {
@@ -1455,6 +1458,9 @@ public ResultBean getPersonsByDepId(HttpServletRequest request,
         }
         personVOList.add(personVO);
     }
+
+
+
     PageInfo<PersonVO> page= new PageInfo<>(personVOList);
     page.setPageNum(pageInfo.getPageNum());
     page.setSize(pageInfo.getSize());

@@ -34,7 +34,7 @@ public class Person implements Serializable{
     private String personPhone;
 
     private String seriesNum;
-    @NotBlank(message = "人员所属组织不能为空")
+    @NotNull(message = "人员所属组织不能为空")
     private Integer depId;
 
     @Override

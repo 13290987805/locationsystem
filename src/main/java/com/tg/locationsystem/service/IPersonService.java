@@ -37,5 +37,5 @@ public interface IPersonService extends IBaseService<Person>{
 
     List<Person> getPersonsByDepId(Integer id, Integer depId);
 
-    PageInfo<Person> getPersonsByDepIdPage(Integer id, Integer depId, Integer pageIndex, Integer pageSize);
+    PageInfo<Person> getPersonsByDepIdPage(Integer id, List<Integer> depId, Integer pageIndex, Integer pageSize);
 }
