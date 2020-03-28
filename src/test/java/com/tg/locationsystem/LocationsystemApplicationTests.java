@@ -1,5 +1,6 @@
 package com.tg.locationsystem;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tg.locationsystem.entity.*;
@@ -13,6 +14,11 @@ import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
 import com.tg.locationsystem.utils.test.BuildTree;
 import com.tg.locationsystem.utils.test.Tree;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.subject.Subject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ws.schild.jave.*;
 
+import javax.sql.DataSource;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -78,10 +85,47 @@ public class LocationsystemApplicationTests {
 	@Value("${async.executor.thread.max_pool_size}")
 	private int maxPoolSize;
 
+	@Autowired
+	private DataSource dataSource;
+
+
+
     @Test
     public void test17() throws Exception {
-        /*List<Integer> ids=depService.getDepIdsByParentId(1,4);
-        System.out.println(ids);*/
+		//System.out.println(dataSource);
+		//创建JdbcRealm对象
+		//我们可以看到这里并没有设置查询语句，那么jdbcRealm对象是怎么做到从数据源中拿数据的呢？
+		//点进源码，jdbcRealm构造函数，我们就可以看到答案。
+		JdbcRealm jdbcRealm=new JdbcRealm();
+		jdbcRealm.setDataSource(dataSource);
+		//如果你这句话注释，那么下面的check权限的时候就会抛出异常
+		jdbcRealm.setPermissionsLookupEnabled(true);
+
+		//从数据库查询数据然后验证用户登录身份
+        String userSql="select password from myuser where username=?";
+        jdbcRealm.setAuthenticationQuery(userSql);
+        //验证角色
+        String roleSql="select role_name from myuser_role where username=?";
+        jdbcRealm.setUserRolesQuery(roleSql);
+        //验证权限
+        String permissionSql="select permission from role_permission where role_name=?";
+        jdbcRealm.setPermissionsQuery(permissionSql);
+
+        DefaultSecurityManager defaultSecurityManager=new DefaultSecurityManager();
+        defaultSecurityManager.setRealm(jdbcRealm);
+
+        SecurityUtils.setSecurityManager(defaultSecurityManager);
+        Subject subject=SecurityUtils.getSubject();
+
+        UsernamePasswordToken token=new UsernamePasswordToken("tgck","dGdjaw==");
+        subject.login(token);
+
+        System.out.println("isAuthenticated:"+subject.isAuthenticated());
+        subject.checkRole("admin");
+        subject.checkPermission("query");
+
+
+
 
     }
 	@Test

@@ -52,7 +52,7 @@
     select
     <include refid="Base_Column_List" />
     from person
-    WHERE    user_id=#{userid}
+    WHERE    user_id=#{userid} AND (tag_address IS NOT NULL AND tag_address!='')
   </select>
 
   <!--根据身份证得到人员-->

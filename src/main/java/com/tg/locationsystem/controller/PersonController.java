@@ -10,6 +10,7 @@ import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -268,6 +269,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersons",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("query")
     public ResultBean getPersons(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer pageIndex,
                                   @RequestParam(defaultValue = "1000") Integer pageSize){

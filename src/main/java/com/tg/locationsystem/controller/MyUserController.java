@@ -8,7 +8,13 @@ import com.tg.locationsystem.pojo.UpdatePassword;
 import com.tg.locationsystem.pojo.User;
 import com.tg.locationsystem.service.IEleCallSetService;
 import com.tg.locationsystem.service.IMyUserService;
+import com.tg.locationsystem.utils.TestUtil;
 import com.tg.locationsystem.utils.UploadFileUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -60,7 +66,7 @@ public class MyUserController {
             resultBean.setSize(errorlist.size());
             return resultBean;
         }
-
+        System.out.println(TestUtil.getGoP(request));
         Myuser myuser=myUserService.getUserByName(user.getUsername());
         if (null==myuser){
             resultBean = new ResultBean();
@@ -100,6 +106,41 @@ public class MyUserController {
                     System.out.println("frencemapkey:"+integer+"----"+"frencemapvalue:"+frence.getName());
                 }
             }*/
+            //添加用户认证信息
+            Subject subject = SecurityUtils.getSubject();
+            //密码加密
+            String pwd = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
+            user.setPassword(pwd);
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(
+                    user.getUsername(),
+                    user.getPassword()
+            );
+            try {
+                //进行验证，这里可以捕获异常，然后返回对应信息
+                subject.login(usernamePasswordToken);
+        //            subject.checkRole("admin");
+        //            subject.checkPermissions("query", "add");
+            } catch (AuthenticationException e) {
+                e.printStackTrace();
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("账号或密码错误！");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            } catch (AuthorizationException e) {
+                e.printStackTrace();
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("没有权限！");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+            //将登陆凭证保存到session中
+            request.getSession().setAttribute("user",myuser);
 
             resultBean = new ResultBean();
             resultBean.setCode(1);

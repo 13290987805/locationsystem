@@ -17,6 +17,14 @@ public class TestUtil {
         FileInputStream fis=new FileInputStream(file);
         // System.out.println(fis.available());
         return true;
+        //Request.ServerVariables("Request_Method")="POST"
+    }
+
+    //判断请求是get还是post
+    public static String getGoP(HttpServletRequest request){
+        String method = request.getMethod();
+        return  method;
+
     }
     public static String getIP(HttpServletRequest request){
         String ip = request.getHeader("x-forwarded-for");
