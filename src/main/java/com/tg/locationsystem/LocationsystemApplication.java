@@ -94,7 +94,7 @@ public class LocationsystemApplication  {
 	public static final String BATTERY="_battery";
 	public static final String FRENCE="_frence";
 
-	public static  SkylabSDK skylabSDK=new SkylabSDK(3600,3601);
+	public static  SkylabSDK skylabSDK=new SkylabSDK(3636,3637);
 	//调用摄像头的对象
 	public static CommandManager manager=new CommandManagerImpl(10);
 	@Autowired

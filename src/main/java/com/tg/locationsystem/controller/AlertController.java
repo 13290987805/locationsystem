@@ -154,6 +154,67 @@ private IEleCallSetService eleCallSetService;
         resultBean.setSize(page.getSize());
         return resultBean;
     }
+
+
+    /*
+     * 查看所有报警信息
+     * 不分页
+     * */
+    @RequestMapping(value = "getTagStatusNoPg",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getTagStatusNoPg(HttpServletRequest request) {
+        //System.out.println(System.currentTimeMillis());
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<TagStatus> tagStatusList=tagStatusService.getTagStatusByUserIdNoPg(user.getId());
+        //System.out.println(System.currentTimeMillis());
+        List<TagStatusVO> tagStatusVOList=new ArrayList<>();
+        for (TagStatus tagStatus : tagStatusList) {
+            TagStatusVO tagStatusVO=new TagStatusVO();
+            tagStatusVO.setId(tagStatus.getId());
+            tagStatusVO.setPersonIdcard(tagStatus.getPersonIdcard());
+            tagStatusVO.setData(tagStatus.getData());
+            tagStatusVO.setAlertType(tagStatus.getAlertType());
+            tagStatusVO.setAddTime(tagStatus.getAddTime());
+            tagStatusVO.setUserId(tagStatus.getUserId());
+            tagStatusVO.setMapkey(tagStatus.getMapKey());
+            tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+            tagStatusVO.setVedio(tagStatus.getVedio());
+            //type name
+            Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+            if (person!=null){
+                tagStatusVO.setName(person.getPersonName());
+                tagStatusVO.setImg(person.getImg());
+            }else {
+                Goods goods = goodsMapper.getGoodsByByIdCard(tagStatus.getPersonIdcard());
+                if (goods!=null){
+                    tagStatusVO.setName(goods.getGoodsName());
+                    tagStatusVO.setImg(goods.getImg());
+                }
+            }
+
+            tagStatusVOList.add(tagStatusVO);
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(tagStatusVOList);
+        resultBean.setSize(tagStatusVOList.size());
+        //System.out.println(System.currentTimeMillis());
+        return resultBean;
+    }
+
+
     /*
      * 根据报警类型查看相关报警信息
      * */

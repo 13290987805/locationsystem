@@ -69,7 +69,7 @@ public class TagService extends BaseServiceImpl<Tag> implements ITagService{
 
     @Override
     public List<TagVO> getUsedTags(Integer id) {
-        List<Tag> list = tagMapper.getTagsByUserId(id);
+        List<Tag> list = tagMapper.getUserTags(id);
         List<TagVO> tagVOList=new ArrayList<>();
         for (Tag tag : list) {
             TagVO tagVO=new TagVO();

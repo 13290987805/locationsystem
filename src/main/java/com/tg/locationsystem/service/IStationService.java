@@ -3,6 +3,7 @@ package com.tg.locationsystem.service;
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.Station;
+import com.tg.locationsystem.pojo.StationVO;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface IStationService extends IBaseService<Station> {
     PageInfo<Station> getStationsByMapKey(Integer pageIndex, Integer pageSize, Integer id);
 
     PageInfo<Station> getOnlineStationsByMapKey(Integer pageIndex, Integer pageSize, Integer id);
+
+    List<StationVO> getStationsByUserIdNoPage(Integer id);
 }

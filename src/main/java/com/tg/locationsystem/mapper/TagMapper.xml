@@ -10,6 +10,7 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="tag_typeId" jdbcType="INTEGER" property="tagTypeid" />
     <result column="lastOnline" jdbcType="TIMESTAMP" property="lastonline" />
+    <result column="lastOffline" jdbcType="TIMESTAMP" property="lastoffline" />
     <result column="isOnline" jdbcType="VARCHAR" property="isonline" />
     <result column="z" jdbcType="DOUBLE" property="z" />
     <result column="electric" jdbcType="VARCHAR" property="electric" />
@@ -17,7 +18,7 @@
     <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, address, x, y, used, user_id, tag_typeId, lastOnline, isOnline, z, electric, 
+    id, address, x, y, used, user_id, tag_typeId, lastOffline, lastOnline, isOnline, z, electric,
     address_broadcast, map_key
   </sql>
   <!--//得到地图下所有已使用的标签-->

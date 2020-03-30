@@ -727,6 +727,34 @@ public class CallController {
         resultBean.setSize(statisticsCallList.size());
         return resultBean;
     }
+
+    /*
+     * 查看近10次统计的数据
+     * 不分页
+     * */
+    @RequestMapping(value = "getStatisticsFirst20",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getStatisticsFirst20(HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<StatisticsCall> statisticsCallList=statisticsCallService.getStatisticsCallByUserId(user.getId());
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(statisticsCallList.subList(0,20));
+        resultBean.setSize(20);
+        return resultBean;
+    }
     /*
      * 查看某次统计的具体数据
      * 分页

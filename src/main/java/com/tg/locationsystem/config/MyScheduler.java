@@ -2,6 +2,7 @@ package com.tg.locationsystem.config;
 
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.DateUtil;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.influxDBUtil.InfluxDBConnection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author hyy
@@ -81,116 +84,96 @@ public class MyScheduler {
     }
 
     //每秒执行一次 从缓存中把标签更新到数据库
-//    @Scheduled(cron ="0/1 * * * * ?" )
-//    public void testTasks4() throws ParseException, IOException {
-//        //System.err.println(influxDBConnection.ping());
-//        Map<String, String> map = new HashMap<>();
-//        StringBuffer sb1 = new StringBuffer();
-//        double x = Math.random() * 60;
-//        double y = Math.random() * 25;
-//        Date date = new Date();
-//        sb1.append(x);
-//        sb1.append("," + y);
-//        sb1.append("," + 0);
-//        sb1.append("," + sdf2.format(date));
-//        sb1.append(",656543db-20cf-4fbc-9081-2588f124cacf");
-//        map.put("32DB91CF0001CADE",sb1.toString());
-//        StringBuffer sb2 = new StringBuffer();
-//        x = Math.random() * 60;
-//        y = Math.random() * 25;
-//        sb2.append(x);
-//        sb2.append("," + y);
-//        sb2.append("," + 0);
-//        sb2.append("," + sdf2.format(date));
-//        sb2.append(",656543db-20cf-4fbc-9081-2588f124cacf");
-//        map.put("325081CF0001CADE",sb2.toString());
-//        //Map<String, String> map = SystemMap.getMap();
-//        Date tagDate;
-//        //遍历map中的值
-//        for (String key : map.keySet()) {
-//            String value = map.get(key);
-//            //System.out.println("Key = " + key + ", Value = " + value);
-//            if (value!=null&&!"".equals(value)){
-//                String[] split = value.split(",");
-//                Tag tag = tagService.getTagByOnlyAddress(key);
-//                if (tag==null){
-//                    continue;
-//                }
-//                if (split[0].toString().equals("")||split[0]==null||Double.isNaN(Double.parseDouble(split[0]))){
-//                    split[0]=String.valueOf(tag.getX());
-//                }
-//                if (split[1].toString().equals("")||split[1]==null||Double.isNaN(Double.parseDouble(split[1]))){
-//                    split[1]=String.valueOf(tag.getY());
-//                }
-//                if (split[2].toString().equals("")||split[2]==null||Double.isNaN(Double.parseDouble(split[2]))){
-//                    split[2]=String.valueOf(tag.getZ());
-//                }
-//                if (split[3].toString().equals("")||split[3]==null){
-//                    split[3]=String.valueOf(sdf2.format(tag.getLastonline()));
-//                }
-//                //更新标签表
-//                //System.out.println("ssssssss" + split[3]);
-//                tagDate = sdf2.parse(split[3]);
-//                tag.setX(Double.parseDouble(split[0]));
-//                tag.setY(Double.parseDouble(split[1]));
-//                tag.setZ(Double.parseDouble(split[2]));
-//                tag.setLastonline(tagDate);
-//                if (split[4]!=null&&!"".equals(split[4])){
-//                    tag.setMapKey(split[4]);
-//                }
-//                long now = System.currentTimeMillis()/1000;
-//                long time = tagDate.getTime()/1000;
-//                //System.out.println("当前时间-系统时间:"+(now-time));
-//                if (now-time<UP_TIME){
-//                    tag.setIsonline("1");
-//                }else {
-//                    tag.setIsonline("0");
-//                }
-//
-//                try {
-//                    updatetag(tag);
-//                }catch (Exception s){
-//                    System.out.println("更新标签:"+tag.toString());
-//                    s.printStackTrace();
-//                }
-//
-//
-//                if ("1".equals(tag.getIsonline())) {
-//                    System.out.println("into insert and x = " + Double.parseDouble(split[0]));
-//                    try {
-//                        //将标签的数据存到历史记录表
-//                        TagHistoryVO tagHistory = new TagHistoryVO();
-//                        String peridcard = SystemMap.getTagAndPersonMap().get(key);
-//                        tagHistory.setPersonIdcard(peridcard);
-//                        tagHistory.setX(Double.parseDouble(split[0]));
-//                        tagHistory.setY(Double.parseDouble(split[1]));
-//                        tagHistory.setZ(Double.parseDouble(split[2]));
-//                        tagHistory.setTime(tagDate);
-//                        if (split[4]!=null&&!"".equals(split[4])){
-//                            tagHistory.setMapKey(split[4]);
-//                        }
-//                        //往记录表插入数据
-//                        //inserttagHistory(format2, tagHistory);
-//                        String measurement = "tagHistory" + key;
-//                        Map<String, String> tags = new HashMap<String, String>();
-//                        Map<String, Object> fields = new HashMap<String, Object>();
-//                        tags.put("mapKey",split[4]);
-//                        tags.put("personIdcard",peridcard);
-//
-//                        fields.put("x",Double.parseDouble(split[0]));
-//                        fields.put("y",Double.parseDouble(split[1]));
-//                        fields.put("z",Double.parseDouble(split[2]));
-//                        System.err.println(System.currentTimeMillis());
-//                        influxDBConnection.insert(measurement,tags,fields, DateUtil.utcToLocal(tagDate).getTime(), TimeUnit.MILLISECONDS);
-//                    } catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//            }
-//
-//        }
-//    }
+    @Scheduled(cron ="0/1 * * * * ?" )
+    public void testTasks4() throws ParseException {
+        Map<String, String> map = SystemMap.getMap();
+        Date tagDate;
+        //遍历map中的值
+        for (String key : map.keySet()) {
+            String value = map.get(key);
+            //System.out.println("Key = " + key + ", Value = " + value);
+            if (value!=null&&!"".equals(value)){
+                String[] split = value.split(",");
+                Tag tag = tagService.getTagByOnlyAddress(key);
+                if (tag==null){
+                    continue;
+                }
+                if (split[0].toString().equals("")||split[0]==null||Double.isNaN(Double.parseDouble(split[0]))){
+                    split[0]=String.valueOf(tag.getX());
+                }
+                if (split[1].toString().equals("")||split[1]==null||Double.isNaN(Double.parseDouble(split[1]))){
+                    split[1]=String.valueOf(tag.getY());
+                }
+                if (split[2].toString().equals("")||split[2]==null||Double.isNaN(Double.parseDouble(split[2]))){
+                    split[2]=String.valueOf(tag.getZ());
+                }
+                if (split[3].toString().equals("")||split[3]==null){
+                    split[3]=String.valueOf(sdf2.format(tag.getLastonline()));
+                }
+                //更新标签表
+                //System.out.println("ssssssss" + split[3]);
+                tagDate = sdf2.parse(split[3]);
+                tag.setX(Double.parseDouble(split[0]));
+                tag.setY(Double.parseDouble(split[1]));
+                tag.setZ(Double.parseDouble(split[2]));
+                tag.setLastonline(tagDate);
+                if (split[4]!=null&&!"".equals(split[4])){
+                    tag.setMapKey(split[4]);
+                }
+                long now = System.currentTimeMillis()/1000;
+                long time = tagDate.getTime()/1000;
+                //System.out.println("当前时间-系统时间:"+(now-time));
+                if (now-time<UP_TIME){
+                    tag.setIsonline("1");
+                }else {
+                    tag.setLastoffline(tagDate);
+                    tag.setIsonline("0");
+                }
+
+                try {
+                    updatetag(tag);
+                }catch (Exception s){
+                    System.out.println("更新标签:"+tag.toString());
+                    s.printStackTrace();
+                }
+
+
+                if ("1".equals(tag.getIsonline())) {
+                    //System.out.println("into insert and x = " + Double.parseDouble(split[0]));
+                    try {
+                        //将标签的数据存到历史记录表
+                        TagHistoryVO tagHistory = new TagHistoryVO();
+                        String peridcard = SystemMap.getTagAndPersonMap().get(key);
+                        tagHistory.setPersonIdcard(peridcard);
+                        tagHistory.setX(Double.parseDouble(split[0]));
+                        tagHistory.setY(Double.parseDouble(split[1]));
+                        tagHistory.setZ(Double.parseDouble(split[2]));
+                        tagHistory.setTime(tagDate);
+                        if (split[4]!=null&&!"".equals(split[4])){
+                            tagHistory.setMapKey(split[4]);
+                        }
+                        //往记录表插入数据
+                        //inserttagHistory(format2, tagHistory);
+                        String measurement = "tagHistory" + key;
+                        Map<String, String> tags = new HashMap<String, String>();
+                        Map<String, Object> fields = new HashMap<String, Object>();
+                        tags.put("mapKey",split[4]);
+                        tags.put("personIdcard",peridcard);
+
+                        fields.put("x",Double.parseDouble(split[0]));
+                        fields.put("y",Double.parseDouble(split[1]));
+                        fields.put("z",Double.parseDouble(split[2]));
+                        System.err.println(System.currentTimeMillis());
+                        influxDBConnection.insert(measurement,tags,fields, DateUtil.utcToLocal(tagDate).getTime(), TimeUnit.MILLISECONDS);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+        }
+    }
 
 
 
@@ -245,6 +228,7 @@ public class MyScheduler {
                     if (now-time<UP_TIME){
                         tag.setIsonline("1");
                     }else {
+                        tag.setLastoffline(sdf2.parse(split[3]));
                         tag.setIsonline("0");
                     }
 

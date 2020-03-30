@@ -168,6 +168,7 @@ public class StationController {
 
    /*
    * 查看网关设备信息
+   * 分页
    * */
    @RequestMapping(value = "getStations",method = RequestMethod.GET)
    @ResponseBody
@@ -247,6 +248,41 @@ public class StationController {
        resultBean.setSize(page.getSize());
        return resultBean;
    }
+
+
+
+    /*
+     * 查看网关设备信息
+     * 不分页
+     * */
+    @RequestMapping(value = "getStationsNoPg",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getStationsNoPg(HttpServletRequest request){
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        List<StationVO> stationVOList=stationService.getStationsByUserIdNoPage(user.getId());
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(stationVOList);
+        resultBean.setSize(stationVOList.size());
+        return resultBean;
+    }
+
+
 
    /*
    * 配置基站

@@ -161,7 +161,7 @@ public class InfluxDBConnection {
         builder.tag(tags);
         builder.fields(fields);
         if (0 != time) {
-            System.err.println(time);
+            //System.err.println(time);
             builder.time(time, timeUnit);
         }
         influxDB.write(database, retentionPolicy, builder.build());

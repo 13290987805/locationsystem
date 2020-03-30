@@ -23,7 +23,8 @@ public class Tag implements Serializable{
     private Integer tagTypeid;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastonline;
-
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date lastoffline;
     private String isonline;
 
     private Double z;
@@ -129,6 +130,14 @@ public class Tag implements Serializable{
 
     public void setAddressBroadcast(String addressBroadcast) {
         this.addressBroadcast = addressBroadcast == null ? null : addressBroadcast.trim();
+    }
+
+    public Date getLastoffline() {
+        return lastoffline;
+    }
+
+    public void setLastoffline(Date lastoffline) {
+        this.lastoffline = lastoffline;
     }
 
     @Override

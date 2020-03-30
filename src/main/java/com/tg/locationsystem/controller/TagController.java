@@ -355,7 +355,7 @@ public class TagController {
             return resultBean;
         }
 
-       List<TagVO> tagList= tagService.getUsedTags(user.getId());
+        List<TagVO> tagList= tagService.getUsedTags(user.getId());
 
         resultBean = new ResultBean();
         resultBean.setCode(1);
@@ -1396,7 +1396,56 @@ public class TagController {
 
     }
 
+    /*
+     * 查看标签在线时长top10
+     * 不分页
+     * */
+    @RequestMapping(value = "getLongTimeTagTop10",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getLongTimeTagTop10(HttpServletRequest request){
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<TagVO2> tagVO2List = new ArrayList<>();
+        List<Tag> tagList= tagService.getUserTags(user.getId());
+        for (Tag tempTag : tagList) {
+            TagVO2 tagVO2 = new TagVO2();
+            tagVO2.setAddress(tempTag.getAddress());
+            tagVO2.setId(tempTag.getId());
+            tagVO2.setIsonline(tempTag.getIsonline());
+            tagVO2.setMapKey(tempTag.getMapKey());
+            tagVO2.setUserId(tempTag.getUserId());
+            tagVO2.setOnlineTime(tempTag.getLastonline().getTime() - tempTag.getLastoffline().getTime());
+            tagVO2List.add(tagVO2);
+        }
 
+        Collections.sort(tagVO2List, new Comparator<TagVO2>() {
+            @Override
+            public int compare(TagVO2 o1, TagVO2 o2) {
+                int i = (int) (o2.getOnlineTime() - o1.getOnlineTime());
+                if (i == 0){
+                    return o2.getId() - o1.getId();
+                }
+                return i;
+            }
+        });
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(tagVO2List.subList(0,10));
+        resultBean.setSize( 10);
+        return resultBean;
+    }
 
 
 }
