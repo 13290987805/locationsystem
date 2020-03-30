@@ -7,9 +7,11 @@ import java.util.Set;
 public class MyuserRole implements Serializable{
     private Integer id;
 
-    private String username;
+    private Integer userId;
 
-    private String roleName;
+    private String roleId;
+
+    private String remark;
 
     /**
      * 角色对应权限集合
@@ -24,18 +26,6 @@ public class MyuserRole implements Serializable{
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
     public Set<RolePermission> getPermissions() {
         return permissions;
     }
@@ -44,17 +34,38 @@ public class MyuserRole implements Serializable{
         this.permissions = permissions;
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "MyuserRole{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", roleName='" + roleName + '\'' +
+                ", userId=" + userId +
+                ", roleId='" + roleId + '\'' +
+                ", remark='" + remark + '\'' +
                 ", permissions=" + permissions +
                 '}';
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName == null ? null : roleName.trim();
     }
 }

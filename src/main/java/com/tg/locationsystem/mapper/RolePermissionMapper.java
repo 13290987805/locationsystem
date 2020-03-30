@@ -20,5 +20,7 @@ public interface RolePermissionMapper extends IBaseDao<RolePermission>{
     int updateByPrimaryKey(RolePermission record);
 
 
-    Set<RolePermission> getRolePermissionSet(String roleName);
+    //Set<RolePermission> getRolePermissionSet(String roleName);
+
+    Set<RolePermission> getRolePermissionSetByRoleId(String roleId);
 }

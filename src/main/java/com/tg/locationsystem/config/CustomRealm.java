@@ -3,6 +3,8 @@ package com.tg.locationsystem.config;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.MyuserRole;
 import com.tg.locationsystem.entity.RolePermission;
+import com.tg.locationsystem.pojo.MyuserRoleVO;
+import com.tg.locationsystem.pojo.RolePermissionVO;
 import com.tg.locationsystem.service.IMyUserService;
 
 import org.apache.shiro.authc.AuthenticationException;
@@ -37,13 +39,13 @@ public class CustomRealm extends AuthorizingRealm {
         //System.out.println("用户:"+user);
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        for (MyuserRole role : user.getRoles()) {
+        for (MyuserRoleVO role : user.getRoles()) {
             //添加角色
             simpleAuthorizationInfo.addRole(role.getRoleName());
             //添加权限
-            for (RolePermission permissions : role.getPermissions()) {
-                System.out.println("权限:"+permissions);
-                simpleAuthorizationInfo.addStringPermission(permissions.getPermission());
+            for (RolePermissionVO permissions : role.getPermissions()) {
+                //System.out.println("权限:"+permissions);
+                simpleAuthorizationInfo.addStringPermission(permissions.getPermissionName());
             }
         }
         return simpleAuthorizationInfo;

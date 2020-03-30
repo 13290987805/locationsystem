@@ -3,20 +3,20 @@
 <mapper namespace="com.tg.locationsystem.mapper.RolePermissionMapper">
   <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.RolePermission">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
-    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, role_name, permission
+    id, role_id, permission_id, remark
   </sql>
 
-
-  <!--根据角色名得到权限对象-->
-  <select id="getRolePermissionSet"  resultMap="BaseResultMap">
+  <!--根据角色id得到角色权限对象-->
+  <select id="getRolePermissionSetByRoleId"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from role_permission
-    WHERE    role_name=#{roleName}
+    WHERE  role_id=#{roleId}
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -30,10 +30,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.tg.locationsystem.entity.RolePermission">
-    insert into role_permission (id, role_name, permission
-      )
-    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}
-      )
+    insert into role_permission (id, role_id, permission_id, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.RolePermission">
     insert into role_permission
@@ -41,41 +41,51 @@
       <if test="id != null">
         id,
       </if>
-      <if test="roleName != null">
-        role_name,
+      <if test="roleId != null">
+        role_id,
       </if>
-      <if test="permission != null">
-        permission,
+      <if test="permissionId != null">
+        permission_id,
+      </if>
+      <if test="remark != null">
+        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="roleName != null">
-        #{roleName,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        #{roleId,jdbcType=VARCHAR},
       </if>
-      <if test="permission != null">
-        #{permission,jdbcType=VARCHAR},
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.RolePermission">
     update role_permission
     <set>
-      <if test="roleName != null">
-        role_name = #{roleName,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=VARCHAR},
       </if>
-      <if test="permission != null">
-        permission = #{permission,jdbcType=VARCHAR},
+      <if test="permissionId != null">
+        permission_id = #{permissionId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.RolePermission">
     update role_permission
-    set role_name = #{roleName,jdbcType=VARCHAR},
-      permission = #{permission,jdbcType=VARCHAR}
+    set role_id = #{roleId,jdbcType=VARCHAR},
+      permission_id = #{permissionId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -2,6 +2,8 @@ package com.tg.locationsystem.entity;
 
 
 
+import com.tg.locationsystem.pojo.MyuserRoleVO;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -36,7 +38,7 @@ public class Myuser implements Serializable{
     /**
      * 用户对应的角色集合
      */
-    private Set<MyuserRole> roles;
+    private Set<MyuserRoleVO> roles;
 
     public Integer getId() {
         return id;
@@ -130,11 +132,11 @@ public class Myuser implements Serializable{
         return parentId;
     }
 
-    public Set<MyuserRole> getRoles() {
+    public Set<MyuserRoleVO> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<MyuserRole> roles) {
+    public void setRoles(Set<MyuserRoleVO> roles) {
         this.roles = roles;
     }
 

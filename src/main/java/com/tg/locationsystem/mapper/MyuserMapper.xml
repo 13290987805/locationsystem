@@ -50,7 +50,7 @@
       #{logo,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Myuser">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Myuser"  useGeneratedKeys="true" keyProperty="id">
     insert into myuser
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

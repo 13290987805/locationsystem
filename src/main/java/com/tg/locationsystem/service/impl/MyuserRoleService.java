@@ -21,4 +21,9 @@ public class MyuserRoleService  extends BaseServiceImpl<MyuserRole> implements I
     public IBaseDao<MyuserRole> getBaseDao() {
         return myuserRoleMapper;
     }
+
+    @Override
+    public MyuserRole getMyuserRoleByRoleId(Integer roleId) {
+        return myuserRoleMapper.getMyuserRoleByRoleId(roleId);
+    }
 }

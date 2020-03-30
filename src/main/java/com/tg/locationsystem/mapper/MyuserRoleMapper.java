@@ -3,7 +3,6 @@ package com.tg.locationsystem.mapper;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.MyuserRole;
 
-
 import java.util.Set;
 
 public interface MyuserRoleMapper extends IBaseDao<MyuserRole>{
@@ -19,5 +18,7 @@ public interface MyuserRoleMapper extends IBaseDao<MyuserRole>{
 
     int updateByPrimaryKey(MyuserRole record);
 
-    Set<MyuserRole> getMyuserRoleSet(String username);
+    Set<MyuserRole> getMyuserRoleSet(Integer id);
+
+    MyuserRole getMyuserRoleByRoleId(Integer roleId);
 }

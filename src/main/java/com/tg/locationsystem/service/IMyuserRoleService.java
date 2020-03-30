@@ -8,4 +8,5 @@ import com.tg.locationsystem.entity.MyuserRole;
  * @ Date2020/3/28
  */
 public interface IMyuserRoleService extends IBaseService<MyuserRole> {
+    MyuserRole getMyuserRoleByRoleId(Integer roleId);
 }

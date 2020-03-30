@@ -3,19 +3,28 @@
 <mapper namespace="com.tg.locationsystem.mapper.MyuserRoleMapper">
   <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.MyuserRole">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, role_name
+    id, user_id, role_id, remark
   </sql>
 
-  <!--根据用户名得到角色集合-->
+  <!--根据角色id得到角色用户-->
+  <select id="getMyuserRoleByRoleId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from myuser_role
+    WHERE role_id=#{roleId}
+  </select>
+
+  <!--根据戹id得到角色相关-->
   <select id="getMyuserRoleSet"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from myuser_role
-    WHERE    username=#{username}
+    WHERE user_id=#{id}
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -29,52 +38,63 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.tg.locationsystem.entity.MyuserRole">
-    insert into myuser_role (id, username, role_name
-      )
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}
-      )
+    insert into myuser_role (id, user_id, role_id, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{roleId,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.MyuserRole">
+
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.MyuserRole" useGeneratedKeys="true" keyProperty="id">
     insert into myuser_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="username != null">
-        username,
+      <if test="userId != null">
+        user_id,
       </if>
-      <if test="roleName != null">
-        role_name,
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="remark != null">
+        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
-      <if test="roleName != null">
-        #{roleName,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.MyuserRole">
     update myuser_role
     <set>
-      <if test="username != null">
-        username = #{username,jdbcType=VARCHAR},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="roleName != null">
-        role_name = #{roleName,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.MyuserRole">
     update myuser_role
-    set username = #{username,jdbcType=VARCHAR},
-      role_name = #{roleName,jdbcType=VARCHAR}
+    set user_id = #{userId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

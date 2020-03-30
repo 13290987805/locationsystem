@@ -1,0 +1,194 @@
+package com.tg.locationsystem.controller;
+
+import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.pojo.ResultBean;
+import com.tg.locationsystem.pojo.ShiroVO;
+import com.tg.locationsystem.service.IMyuserRoleService;
+import com.tg.locationsystem.service.IPermissionService;
+import com.tg.locationsystem.service.IRolePermissionService;
+import com.tg.locationsystem.service.IRoleService;
+import com.tg.locationsystem.utils.test.BuildTree;
+import com.tg.locationsystem.utils.test.Test;
+import com.tg.locationsystem.utils.test.Tree;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author hyy
+ * @ Date2020/3/30
+ */
+@Controller
+@RequestMapping("shiro")
+public class ShiroController {
+
+    @Autowired
+    private IPermissionService permissionService;
+    @Autowired
+    private IRoleService roleService;
+    @Autowired
+    private IRolePermissionService rolePermissionService;
+
+    @Autowired
+    private IMyuserRoleService myuserRoleService;
+    /*
+    * 查看所有权限
+    * */
+    @RequestMapping(value = "getPermission", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getPermission(HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Permission> permissionList=permissionService.getAllPermission();
+        List<Tree<com.tg.locationsystem.utils.test.Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
+        for (Permission permission : permissionList) {
+            Tree<Test> tree = new Tree<com.tg.locationsystem.utils.test.Test>();
+            tree.setId(String.valueOf(permission.getId()));
+            tree.setParentId(String.valueOf(permission.getParentId()));
+            tree.setTitle(permission.getPermissionName());
+            List<Map<String, Object>> lmp = new ArrayList<Map<String, Object>>();
+            Map<String, Object> mp = new HashMap<String, Object>();
+            /*mp.put("COSTDEVICE_NUMBER", "");
+            mp.put("PRICE_PER", "");
+            mp.put("ORDER_INDEX", "");
+            mp.put("ADJUST_DATE", "");
+            mp.put("IS_LEAF", "");*/
+            lmp.add(mp);
+            trees.add(tree);
+        }
+        Tree<com.tg.locationsystem.utils.test.Test> tree = BuildTree.build(trees);
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List<Tree> list = new ArrayList<>();
+        list.add(tree);
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+
+    /*
+    * 添加角色,权限
+    *
+    * */
+    @RequestMapping(value = "AddRole",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean AddTag(@Valid ShiroVO shiroVO, BindingResult result,
+                             HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //有必填项没填
+        if (result.hasErrors()) {
+            List<String> errorlist = new ArrayList<>();
+            result.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                // 属性
+                String field = fieldError.getField();
+                // 错误信息
+                String message = field + ":" + fieldError.getDefaultMessage();
+                //System.out.println(field + ":" + message);
+                errorlist.add(message);
+            });
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("信息未填完整");
+            resultBean.setData(errorlist);
+            resultBean.setSize(errorlist.size());
+            return resultBean;
+        }
+        Role role=new Role();
+        role.setRoleName(shiroVO.getRoleName());
+        role.setRemark(shiroVO.getRoleRemark());
+        role.setCreateUserid(user.getId());
+        //插入角色表
+        roleService.insertSelective(role);
+        //插入权限记录
+        String[] permissionIds = shiroVO.getPermissionIds().split(",");
+        for (String permissionId : permissionIds) {
+            Permission permission = permissionService.selectByPrimaryKey(Integer.parseInt(permissionId));
+            if (permission!=null){
+                RolePermission rolePermission=new RolePermission();
+                rolePermission.setRoleId(String.valueOf(role.getId()));
+                rolePermission.setPermissionId(String.valueOf(permissionId));
+                //插入角色权限记录
+                rolePermissionService.insertSelective(rolePermission);
+            }
+        }
+        //插入用户,角色记录
+        MyuserRole myuserRole=new MyuserRole();
+        myuserRole.setRoleId(String.valueOf(role.getId()));
+        myuserRole.setRemark(shiroVO.getRoleRemark());
+        //插入
+        myuserRoleService.insertSelective(myuserRole);
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List<Tree> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    /*
+    *
+    查看该用户下有什么角色
+    * */
+    @RequestMapping(value = "getRole", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getDep(HttpServletRequest request) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        List<Role> roles=roleService.getRoleByUserId(user.getId());
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        resultBean.setData(roles);
+        resultBean.setSize(roles.size());
+        return resultBean;
+    }
+
+}

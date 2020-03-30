@@ -4,10 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tg.locationsystem.entity.*;
-import com.tg.locationsystem.mapper.FrenceHistoryMapper;
-import com.tg.locationsystem.mapper.MyuserMapper;
-import com.tg.locationsystem.mapper.PersonMapper;
-import com.tg.locationsystem.mapper.TableMapper;
+import com.tg.locationsystem.mapper.*;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
 import com.tg.locationsystem.service.*;
@@ -77,6 +74,8 @@ public class LocationsystemApplicationTests {
 	private FrenceHistoryMapper frenceHistoryMapper;
 	@Autowired
 	private IDepService depService;
+	@Autowired
+	private PermissionMapper permissionMapper;
 
 
 	DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -89,7 +88,30 @@ public class LocationsystemApplicationTests {
 	private DataSource dataSource;
 
 
+	@Test
+	public void test18(){
 
+		List<Permission> permissionList=permissionMapper.getAllPermission();
+		List<Tree<com.tg.locationsystem.utils.test.Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
+		for (Permission permission : permissionList) {
+			Tree<com.tg.locationsystem.utils.test.Test> tree = new Tree<com.tg.locationsystem.utils.test.Test>();
+			tree.setId(String.valueOf(permission.getId()));
+			tree.setParentId(String.valueOf(permission.getParentId()));
+			tree.setTitle(permission.getPermissionName());
+			List<Map<String, Object>> lmp = new ArrayList<Map<String, Object>>();
+			Map<String, Object> mp = new HashMap<String, Object>();
+            /*mp.put("COSTDEVICE_NUMBER", "");
+            mp.put("PRICE_PER", "");
+            mp.put("ORDER_INDEX", "");
+            mp.put("ADJUST_DATE", "");
+            mp.put("IS_LEAF", "");*/
+			lmp.add(mp);
+			trees.add(tree);
+		}
+		Tree<com.tg.locationsystem.utils.test.Test> tree = BuildTree.build(trees);
+
+		System.out.println("结果:"+new Gson().toJson(tree));
+	}
     @Test
     public void test17() throws Exception {
 		//System.out.println(dataSource);

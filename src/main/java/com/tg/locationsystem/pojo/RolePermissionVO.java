@@ -1,8 +1,12 @@
-package com.tg.locationsystem.entity;
+package com.tg.locationsystem.pojo;
 
 import java.io.Serializable;
 
-public class RolePermission implements Serializable{
+/**
+ * @author hyy
+ * @ Date2020/3/30
+ */
+public class RolePermissionVO  implements java.lang.Comparable{
     private Integer id;
 
     private String roleId;
@@ -10,6 +14,12 @@ public class RolePermission implements Serializable{
     private String permissionId;
 
     private String remark;
+
+    private String permissionName;
+
+    public RolePermissionVO() {
+    }
+
 
     public Integer getId() {
         return id;
@@ -43,13 +53,28 @@ public class RolePermission implements Serializable{
         this.remark = remark;
     }
 
+    public String getPermissionName() {
+        return permissionName;
+    }
+
+    public void setPermissionName(String permissionName) {
+        this.permissionName = permissionName;
+    }
+
     @Override
     public String toString() {
-        return "RolePermission{" +
+        return "RolePermissionVO{" +
                 "id=" + id +
                 ", roleId='" + roleId + '\'' +
                 ", permissionId='" + permissionId + '\'' +
                 ", remark='" + remark + '\'' +
+                ", permissionName='" + permissionName + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        RolePermissionVO r= (RolePermissionVO) o;
+        return this.getId()-((RolePermissionVO) o).getId();
     }
 }

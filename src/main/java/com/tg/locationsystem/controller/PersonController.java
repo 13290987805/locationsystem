@@ -269,7 +269,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersons",method = RequestMethod.GET)
     @ResponseBody
-    @RequiresPermissions("query")
+   // @RequiresPermissions("query")
     public ResultBean getPersons(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer pageIndex,
                                   @RequestParam(defaultValue = "1000") Integer pageSize){
