@@ -13,7 +13,7 @@ import java.util.List;
  * @ Date2019/6/26
  */
 public interface ITagService extends IBaseService<Tag> {
-    Tag getTagByAddress(String address, Integer id);
+    Tag getTagByAddress(String address);
 
     PageInfo<Tag> getTagsByUserId(Integer pageIndex, Integer pageSize, Integer id);
 

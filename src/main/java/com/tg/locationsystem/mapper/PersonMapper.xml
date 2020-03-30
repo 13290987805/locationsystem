@@ -14,11 +14,37 @@
     <result column="person_type" jdbcType="VARCHAR" property="personType" />
     <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
     <result column="person_phone" jdbcType="VARCHAR" property="personPhone" />
+    <result column="dep_id" jdbcType="INTEGER" property="depId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, person_name, person_sex, user_id, person_typeId, person_height, id_card, tag_address, 
-    img, person_type, reserved2_date, person_phone
+    id, person_name, person_sex, user_id, person_typeId, person_height, id_card, tag_address,
+    img, person_type, reserved2_date, person_phone, series_num, dep_id
   </sql>
+
+
+  <!--根据组织部门id集合得到人员集合-->
+  <select id="getPersonsByDepIdPage"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE
+    dep_id IN
+    <foreach collection="list" open="(" close=")" separator=","
+             item="id" index="i">
+      #{id}
+    </foreach>
+    AND
+    user_id=#{userid}
+  </select>
+
+  <!--根据组织部门id得到人员集合-->
+  <select id="getPersonsByDepId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    WHERE    user_id=#{userid}
+    AND dep_id=#{depId}
+  </select>
 
 
   <!--得到所有的登录用户下的人员-->
@@ -26,7 +52,7 @@
     select
     <include refid="Base_Column_List" />
     from person
-    WHERE    user_id=#{userid} and tag_address is not null and tag_address != ""
+    WHERE    user_id=#{userid} AND (tag_address IS NOT NULL AND tag_address!='')
   </select>
 
   <!--根据身份证得到人员-->
@@ -143,12 +169,12 @@
     insert into person (id, person_name, person_sex, 
       user_id, person_typeId, person_height, 
       id_card, tag_address, img, 
-      person_type, reserved2_date, person_phone
+      person_type, reserved2_date, person_phone,dep_id
       )
     values (#{id,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR}, #{personSex,jdbcType=VARCHAR}, 
       #{userId,jdbcType=INTEGER}, #{personTypeid,jdbcType=INTEGER}, #{personHeight,jdbcType=VARCHAR}, 
       #{idCard,jdbcType=VARCHAR}, #{tagAddress,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
-      #{personType,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, #{personPhone,jdbcType=VARCHAR}
+      #{personType,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, #{personPhone,jdbcType=VARCHAR},#{depId,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Person" useGeneratedKeys="true" keyProperty="id">
@@ -190,6 +216,9 @@
       <if test="personPhone != null">
         person_phone,
       </if>
+      <if test="depId != null">
+        dep_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -226,7 +255,10 @@
         #{reserved2Date,jdbcType=TIMESTAMP},
       </if>
       <if test="personPhone != null">
-        #{personPhone,jdbcType=VARCHAR},
+      #{personPhone,jdbcType=VARCHAR},
+    </if>
+      <if test="depId != null">
+        #{depId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -266,6 +298,9 @@
       <if test="personPhone != null">
         person_phone = #{personPhone,jdbcType=VARCHAR},
       </if>
+      <if test="depId != null">
+        dep_id = #{depId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -282,6 +317,7 @@
       person_type = #{personType,jdbcType=VARCHAR},
       reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
       person_phone = #{personPhone,jdbcType=VARCHAR}
+       dep_id = #{depId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

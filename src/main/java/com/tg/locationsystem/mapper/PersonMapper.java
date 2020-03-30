@@ -43,4 +43,8 @@ public interface PersonMapper extends IBaseDao<Person>{
     List<Person> getPersonsByNoTag(Integer id);
 
     List<Person> getPersonListByUserId(Integer userId);
+
+    List<Person> getPersonsByDepId(@Param("userid")Integer userid,@Param("depId") Integer depId);
+
+    List<Person> getPersonsByDepIdPage(@Param("userid")Integer userid,@Param("list") List<Integer> depId);
 }

@@ -9,12 +9,14 @@ import com.tg.locationsystem.entity.TagHistory;
 import com.tg.locationsystem.entity.TagHistoryVO;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * ??????????????????int????????
@@ -541,4 +543,19 @@ public static List<double[]>  setData(String data) {
 		}
 		return true;
 	}
-}
+
+		public static String compress(String str) throws IOException {
+			if (null == str || str.length() <= 0) {
+				return null;
+			}
+			// 创建一个新的 byte 数组输出流
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			// 使用默认缓冲区大小创建新的输出流
+			GZIPOutputStream gzip = new GZIPOutputStream(out);
+			// 将 b.length 个字节写入此输出流
+			gzip.write(str.getBytes("UTF-8"));
+			gzip.close();
+			// 使用指定的 charsetName，通过解码字节将缓冲区内容转换为字符串
+			return out.toString("ISO-8859-1");
+		}
+	}

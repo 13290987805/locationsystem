@@ -1,9 +1,14 @@
 package com.tg.locationsystem.entity;
 
+
+
+import com.tg.locationsystem.pojo.MyuserRoleVO;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 public class Myuser implements Serializable{
     private Integer id;
@@ -27,6 +32,13 @@ public class Myuser implements Serializable{
     private String logo;
     @Pattern(regexp = "^[0-9a-z]+\\w*@([0-9a-z]+\\.)+[0-9a-z]+$",message = "邮箱格式不正确")
     private String mail;
+
+    private Integer parentId;
+
+    /**
+     * 用户对应的角色集合
+     */
+    private Set<MyuserRoleVO> roles;
 
     public Integer getId() {
         return id;
@@ -116,6 +128,18 @@ public class Myuser implements Serializable{
         this.logo = logo;
     }
 
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public Set<MyuserRoleVO> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<MyuserRoleVO> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "Myuser{" +
@@ -127,8 +151,18 @@ public class Myuser implements Serializable{
                 ", address='" + address + '\'' +
                 ", createUser='" + createUser + '\'' +
                 ", reserved2Date=" + reserved2Date +
+                ", systemName='" + systemName + '\'' +
+                ", logo='" + logo + '\'' +
+                ", mail='" + mail + '\'' +
+                ", parentId=" + parentId +
+                ", roles=" + roles +
                 '}';
     }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
 }
 
 

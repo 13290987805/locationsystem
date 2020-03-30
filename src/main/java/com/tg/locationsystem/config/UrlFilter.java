@@ -28,7 +28,10 @@ public class UrlFilter implements Filter {
         Object user = req.getSession().getAttribute("user");
         if (user!=null||requestURI.contains("Login")||
                 requestURI.contains("toLogin")||requestURI.contains("Login2")){
+
             filterChain.doFilter(servletRequest, servletResponse);
+
+
         }else {
             servletRequest.getRequestDispatcher("/myuser/toLogin").forward(servletRequest, servletResponse);
         }

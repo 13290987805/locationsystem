@@ -103,5 +103,21 @@ public class PersonService extends BaseServiceImpl<Person> implements IPersonSer
         return personMapper.getPersonListByUserId(userId);
     }
 
+    @Override
+    public List<Person> getPersonsByDepId(Integer userid, Integer depId) {
+        return personMapper.getPersonsByDepId(userid,depId);
+    }
+
+    @Override
+    public PageInfo<Person> getPersonsByDepIdPage(Integer userid, List<Integer> depId, Integer pageIndex, Integer pageSize) {
+        //设置分页
+        PageHelper.startPage(pageIndex, pageSize);
+
+        //人员表查询结果
+        List<Person> list = personMapper.getPersonsByDepIdPage(userid,depId);
+
+        return new PageInfo<Person>(list,3);
+    }
+
 
 }

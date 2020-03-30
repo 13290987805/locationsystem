@@ -4,6 +4,7 @@ import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.AlertSet;
 import com.tg.locationsystem.entity.Camera;
 import com.tg.locationsystem.entity.Frence;
+import com.tg.locationsystem.entity.FrenceHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,6 +26,22 @@ public interface AlertSetMapper extends IBaseDao<AlertSet>{
 
     AlertSet getAlertSetByUserId(Integer id);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 /**
@@ -38,7 +40,7 @@ public class CameraController {
     @RequestMapping(value = "addCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public ResultBean addCamera(@Valid Camera camera, BindingResult result,
-                                HttpServletRequest request) {
+                                HttpServletRequest request) throws UnknownHostException {
 
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -96,7 +98,11 @@ public class CameraController {
 
         //rtmp://localhost/live/192.168.3.40
 
-        StringBuffer sb = new StringBuffer("rtmp://localhost/live/");
+        StringBuffer sb = new StringBuffer("rtmp://");
+        //获取本机ip地址
+        InetAddress addr = InetAddress.getLocalHost();
+        sb.append(addr.getHostAddress());
+        sb.append("/live/");
         String uuid = UUID.randomUUID().toString();
         sb.append(uuid);
         camera.setCameraStreamMediaAddress(sb.toString());

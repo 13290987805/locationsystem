@@ -20,7 +20,7 @@ public interface TagMapper extends IBaseDao<Tag>{
 
     int updateByPrimaryKey(Tag record);
 
-    Tag getTagByAddress(@Param("address") String address, @Param("id")Integer id);
+    Tag getTagByAddress(@Param("address") String address);
 
     List<Tag> getTagsByUserId(Integer id);
 

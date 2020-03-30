@@ -34,6 +34,8 @@ public class Person implements Serializable{
     private String personPhone;
 
     private String seriesNum;
+    @NotNull(message = "人员所属组织不能为空")
+    private Integer depId;
 
     @Override
     public String toString() {
@@ -107,6 +109,14 @@ public class Person implements Serializable{
 
     public void setPersonHeight(String personHeight) {
         this.personHeight = personHeight == null ? null : personHeight.trim();
+    }
+
+    public Integer getDepId() {
+        return depId;
+    }
+
+    public void setDepId(Integer depId) {
+        this.depId = depId;
     }
 
     public String getIdCard() {

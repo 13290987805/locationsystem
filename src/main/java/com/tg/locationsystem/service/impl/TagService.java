@@ -41,8 +41,8 @@ public class TagService extends BaseServiceImpl<Tag> implements ITagService{
     }
 
     @Override
-    public Tag getTagByAddress(String address, Integer id) {
-        return tagMapper.getTagByAddress(address, id);
+    public Tag getTagByAddress(String address) {
+        return tagMapper.getTagByAddress(address);
     }
 
     @Override

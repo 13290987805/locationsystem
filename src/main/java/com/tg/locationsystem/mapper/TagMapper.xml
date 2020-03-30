@@ -113,7 +113,7 @@
     select
     <include refid="Base_Column_List" />
     from tag
-    WHERE address=#{address} AND  user_id=#{id}
+    WHERE address=#{address}
   </select>
 
   <!--得到对象下所有的标签-->

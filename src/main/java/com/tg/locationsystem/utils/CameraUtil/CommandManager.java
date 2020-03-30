@@ -24,7 +24,7 @@ import static com.tg.locationsystem.utils.CameraUtil.util.PropertiesUtil.load;
  * @version 2016年10月29日
  */
 public interface CommandManager {
-	
+
 	public static final ProgramConfig config=load("E:\\Workspaces\\git\\locationsystem\\src\\main\\java\\com\\tg\\locationsystem\\utils\\CameraUtil\\loadFFmpeg.properties", ProgramConfig.class);
 	/**
 	 * 注入自己实现的持久层

@@ -10,6 +10,7 @@ import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -51,6 +52,8 @@ public class PersonController {
     private IFrenceHistoryService frenceHistoryService;
     @Autowired
     private IHeartRateHistoryService heartRateHistoryService;
+    @Autowired
+    private IDepService depService;
 
     /*
     * 添加人员
@@ -106,7 +109,7 @@ public class PersonController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Tag usetag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag usetag = tagService.getTagByAddress(person.getTagAddress());
         if ("1".equals(usetag.getUsed())){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -122,7 +125,7 @@ public class PersonController {
         if (person.getTagAddress()==null){
             person.setTagAddress("");
         }
-        Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(person.getTagAddress());
         if (tag!=null){
             tag.setUsed("1");
             //更新标签表
@@ -234,6 +237,16 @@ public class PersonController {
                 if (personType != null) {
                     personVO.setPersonTypeName(personType.getTypeName());
                 }
+                //人员所属组织
+                if (person.getDepId()!=null){
+                    Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                    if (dep!=null){
+                        personVO.setDepName(dep.getName());
+                        personVO.setDepId(dep.getId());
+                    }
+                }
+
+
                 personVOList.add(personVO);
             }
             resultBean = new ResultBean();
@@ -256,6 +269,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersons",method = RequestMethod.GET)
     @ResponseBody
+   // @RequiresPermissions("query")
     public ResultBean getPersons(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer pageIndex,
                                   @RequestParam(defaultValue = "1000") Integer pageSize){
@@ -290,6 +304,14 @@ public class PersonController {
             PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
+            }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                    personVO.setDepId(dep.getId());
+                }
             }
             personVOList.add(personVO);
         }
@@ -352,7 +374,7 @@ public class PersonController {
                 location.setUserId(person.getUserId());
                 location.setTagAddress(person.getTagAddress());
 
-                Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+                Tag tag = tagService.getTagByAddress(person.getTagAddress());
                 if (tag!=null){
                     location.setTag(tag);
                 }
@@ -599,6 +621,14 @@ public class PersonController {
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
             }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                    personVO.setDepId(dep.getId());
+                }
+            }
             personVOList.add(personVO);
         }
         PageInfo<PersonVO> page= new PageInfo<>(personVOList);
@@ -672,6 +702,14 @@ public class PersonController {
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
             }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                    personVO.setDepId(dep.getId());
+                }
+            }
             personVOList.add(personVO);
         }
 
@@ -715,7 +753,7 @@ public ResultBean deletePerson(HttpServletRequest request,
     if (delete>0){
 
         //更新标签,使标签变为未使用状态
-        Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(person.getTagAddress());
         if (tag!=null){
             tag.setUsed("0");
             int updatetag = tagService.updateByPrimaryKeySelective(tag);
@@ -1192,6 +1230,14 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
                 if (personType!=null){
                     personVO.setPersonTypeName(personType.getTypeName());
                 }
+                //人员所属组织
+                if (person.getDepId()!=null){
+                    Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                    if (dep!=null){
+                        personVO.setDepName(dep.getName());
+                        personVO.setDepId(dep.getId());
+                    }
+                }
                 personVOList.add(personVO);
             }
             PageInfo<PersonVO> page= new PageInfo<>(personVOList);
@@ -1246,6 +1292,14 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
             PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
             if (personType != null) {
                 personVO.setPersonTypeName(personType.getTypeName());
+            }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                    personVO.setDepId(dep.getId());
+                }
             }
             personVOList.add(personVO);
         }
@@ -1323,6 +1377,14 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
             if (personType!=null){
                 personVO.setPersonTypeName(personType.getTypeName());
             }
+            //人员所属组织
+            if (person.getDepId()!=null){
+                Dep dep = depService.selectByPrimaryKey(person.getDepId());
+                if (dep!=null){
+                    personVO.setDepName(dep.getName());
+                    personVO.setDepId(dep.getId());
+                }
+            }
             personVOList.add(personVO);
         }
     }
@@ -1332,6 +1394,96 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
     resultBean.setMsg("操作成功");
     resultBean.setData(personVOList);
     resultBean.setSize(personVOList.size());
+    return resultBean;
+}
+/*
+*
+* 根据组织部门id查询相关人员
+* */
+@RequestMapping(value = "getPersonsByDepId",method = RequestMethod.GET)
+@ResponseBody
+public ResultBean getPersonsByDepId(HttpServletRequest request,
+                                    @RequestParam(defaultValue = "1") Integer pageIndex,
+                                    @RequestParam(defaultValue = "10") Integer pageSize,
+                                    @RequestParam(defaultValue = "") Integer depId) {
+    ResultBean resultBean;
+    Myuser user = (Myuser) request.getSession().getAttribute("user");
+    //未登录
+    if (user == null) {
+        resultBean = new ResultBean();
+        resultBean.setCode(5);
+        resultBean.setMsg("还未登录");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    if (depId == null || "".equals(depId) || !StringUtils.isNumeric(String.valueOf(depId))) {
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("查询参数有误");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    //得到该组织id下的子节点
+    List<Integer> depIds = depService.getDepIdsByParentId(user.getId(), depId);
+    depIds.add(depId);
+    PageInfo<Person> pageInfo=personService.getPersonsByDepIdPage(user.getId(),depIds,pageIndex,pageSize);
+
+    List<PersonVO> personVOList=new ArrayList<>();
+    for (Person person : pageInfo.getList()) {
+        PersonVO personVO=new PersonVO();
+        personVO.setId(person.getId());
+        personVO.setIdCard(person.getIdCard());
+        personVO.setImg(person.getImg());
+        personVO.setPersonHeight(person.getPersonHeight());
+        personVO.setPersonPhone(person.getPersonPhone());
+        personVO.setPersonName(person.getPersonName());
+        personVO.setPersonSex(person.getPersonSex());
+        personVO.setTagAddress(person.getTagAddress());
+        personVO.setUserId(person.getUserId());
+        personVO.setPersonTypeid(person.getPersonTypeid());
+        //人员类型名字
+        PersonType personType = personTypeMapper.selectByPrimaryKey(person.getPersonTypeid());
+        if (personType!=null){
+            personVO.setPersonTypeName(personType.getTypeName());
+        }
+        //人员所属组织
+        if (person.getDepId()!=null){
+            Dep dep = depService.selectByPrimaryKey(person.getDepId());
+            if (dep!=null){
+                personVO.setDepName(dep.getName());
+                personVO.setDepId(dep.getId());
+            }
+        }
+        personVOList.add(personVO);
+    }
+
+
+
+    PageInfo<PersonVO> page= new PageInfo<>(personVOList);
+    page.setPageNum(pageInfo.getPageNum());
+    page.setSize(pageInfo.getSize());
+    page.setSize(pageInfo.getSize());
+    page.setStartRow(pageInfo.getStartRow());
+    page.setEndRow(pageInfo.getEndRow());
+    page.setTotal(pageInfo.getTotal());
+    page.setPages(pageInfo.getPages());
+    page.setList(personVOList);
+    page.setPrePage(pageInfo.getPrePage());
+    page.setNextPage(pageInfo.getNextPage());
+    page.setIsFirstPage(pageInfo.isIsFirstPage());
+    page.setIsLastPage(pageInfo.isIsLastPage());
+
+    resultBean = new ResultBean();
+    resultBean.setCode(1);
+    resultBean.setMsg("操作成功");
+    List list=new ArrayList<>();
+    list.add(page);
+    resultBean.setData(list);
+    resultBean.setSize(page.getSize());
     return resultBean;
 }
 

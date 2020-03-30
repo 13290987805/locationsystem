@@ -1,19 +1,21 @@
 package com.tg.locationsystem;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tg.locationsystem.entity.Frence;
-import com.tg.locationsystem.entity.Person;
-import com.tg.locationsystem.entity.Tag;
-import com.tg.locationsystem.entity.TagTest;
-import com.tg.locationsystem.mapper.FrenceHistoryMapper;
-import com.tg.locationsystem.mapper.MyuserMapper;
-import com.tg.locationsystem.mapper.PersonMapper;
-import com.tg.locationsystem.mapper.TableMapper;
+import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.mapper.*;
 import com.tg.locationsystem.maprule.SVGUtil;
 import com.tg.locationsystem.maprule.ThroughWall;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
+import com.tg.locationsystem.utils.test.BuildTree;
+import com.tg.locationsystem.utils.test.Tree;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.subject.Subject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ws.schild.jave.*;
 
+import javax.sql.DataSource;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -66,6 +72,10 @@ public class LocationsystemApplicationTests {
 	private PersonMapper personMapper;
 	@Autowired
 	private FrenceHistoryMapper frenceHistoryMapper;
+	@Autowired
+	private IDepService depService;
+	@Autowired
+	private PermissionMapper permissionMapper;
 
 
 	DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -74,17 +84,96 @@ public class LocationsystemApplicationTests {
 	@Value("${async.executor.thread.max_pool_size}")
 	private int maxPoolSize;
 
+	@Autowired
+	private DataSource dataSource;
+
+
 	@Test
-	public void test16() throws IOException {
-		DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-		String format = "C:\\video\\"+simpleDateFormat.format(new Date());
-		format=format+"_";
-		format=format+UUID.randomUUID().toString()+".mp4";
-		File file=new File(format);
-		if (!file.exists()){
-			file.createNewFile();
+	public void test18(){
+
+		List<Permission> permissionList=permissionMapper.getAllPermission();
+		List<Tree<com.tg.locationsystem.utils.test.Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
+		for (Permission permission : permissionList) {
+			Tree<com.tg.locationsystem.utils.test.Test> tree = new Tree<com.tg.locationsystem.utils.test.Test>();
+			tree.setId(String.valueOf(permission.getId()));
+			tree.setParentId(String.valueOf(permission.getParentId()));
+			tree.setTitle(permission.getPermissionName());
+			List<Map<String, Object>> lmp = new ArrayList<Map<String, Object>>();
+			Map<String, Object> mp = new HashMap<String, Object>();
+            /*mp.put("COSTDEVICE_NUMBER", "");
+            mp.put("PRICE_PER", "");
+            mp.put("ORDER_INDEX", "");
+            mp.put("ADJUST_DATE", "");
+            mp.put("IS_LEAF", "");*/
+			lmp.add(mp);
+			trees.add(tree);
 		}
-		System.out.println("成功");
+		Tree<com.tg.locationsystem.utils.test.Test> tree = BuildTree.build(trees);
+
+		System.out.println("结果:"+new Gson().toJson(tree));
+	}
+    @Test
+    public void test17() throws Exception {
+		//System.out.println(dataSource);
+		//创建JdbcRealm对象
+		//我们可以看到这里并没有设置查询语句，那么jdbcRealm对象是怎么做到从数据源中拿数据的呢？
+		//点进源码，jdbcRealm构造函数，我们就可以看到答案。
+		JdbcRealm jdbcRealm=new JdbcRealm();
+		jdbcRealm.setDataSource(dataSource);
+		//如果你这句话注释，那么下面的check权限的时候就会抛出异常
+		jdbcRealm.setPermissionsLookupEnabled(true);
+
+		//从数据库查询数据然后验证用户登录身份
+        String userSql="select password from myuser where username=?";
+        jdbcRealm.setAuthenticationQuery(userSql);
+        //验证角色
+        String roleSql="select role_name from myuser_role where username=?";
+        jdbcRealm.setUserRolesQuery(roleSql);
+        //验证权限
+        String permissionSql="select permission from role_permission where role_name=?";
+        jdbcRealm.setPermissionsQuery(permissionSql);
+
+        DefaultSecurityManager defaultSecurityManager=new DefaultSecurityManager();
+        defaultSecurityManager.setRealm(jdbcRealm);
+
+        SecurityUtils.setSecurityManager(defaultSecurityManager);
+        Subject subject=SecurityUtils.getSubject();
+
+        UsernamePasswordToken token=new UsernamePasswordToken("tgck","dGdjaw==");
+        subject.login(token);
+
+        System.out.println("isAuthenticated:"+subject.isAuthenticated());
+        subject.checkRole("admin");
+        subject.checkPermission("query");
+
+
+
+
+    }
+	@Test
+	public void test16() throws Exception {
+	//ALTER TABLE post/*post:表名*/ ADD COLUMN h_id/*h_id:列名*/ INT;
+		List<Dep> depList=depService.getDepsByUserId(1);
+		List<Tree<com.tg.locationsystem.utils.test.Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
+
+		for (Dep dep : depList) {
+			Tree<com.tg.locationsystem.utils.test.Test> tree = new Tree<com.tg.locationsystem.utils.test.Test>();
+			tree.setId(String.valueOf(dep.getId()));
+			tree.setParentId(String.valueOf(dep.getPid()));
+			tree.setTitle(dep.getName());
+			List<Map<String, Object>> lmp = new ArrayList<Map<String, Object>>();
+			Map<String, Object> mp = new HashMap<String, Object>();
+            /*mp.put("COSTDEVICE_NUMBER", "");
+            mp.put("PRICE_PER", "");
+            mp.put("ORDER_INDEX", "");
+            mp.put("ADJUST_DATE", "");
+            mp.put("IS_LEAF", "");*/
+			lmp.add(mp);
+			trees.add(tree);
+		}
+		Tree<com.tg.locationsystem.utils.test.Test> t = BuildTree.build(trees);
+
+		System.out.println(new Gson().toJson(t));
 
 	}
 	@Test

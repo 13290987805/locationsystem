@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.tg.locationsystem.service.IHeartRateHistoryService;
+import com.tg.locationsystem.utils.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,7 @@ public class testController {
                          @PathVariable("id") String id){
         /*String ip = TestUtil.getIP(request);
         return ip;*/
-        String msg="success:"+id;
-        System.out.println(msg);
-        return msg;
+        return TestUtil.getGoP(request);
 
     }
     /*

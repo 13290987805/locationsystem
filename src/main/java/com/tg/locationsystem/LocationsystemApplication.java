@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.tg.locationsystem.entity.*;
+import com.tg.locationsystem.handler.NettyClient;
 import com.tg.locationsystem.handler.NettyServerHandler;
 import com.tg.locationsystem.pojo.AlertVO;
 import com.tg.locationsystem.service.*;
@@ -129,6 +130,7 @@ public class LocationsystemApplication  {
 		new LocationsystemApplication().cach();
 		/*new LocationsystemApplication().run();
 		new NettyServer().initNetty();*/
+
         SkylabSDK.debug=false;
 		skylabSDK.setUwbDataCallback(new UWBCallback() {
 			@Override

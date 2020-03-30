@@ -120,7 +120,7 @@ public class GoodsController {
         if (goods.getTagAddress()==null){
             goods.setTagAddress("");
         }
-        Tag tag = tagService.getTagByAddress(goods.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(goods.getTagAddress());
         if (tag!=null){
             tag.setUsed("1");
             //更新标签表
@@ -293,7 +293,7 @@ public ResultBean getGoods(HttpServletRequest request,
                 location.setGoodsIdcard(goods.getGoodsIdcard());
                 //location.setRank(goods.getRank());
 
-                Tag tag = tagService.getTagByAddress(goods.getTagAddress(), user.getId());
+                Tag tag = tagService.getTagByAddress(goods.getTagAddress());
                 if (tag!=null){
                     location.setTag(tag);
                 }
@@ -580,7 +580,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
 
     int delete = goodsService.deleteByPrimaryKey(goodsid);
     if (delete>0){
-        Tag tag = tagService.getTagByAddress(goods.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(goods.getTagAddress());
         if (tag!=null){
             tag.setUsed("0");
             int updatetag = tagService.updateByPrimaryKeySelective(tag);

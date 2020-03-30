@@ -36,6 +36,10 @@ public class PersonVO implements Serializable {
 
     private String personTypeName;
 
+    private String depName;
+
+    private Integer depId;
+
     public Integer getId() {
         return id;
     }
@@ -141,6 +145,22 @@ public class PersonVO implements Serializable {
     }
 
     public PersonVO() {
+    }
+
+    public Integer getDepId() {
+        return depId;
+    }
+
+    public void setDepId(Integer depId) {
+        this.depId = depId;
+    }
+
+    public String getDepName() {
+        return depName;
+    }
+
+    public void setDepName(String depName) {
+        this.depName = depName;
     }
 
     public PersonVO(Integer id) {

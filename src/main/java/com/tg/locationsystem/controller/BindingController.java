@@ -92,7 +92,7 @@ public class BindingController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Tag tag = tagService.getTagByAddress(address, user.getId());
+        Tag tag = tagService.getTagByAddress(address);
         if (tag==null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -189,7 +189,7 @@ public class BindingController {
             return resultBean;
         }
 
-        Tag tag = tagService.getTagByAddress(person.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(person.getTagAddress());
         if (tag == null) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -289,7 +289,7 @@ public class BindingController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Tag tag = tagService.getTagByAddress(address, user.getId());
+        Tag tag = tagService.getTagByAddress(address);
         if (tag==null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -373,7 +373,7 @@ public class BindingController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Tag tag = tagService.getTagByAddress(goods.getTagAddress(), user.getId());
+        Tag tag = tagService.getTagByAddress(goods.getTagAddress());
         if (tag == null) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -429,7 +429,7 @@ public ResultBean DeleteBindingTag(HttpServletRequest request,
         resultBean.setSize(list.size());
         return resultBean;
     }
-    Tag tag = tagService.getTagByAddress(address, user.getId());
+    Tag tag = tagService.getTagByAddress(address);
     if (tag==null){
         resultBean = new ResultBean();
         resultBean.setCode(-1);
