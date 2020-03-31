@@ -11,6 +11,20 @@
     id, role_id, permission_id, remark
   </sql>
 
+  <!--根据角色id获取相关权限-->
+  <select id="getPermissionsByRoleId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from role_permission
+    WHERE  role_id=#{roleId}
+  </select>
+
+  <!--根据角色id删除-->
+  <delete id="deleteByRoleId" parameterType="INTEGER">
+    delete from role_permission
+    where role_id=#{roleId}
+  </delete>
+
   <!--根据角色id得到角色权限对象-->
   <select id="getRolePermissionSetByRoleId"  resultMap="BaseResultMap">
     select

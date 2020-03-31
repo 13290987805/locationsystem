@@ -11,6 +11,12 @@
     id, user_id, role_id, remark
   </sql>
 
+  <!--根据角色id删除-->
+  <delete id="deleteByRoleId" parameterType="INTEGER">
+    delete from myuser_role
+    where role_id=#{roleId}
+  </delete>
+
   <!--根据角色id得到角色用户-->
   <select id="getMyuserRoleByRoleId"  resultMap="BaseResultMap">
     select

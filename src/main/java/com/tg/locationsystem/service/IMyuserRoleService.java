@@ -9,4 +9,6 @@ import com.tg.locationsystem.entity.MyuserRole;
  */
 public interface IMyuserRoleService extends IBaseService<MyuserRole> {
     MyuserRole getMyuserRoleByRoleId(Integer roleId);
+
+    int deleteByRoleId(Integer roleId);
 }

@@ -4,6 +4,7 @@ import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.RolePermission;
 
 
+import java.util.List;
 import java.util.Set;
 
 public interface RolePermissionMapper extends IBaseDao<RolePermission>{
@@ -23,4 +24,8 @@ public interface RolePermissionMapper extends IBaseDao<RolePermission>{
     //Set<RolePermission> getRolePermissionSet(String roleName);
 
     Set<RolePermission> getRolePermissionSetByRoleId(String roleId);
+
+    int deleteByRoleId(Integer roleId);
+
+    List<RolePermission> getPermissionsByRoleId(Integer roleId);
 }

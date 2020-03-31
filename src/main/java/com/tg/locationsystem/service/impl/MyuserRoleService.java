@@ -26,4 +26,9 @@ public class MyuserRoleService  extends BaseServiceImpl<MyuserRole> implements I
     public MyuserRole getMyuserRoleByRoleId(Integer roleId) {
         return myuserRoleMapper.getMyuserRoleByRoleId(roleId);
     }
+
+    @Override
+    public int deleteByRoleId(Integer roleId) {
+        return myuserRoleMapper.deleteByRoleId(roleId);
+    }
 }

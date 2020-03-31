@@ -9,6 +9,8 @@ import com.tg.locationsystem.service.IRolePermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author hyy
  * @ Date2020/3/28
@@ -20,5 +22,15 @@ public class RolePermissionService  extends BaseServiceImpl<RolePermission> impl
     @Override
     public IBaseDao<RolePermission> getBaseDao() {
         return rolePermissionMapper;
+    }
+
+    @Override
+    public int deleteByRoleId(Integer roleId) {
+        return rolePermissionMapper.deleteByRoleId(roleId) ;
+    }
+
+    @Override
+    public List<RolePermission> getPermissionsByRoleId(Integer roleId) {
+        return rolePermissionMapper.getPermissionsByRoleId(roleId);
     }
 }

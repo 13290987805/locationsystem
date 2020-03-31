@@ -15,6 +15,8 @@ public class ShiroVO implements Serializable {
     @NotBlank(message = "人员权限不能为空")
     private String permissionIds;
 
+    private Integer roleId;
+
     public ShiroVO() {
     }
 
@@ -36,6 +38,14 @@ public class ShiroVO implements Serializable {
 
     public String getPermissionIds() {
         return permissionIds;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public void setPermissionIds(String permissionIds) {
