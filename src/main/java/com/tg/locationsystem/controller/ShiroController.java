@@ -231,6 +231,16 @@ public ResultBean deleteRole(@RequestParam("") Integer RoleId, HttpServletReques
         resultBean.setSize(list.size());
         return resultBean;
     }
+    //admin角色不可修改
+    if ("admin".equals(role.getRoleName())&&role.getId()==1){
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("管理员角色不可修改");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
     //判断是否绑定账号
     //绑定账号不可删
     MyuserRole myuserRole = myuserRoleService.getMyuserRoleByRoleId(RoleId);
@@ -374,7 +384,7 @@ public ResultBean UpdateRole(@Valid ShiroVO shiroVO, BindingResult result,
         return resultBean;
     }
     //admin角色不可修改
-    if ("admin".equals(role.getRoleName())){
+    if ("admin".equals(role.getRoleName())&&role.getId()==1){
         resultBean = new ResultBean();
         resultBean.setCode(-1);
         resultBean.setMsg("管理员角色不可修改");
@@ -412,4 +422,6 @@ public ResultBean UpdateRole(@Valid ShiroVO shiroVO, BindingResult result,
     resultBean.setSize(list.size());
     return resultBean;
 }
+
+
 }

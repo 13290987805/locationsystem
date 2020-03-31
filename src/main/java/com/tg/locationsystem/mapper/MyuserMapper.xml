@@ -19,6 +19,19 @@
     id, username, company_name, password, phoneNumber, address, create_user, reserved2_date, 
     system_name, logo, mail, parent_id
   </sql>
+  <sql id="Base_Column_List2">
+    id, username, company_name, phoneNumber, address, create_user, reserved2_date,
+    system_name, logo, mail, parent_id
+  </sql>
+
+  <!--根据fuid得到子账号-->
+  <select id="getUsersByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List2" />
+    from myuser
+    WHERE parent_id=#{pid}
+  </select>
+
 
   <!--根据登录账号得到myuser对象-->
   <select id="getUserByName"  resultMap="BaseResultMap">

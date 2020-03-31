@@ -8,6 +8,8 @@ import com.tg.locationsystem.service.IMyuserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author hyy
  * @ Date2020/3/28
@@ -30,5 +32,10 @@ public class MyuserRoleService  extends BaseServiceImpl<MyuserRole> implements I
     @Override
     public int deleteByRoleId(Integer roleId) {
         return myuserRoleMapper.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public List<MyuserRole> getmyuserRoleByUserId(Integer userid) {
+        return myuserRoleMapper.getmyuserRoleByUserId(userid);
     }
 }

@@ -1,5 +1,6 @@
 package com.tg.locationsystem.service;
 
+import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.service.IBaseService;
 import com.tg.locationsystem.entity.Myuser;
 
@@ -9,4 +10,6 @@ import com.tg.locationsystem.entity.Myuser;
  */
 public interface IMyUserService extends IBaseService<Myuser> {
     Myuser getUserByName(String username);
+
+    PageInfo<Myuser> getUsersByUserId(Integer id, Integer pageIndex, Integer pageSize);
 }
