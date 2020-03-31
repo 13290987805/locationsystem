@@ -3,6 +3,7 @@ package com.tg.locationsystem.mapper;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.MyuserRole;
 
+import java.util.List;
 import java.util.Set;
 
 public interface MyuserRoleMapper extends IBaseDao<MyuserRole>{
@@ -23,4 +24,6 @@ public interface MyuserRoleMapper extends IBaseDao<MyuserRole>{
     MyuserRole getMyuserRoleByRoleId(Integer roleId);
 
     int deleteByRoleId(Integer roleId);
+
+    List<MyuserRole> getmyuserRoleByUserId(Integer userid);
 }

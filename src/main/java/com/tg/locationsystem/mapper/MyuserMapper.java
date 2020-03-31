@@ -3,6 +3,8 @@ package com.tg.locationsystem.mapper;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.entity.Myuser;
 
+import java.util.List;
+
 public interface MyuserMapper extends IBaseDao<Myuser>{
     int deleteByPrimaryKey(Integer id);
 
@@ -17,4 +19,6 @@ public interface MyuserMapper extends IBaseDao<Myuser>{
     int updateByPrimaryKey(Myuser record);
 
     Myuser getUserByName(String username);
+
+    List<Myuser> getUsersByUserId(Integer pid);
 }

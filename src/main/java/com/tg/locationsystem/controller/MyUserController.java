@@ -1,16 +1,13 @@
 package com.tg.locationsystem.controller;
 
 
+import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.entity.EleCallSet;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.MyuserRole;
-import com.tg.locationsystem.pojo.AddUser;
-import com.tg.locationsystem.pojo.ResultBean;
-import com.tg.locationsystem.pojo.UpdatePassword;
-import com.tg.locationsystem.pojo.User;
-import com.tg.locationsystem.service.IEleCallSetService;
-import com.tg.locationsystem.service.IMyUserService;
-import com.tg.locationsystem.service.IMyuserRoleService;
+import com.tg.locationsystem.entity.Role;
+import com.tg.locationsystem.pojo.*;
+import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.TestUtil;
 import com.tg.locationsystem.utils.UploadFileUtil;
 import org.apache.shiro.SecurityUtils;
@@ -44,6 +41,10 @@ public class MyUserController {
     private IEleCallSetService eleCallSetService;
     @Autowired
     private IMyuserRoleService myuserRoleService;
+    @Autowired
+    private IRoleService roleService;
+    @Autowired
+    private IRolePermissionService rolePermissionService;
 
     /*
     * 登录
@@ -71,7 +72,7 @@ public class MyUserController {
             resultBean.setSize(errorlist.size());
             return resultBean;
         }
-        System.out.println(TestUtil.getGoP(request));
+        //System.out.println(TestUtil.getGoP(request));
         Myuser myuser=myUserService.getUserByName(user.getUsername());
         if (null==myuser){
             resultBean = new ResultBean();
@@ -750,5 +751,187 @@ public class MyUserController {
             return resultBean;
         }
     }
+
+    /*
+     * 查看子账号
+     *
+     * */
+    @RequestMapping(value = "getSonUser",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getSonUser(HttpServletRequest request,
+                                 @RequestParam(defaultValue = "1") Integer pageIndex,
+                                 @RequestParam(defaultValue = "10") Integer pageSize) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        PageInfo<Myuser> page=myUserService.getUsersByUserId(user.getId(),pageIndex,pageSize);
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List list=new ArrayList<>();
+        list.add(page);
+        resultBean.setData(list);
+        resultBean.setSize(page.getSize());
+        return resultBean;
+    }
+
+    /*
+    * 搜索账号
+    * 账号,角色模糊搜索
+    * */
+    @RequestMapping(value = "getSonUserByMsg",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean getSonUserByMsg(HttpServletRequest request,
+                                      @RequestParam(defaultValue = "") String msg,
+                                 @RequestParam(defaultValue = "1") Integer pageIndex,
+                                 @RequestParam(defaultValue = "10") Integer pageSize) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+
+        if (msg==null||"".equals(msg)){
+            PageInfo<Myuser> page=myUserService.getUsersByUserId(user.getId(),pageIndex,pageSize);
+
+            resultBean = new ResultBean();
+            resultBean.setCode(1);
+            resultBean.setMsg("操作成功");
+            List list=new ArrayList<>();
+            list.add(page);
+            resultBean.setData(list);
+            resultBean.setSize(page.getSize());
+            return resultBean;
+        }
+        //所有账号
+        PageInfo<Myuser> page=myUserService.getUsersByUserId(user.getId(),pageIndex,pageSize);
+
+       Set<Integer> list=new TreeSet<>();
+        for (Myuser myuser : page.getList()) {
+            if (myuser.getUsername().contains(msg)){
+                list.add(myuser.getId());
+            }
+            List<MyuserRole> myuserRolelist=myuserRoleService.getmyuserRoleByUserId(myuser.getId());
+
+            for (MyuserRole myuserRole : myuserRolelist) {
+                Role role = roleService.selectByPrimaryKey(Integer.parseInt(myuserRole.getRoleId()));
+                if (role.getRoleName().contains(msg)){
+                        list.add(myuser.getId());
+                    }
+
+            }
+        }
+        //System.out.println("结果:"+list.size());
+        List<Myuser> resultList=new ArrayList<>();
+        for (Integer integer : list) {
+            Myuser myuser = myUserService.selectByPrimaryKey(integer);
+            resultList.add(myuser);
+        }
+
+
+        page.setList(resultList);
+        page.setTotal(resultList.size());
+
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List list1=new ArrayList<>();
+        list1.add(page);
+        resultBean.setData(list1);
+        resultBean.setSize(resultList.size());
+        return resultBean;
+    }
+
+    /*
+    * 删除账号
+    * */
+    @RequestMapping(value = "deleteUser",method = {RequestMethod.POST})
+    @ResponseBody
+    public ResultBean deleteUser(@RequestParam("") Integer UserId, HttpServletRequest request
+    ) {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (UserId == null || "".equals(UserId)) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("参数有误,账号id不能为空");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //
+        //是否存在该账号
+        Myuser myuser = myUserService.selectByPrimaryKey(UserId);
+        if (myuser == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该角色不存在");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //是否登录账号子账号
+        if (myuser.getParentId()!=user.getId()){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该账号不是您的子账号");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        //删除该账号
+        myUserService.deleteByPrimaryKey(UserId);
+        //该账户的所有账户,角色
+        List<MyuserRole> myuserRoles = myuserRoleService.getmyuserRoleByUserId(UserId);
+        for (MyuserRole myuserRole : myuserRoles) {
+            //删除角色
+            roleService.deleteByPrimaryKey(Integer.parseInt(myuserRole.getRoleId()));
+            //删除权限
+            rolePermissionService.deleteByRoleId(Integer.parseInt(myuserRole.getRoleId()));
+            //删除角色,权限
+            myuserRoleService.deleteByPrimaryKey(myuserRole.getId());
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("操作成功");
+        List<Myuser> list=new ArrayList<>();
+        list.add(myuser);
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+
 }
 

@@ -1,5 +1,7 @@
 package com.tg.locationsystem.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.base.dao.IBaseDao;
 import com.tg.locationsystem.base.service.impl.BaseServiceImpl;
 import com.tg.locationsystem.entity.*;
@@ -11,6 +13,7 @@ import com.tg.locationsystem.service.IMyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -74,5 +77,15 @@ public class MyUserService extends BaseServiceImpl<Myuser> implements IMyUserSer
         user.setRoles(roleVOS);
        // System.out.println("用户:"+user);
         return user;
+    }
+
+    @Override
+    public PageInfo<Myuser> getUsersByUserId(Integer pid, Integer pageIndex, Integer pageSize) {
+        //设置分页
+        PageHelper.startPage(pageIndex,pageSize);
+
+        List<Myuser> list = myuserMapper.getUsersByUserId(pid);
+
+        return new PageInfo<Myuser>(list,3);
     }
 }

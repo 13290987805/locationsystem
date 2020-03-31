@@ -11,6 +11,15 @@
     id, user_id, role_id, remark
   </sql>
 
+
+  <!--根据userid查询相关-->
+  <select id="getmyuserRoleByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from myuser_role
+    WHERE user_id=#{userid}
+  </select>
+
   <!--根据角色id删除-->
   <delete id="deleteByRoleId" parameterType="INTEGER">
     delete from myuser_role
