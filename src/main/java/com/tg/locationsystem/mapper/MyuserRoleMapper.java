@@ -21,4 +21,6 @@ public interface MyuserRoleMapper extends IBaseDao<MyuserRole>{
     Set<MyuserRole> getMyuserRoleSet(Integer id);
 
     MyuserRole getMyuserRoleByRoleId(Integer roleId);
+
+    int deleteByRoleId(Integer roleId);
 }

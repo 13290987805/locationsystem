@@ -31,6 +31,8 @@ public class Tree<T> {
      */
     private String parentId;
 
+    private String checkArr="0";
+
     public Tree() {
     }
 
@@ -38,14 +40,17 @@ public class Tree<T> {
         return id;
     }
 
+    public String getCheckArr() {
+        return checkArr;
+    }
+
+    public void setCheckArr(String checkArr) {
+        this.checkArr = checkArr;
+    }
 
     public void setId(String id) {
         this.id = id;
     }
-
-
-
-
 
 
     public List<Tree<T>> getChildren() {
@@ -55,8 +60,6 @@ public class Tree<T> {
     public void setChildren(List<Tree<T>> children) {
         this.children = children;
     }
-
-
 
     public String getTitle() {
         return title;
