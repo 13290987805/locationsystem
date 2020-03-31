@@ -25,6 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @author hyy
@@ -177,34 +180,65 @@ private IEleCallSetService eleCallSetService;
             return resultBean;
         }
         List<TagStatus> tagStatusList=tagStatusService.getTagStatusByUserIdNoPg(user.getId());
+
+        Map<String,List<TagStatus>> tagByPersonIdcard = tagStatusList.stream().collect(groupingBy(TagStatus::getPersonIdcard));
+
         //System.out.println(System.currentTimeMillis());
         List<TagStatusVO> tagStatusVOList=new ArrayList<>();
-        for (TagStatus tagStatus : tagStatusList) {
-            TagStatusVO tagStatusVO=new TagStatusVO();
-            tagStatusVO.setId(tagStatus.getId());
-            tagStatusVO.setPersonIdcard(tagStatus.getPersonIdcard());
-            tagStatusVO.setData(tagStatus.getData());
-            tagStatusVO.setAlertType(tagStatus.getAlertType());
-            tagStatusVO.setAddTime(tagStatus.getAddTime());
-            tagStatusVO.setUserId(tagStatus.getUserId());
-            tagStatusVO.setMapkey(tagStatus.getMapKey());
-            tagStatusVO.setIsdeal(tagStatus.getIsdeal());
-            tagStatusVO.setVedio(tagStatus.getVedio());
-            //type name
-            Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+
+        for (String personIdcard : tagByPersonIdcard.keySet()){
+            String name = "";
+            Person person = personMapper.getPersonByIdCard(personIdcard);
             if (person!=null){
-                tagStatusVO.setName(person.getPersonName());
-                tagStatusVO.setImg(person.getImg());
+                name = person.getPersonName();
             }else {
-                Goods goods = goodsMapper.getGoodsByByIdCard(tagStatus.getPersonIdcard());
+                Goods goods = goodsMapper.getGoodsByByIdCard(personIdcard);
                 if (goods!=null){
-                    tagStatusVO.setName(goods.getGoodsName());
-                    tagStatusVO.setImg(goods.getImg());
+                    name = goods.getGoodsName();
                 }
             }
-
-            tagStatusVOList.add(tagStatusVO);
+            for (TagStatus tagStatus : tagByPersonIdcard.get(personIdcard)){
+                TagStatusVO tagStatusVO=new TagStatusVO();
+                tagStatusVO.setId(tagStatus.getId());
+                tagStatusVO.setPersonIdcard(tagStatus.getPersonIdcard());
+                tagStatusVO.setData(tagStatus.getData());
+                tagStatusVO.setAlertType(tagStatus.getAlertType());
+                tagStatusVO.setAddTime(tagStatus.getAddTime());
+                tagStatusVO.setUserId(tagStatus.getUserId());
+                tagStatusVO.setMapkey(tagStatus.getMapKey());
+                tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+                tagStatusVO.setVedio(tagStatus.getVedio());
+                tagStatusVO.setName(name);
+                tagStatusVOList.add(tagStatusVO);
+            }
         }
+
+//        for (TagStatus tagStatus : tagStatusList) {
+//            TagStatusVO tagStatusVO=new TagStatusVO();
+//            tagStatusVO.setId(tagStatus.getId());
+//            tagStatusVO.setPersonIdcard(tagStatus.getPersonIdcard());
+//            tagStatusVO.setData(tagStatus.getData());
+//            tagStatusVO.setAlertType(tagStatus.getAlertType());
+//            tagStatusVO.setAddTime(tagStatus.getAddTime());
+//            tagStatusVO.setUserId(tagStatus.getUserId());
+//            tagStatusVO.setMapkey(tagStatus.getMapKey());
+//            tagStatusVO.setIsdeal(tagStatus.getIsdeal());
+//            tagStatusVO.setVedio(tagStatus.getVedio());
+//            //type name
+//            Person person = personMapper.getPersonByIdCard(tagStatus.getPersonIdcard());
+//            if (person!=null){
+//                tagStatusVO.setName(person.getPersonName());
+//                tagStatusVO.setImg(person.getImg());
+//            }else {
+//                Goods goods = goodsMapper.getGoodsByByIdCard(tagStatus.getPersonIdcard());
+//                if (goods!=null){
+//                    tagStatusVO.setName(goods.getGoodsName());
+//                    tagStatusVO.setImg(goods.getImg());
+//                }
+//            }
+//
+//            tagStatusVOList.add(tagStatusVO);
+//        }
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");

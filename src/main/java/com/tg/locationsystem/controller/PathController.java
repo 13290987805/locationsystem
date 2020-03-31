@@ -622,7 +622,9 @@ public class PathController {
 
         String sqlCommand = "select * from \""+measurement+"\" where time>"+startTime.getTime()*1000000+" and time < "+endTime.getTime()*1000000+" and mapKey='"+mapKey+"' and personIdcard='"+personIdcard+"'";
         QueryResult results = influxDBConnection.query(sqlCommand);
-        if(results.getResults() == null){
+//        System.err.println(results.getResults());
+//        System.err.println(results.getResults().size());
+        if(results.getResults() == null || results.getResults().get(0).getSeries() == null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("该标签不存在或无轨迹记录");
