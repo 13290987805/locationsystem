@@ -111,6 +111,7 @@ public class TagController {
         tag.setUsed("0");
         tag.setUserId(user.getId());
         tag.setLastonline(new Date());
+        tag.setLastoffline(new Date());
         //添加
         int insert = tagService.insertSelective(tag);
         if (insert>0){
