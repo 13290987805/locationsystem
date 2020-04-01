@@ -15,7 +15,7 @@ public class AddUser {
     @NotBlank(message = "密码不能为空")
     private String password;
     @NotNull(message="角色不能为空")
-    private Integer roleId;
+    private String roleIds;
 
     public AddUser() {
     }
@@ -36,11 +36,11 @@ public class AddUser {
         this.password = password;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public String getRoleIds() {
+        return roleIds;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
     }
 }

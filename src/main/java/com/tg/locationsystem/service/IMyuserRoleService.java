@@ -10,7 +10,7 @@ import java.util.List;
  * @ Date2020/3/28
  */
 public interface IMyuserRoleService extends IBaseService<MyuserRole> {
-    MyuserRole getMyuserRoleByRoleId(Integer roleId);
+    List<MyuserRole> getMyuserRoleByRoleId(Integer roleId);
 
     int deleteByRoleId(Integer roleId);
 

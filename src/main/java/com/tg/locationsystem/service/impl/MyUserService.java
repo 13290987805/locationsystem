@@ -88,4 +88,9 @@ public class MyUserService extends BaseServiceImpl<Myuser> implements IMyUserSer
 
         return new PageInfo<Myuser>(list,3);
     }
+
+    @Override
+    public Myuser getUserByUsername(String username) {
+        return myuserMapper.getUserByName(username);
+    }
 }

@@ -12,4 +12,6 @@ public interface IMyUserService extends IBaseService<Myuser> {
     Myuser getUserByName(String username);
 
     PageInfo<Myuser> getUsersByUserId(Integer id, Integer pageIndex, Integer pageSize);
+
+    Myuser getUserByUsername(String username);
 }
