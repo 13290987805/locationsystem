@@ -147,6 +147,7 @@ public class MyUserController {
             }
             if (myuser.getParentId()!=0&&myuser.getParentId()!=null&&!"".equals(myuser.getParentId())){
                 myuser.setId(myuser.getParentId());
+
             }
 
             //将登陆凭证保存到session中
@@ -696,7 +697,9 @@ public class MyUserController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        Myuser userByName = myUserService.getUserByName(addUser.getUsername());
+
+        //Myuser userByName = myUserService.getUserByName(addUser.getUsername());
+        Myuser userByName = myUserService.getUserByUsername(addUser.getUsername());
         if (userByName != null) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -716,12 +719,23 @@ public class MyUserController {
             myuser.setParentId(user.getId());
             myuser.setCreateUser("1");
 
-            //更新角色用户表
-            MyuserRole myuserRole=myuserRoleService.getMyuserRoleByRoleId(addUser.getRoleId());
-            myuserRole.setUserId(myuser.getId());
-            myuserRoleService.updateByPrimaryKey(myuserRole);
-
             int insert = myUserService.insertSelective(myuser);
+
+            String[] roleIds = addUser.getRoleIds().split(",");
+            for (String roleId : roleIds) {
+                //更新角色用户表
+                MyuserRole myuserRole=new MyuserRole();
+                myuserRole.setRoleId(String.valueOf(roleId));
+                Role role = roleService.selectByPrimaryKey(Integer.parseInt(roleId));
+                if (role!=null){
+                    myuserRole.setRemark(role.getRemark());
+                }
+                myuserRole.setUserId(myuser.getId());
+                //插入
+                myuserRoleService.insertSelective(myuserRole);
+            }
+
+
 
             if (insert>0){
                 resultBean = new ResultBean();
@@ -775,6 +789,12 @@ public class MyUserController {
         }
 
         PageInfo<Myuser> page=myUserService.getUsersByUserId(user.getId(),pageIndex,pageSize);
+       List<Myuser> resultList=new ArrayList<>();
+        for (Myuser myuser : page.getList()) {
+            Myuser userByName = myUserService.getUserByName(myuser.getUsername());
+            resultList.add(userByName);
+        }
+        page.setList(resultList);
 
         resultBean = new ResultBean();
         resultBean.setCode(1);
@@ -845,10 +865,13 @@ public class MyUserController {
             Myuser myuser = myUserService.selectByPrimaryKey(integer);
             resultList.add(myuser);
         }
-
-
-        page.setList(resultList);
-        page.setTotal(resultList.size());
+        List<Myuser> result=new ArrayList<>();
+        for (Myuser myuser : resultList) {
+            Myuser userByName = myUserService.getUserByName(myuser.getUsername());
+            result.add(userByName);
+        }
+        page.setList(result);
+        page.setTotal(result.size());
 
 
         resultBean = new ResultBean();

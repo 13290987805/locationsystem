@@ -148,11 +148,11 @@ public class ShiroController {
             }
         }
         //插入用户,角色记录
-        MyuserRole myuserRole=new MyuserRole();
+        /*MyuserRole myuserRole=new MyuserRole();
         myuserRole.setRoleId(String.valueOf(role.getId()));
         myuserRole.setRemark(shiroVO.getRoleRemark());
         //插入
-        myuserRoleService.insertSelective(myuserRole);
+        myuserRoleService.insertSelective(myuserRole);*/
 
         resultBean = new ResultBean();
         resultBean.setCode(1);
@@ -243,8 +243,8 @@ public ResultBean deleteRole(@RequestParam("") Integer RoleId, HttpServletReques
     }
     //判断是否绑定账号
     //绑定账号不可删
-    MyuserRole myuserRole = myuserRoleService.getMyuserRoleByRoleId(RoleId);
-    if (myuserRole.getUserId()!=null&&!"".equals(myuserRole.getRoleId())){
+    List<MyuserRole> myuserRoleList = myuserRoleService.getMyuserRoleByRoleId(RoleId);
+    if (myuserRoleList.size()>0){
         resultBean = new ResultBean();
         resultBean.setCode(-1);
         resultBean.setMsg("该角色已经绑定账号");
@@ -253,6 +253,16 @@ public ResultBean deleteRole(@RequestParam("") Integer RoleId, HttpServletReques
         resultBean.setSize(list.size());
         return resultBean;
     }
+    /*MyuserRole myuserRole = myuserRoleService.getMyuserRoleByRoleId(RoleId);
+    if (myuserRole.getUserId()!=null&&!"".equals(myuserRole.getRoleId())){
+        resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("该角色已经绑定账号");
+        List<Myuser> list = new ArrayList<>();
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }*/
     //删除角色
     roleService.deleteByPrimaryKey(RoleId);
     //删除用户_角色
