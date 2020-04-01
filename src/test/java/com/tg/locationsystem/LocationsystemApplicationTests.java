@@ -87,7 +87,10 @@ public class LocationsystemApplicationTests {
 	@Autowired
 	private DataSource dataSource;
 
+	@Test
+	public void test19(){
 
+	}
 	@Test
 	public void test18(){
 
