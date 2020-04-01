@@ -6,9 +6,11 @@ import com.tg.locationsystem.entity.EleCallSet;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.MyuserRole;
 import com.tg.locationsystem.entity.Role;
-import com.tg.locationsystem.pojo.*;
+import com.tg.locationsystem.pojo.AddUser;
+import com.tg.locationsystem.pojo.ResultBean;
+import com.tg.locationsystem.pojo.UpdatePassword;
+import com.tg.locationsystem.pojo.User;
 import com.tg.locationsystem.service.*;
-import com.tg.locationsystem.utils.TestUtil;
 import com.tg.locationsystem.utils.UploadFileUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -933,5 +935,91 @@ public class MyUserController {
         return resultBean;
     }
 
+
+
+    /*
+     * 修改账号
+     * */
+    @RequestMapping(value = "uodataUser",method = {RequestMethod.POST})
+    @ResponseBody
+    public ResultBean uodataUser(@Valid Myuser updataUser, BindingResult result,
+                                 HttpServletRequest request) {
+
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (result.hasErrors()) {
+            List<String> errorlist = new ArrayList<>();
+            result.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                // 属性
+                String field = fieldError.getField();
+                // 错误信息
+                String message = field + ":" + fieldError.getDefaultMessage();
+                //System.out.println(field + ":" + message);
+                errorlist.add(message);
+            });
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("信息未填完整");
+            resultBean.setData(errorlist);
+            resultBean.setSize(errorlist.size());
+            return resultBean;
+        }
+
+        Myuser userByName = myUserService.getUserByName(updataUser.getUsername());
+        if (userByName == null) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("该用户不存在,无法修改");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        MyuserRole myuserRole=myuserRoleService.getmyuserRoleByUserId(userByName.getId()).get(0);
+        myuserRole.setRoleId(userByName.getRoles().iterator().next().getRoleId());
+
+
+        try {
+            int update = myuserRoleService.updateByPrimaryKey(myuserRole);
+
+            if (update > 0){
+                resultBean = new ResultBean();
+                resultBean.setCode(1);
+                resultBean.setMsg("用户修改成功");
+                List<MyuserRole> list = new ArrayList<>();
+                list.add(myuserRole);
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }else {
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("用户修改失败");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+        } catch (Exception e) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("用户修改失败:"+e.getMessage());
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+    }
 }
 
