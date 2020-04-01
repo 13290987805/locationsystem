@@ -19,6 +19,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -965,7 +966,8 @@ public class MyUserController {
      * */
     @RequestMapping(value = "uodataUser",method = {RequestMethod.POST})
     @ResponseBody
-    public ResultBean uodataUser(@Valid Myuser updataUser, BindingResult result,
+    @Transactional
+    public ResultBean uodataUser(@RequestParam(value = "roleIds[]",required=true) List<String> roleIds, Integer userId , BindingResult result,
                                  HttpServletRequest request) {
 
         ResultBean resultBean;
@@ -980,27 +982,9 @@ public class MyUserController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        if (result.hasErrors()) {
-            List<String> errorlist = new ArrayList<>();
-            result.getAllErrors().forEach((error) -> {
-                FieldError fieldError = (FieldError) error;
-                // 属性
-                String field = fieldError.getField();
-                // 错误信息
-                String message = field + ":" + fieldError.getDefaultMessage();
-                //System.out.println(field + ":" + message);
-                errorlist.add(message);
-            });
-            resultBean = new ResultBean();
-            resultBean.setCode(-1);
-            resultBean.setMsg("信息未填完整");
-            resultBean.setData(errorlist);
-            resultBean.setSize(errorlist.size());
-            return resultBean;
-        }
 
-        Myuser userByName = myUserService.getUserByName(updataUser.getUsername());
-        if (userByName == null) {
+        Myuser userById = myUserService.selectByPrimaryKey(userId);
+        if (userById == null) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("该用户不存在,无法修改");
@@ -1009,23 +993,11 @@ public class MyUserController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        MyuserRole myuserRole=myuserRoleService.getmyuserRoleByUserId(userByName.getId()).get(0);
-        myuserRole.setRoleId(userByName.getRoles().iterator().next().getRoleId());
 
-
-        try {
-            int update = myuserRoleService.updateByPrimaryKey(myuserRole);
-
-            if (update > 0){
-                resultBean = new ResultBean();
-                resultBean.setCode(1);
-                resultBean.setMsg("用户修改成功");
-                List<MyuserRole> list = new ArrayList<>();
-                list.add(myuserRole);
-                resultBean.setData(list);
-                resultBean.setSize(list.size());
-                return resultBean;
-            }else {
+        List<MyuserRole> myuserRoles = myuserRoleService.getmyuserRoleByUserId(userById.getId());
+        for (MyuserRole myuserRole : myuserRoles){
+            int delete = myuserRoleService.deleteByPrimaryKey(myuserRole.getId());
+            if (delete <= 0){
                 resultBean = new ResultBean();
                 resultBean.setCode(-1);
                 resultBean.setMsg("用户修改失败");
@@ -1034,15 +1006,30 @@ public class MyUserController {
                 resultBean.setSize(list.size());
                 return resultBean;
             }
-        } catch (Exception e) {
-            resultBean = new ResultBean();
-            resultBean.setCode(-1);
-            resultBean.setMsg("用户修改失败:"+e.getMessage());
-            List<Myuser> list = new ArrayList<>();
-            resultBean.setData(list);
-            resultBean.setSize(list.size());
-            return resultBean;
         }
+        for (String roleId : roleIds){
+            MyuserRole myuserRole = new MyuserRole();
+            myuserRole.setRoleId(roleId);
+            myuserRole.setUserId(userId);
+            int insert = myuserRoleService.insertSelective(myuserRole);
+            if (insert <= 0){
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("用户修改失败");
+                List<Myuser> list = new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+        }
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("用户修改成功");
+        List<Myuser> list = new ArrayList<>();
+        list.add(userById);
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
     }
 }
 
