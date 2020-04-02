@@ -11,6 +11,7 @@ import com.tg.locationsystem.utils.PngToSvg;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -35,6 +36,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping("map")
+
 public class MapController {
     @Autowired
     private IMapService mapService;
@@ -48,6 +50,7 @@ public class MapController {
     * */
     @RequestMapping(value = "AddMap",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("map_add")
     public ResultBean AddMap(@Valid AddMapVO addMapVO, BindingResult result,
                              HttpServletRequest request, @RequestParam(value="map",required=false)MultipartFile file){
         ResultBean resultBean;
@@ -302,6 +305,7 @@ public class MapController {
     * */
     @RequestMapping(value = "getMaps",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("map_select")
     public ResultBean getMaps(HttpServletRequest request,@RequestParam(defaultValue = "1") Integer pageIndex,
                               @RequestParam(defaultValue = "1000") Integer pageSize){
         ResultBean resultBean;
@@ -393,6 +397,7 @@ public class MapController {
     * */
     @RequestMapping(value = "queryMap",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("map_select")
     public ResultBean queryMap(@RequestParam("") Integer MapId, HttpServletResponse response,
                                   HttpServletRequest request) throws IOException {
         ResultBean resultBean;
@@ -449,6 +454,7 @@ public class MapController {
      * */
     @RequestMapping(value = "queryMapByKey",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("map_select")
     public ResultBean queryMapByKey(@RequestParam("") String MapKey, HttpServletResponse response,
                                HttpServletRequest request) throws IOException {
         ResultBean resultBean;
@@ -513,6 +519,7 @@ public class MapController {
      * */
     @RequestMapping(value = "deleteMap",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("map_delete")
     public ResultBean deleteMap(@RequestParam("") String MapKey,HttpServletRequest request
                                 ){
 
@@ -587,6 +594,7 @@ public class MapController {
     * */
     @RequestMapping(value = "cleConfig",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("cle_config")
     public ResultBean cleConfig(@Valid CleconfigVO cleconfigVO, BindingResult result,
                                 HttpServletRequest request){
         ResultBean resultBean;
@@ -670,6 +678,7 @@ public class MapController {
     * */
     @RequestMapping(value = "getConfigByMapKey",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("cle_select")
     public ResultBean getConfigByMapKey(@RequestParam("") String MapKey,HttpServletRequest request
     ) {
 

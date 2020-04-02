@@ -8,6 +8,7 @@ import com.tg.locationsystem.mapper.TagTypeMapper;
 import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -62,6 +63,7 @@ public class TagController {
     * */
     @RequestMapping(value = "AddTag",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("tag_add")
     public ResultBean AddTag(@Valid Tag tag, BindingResult result,
                              HttpServletRequest request){
         ResultBean resultBean;
@@ -139,6 +141,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getTags",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTags(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer pageIndex,
                                   @RequestParam(defaultValue = "10") Integer pageSize){
@@ -245,6 +248,7 @@ public class TagController {
     * */
     @RequestMapping(value = "getUsedTagsPage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getUsedTagsPage(HttpServletRequest request,
                               @RequestParam(defaultValue = "1") Integer pageIndex,
                               @RequestParam(defaultValue = "10") Integer pageSize){
@@ -342,6 +346,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getUsedTags",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getUsedTags(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -372,6 +377,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getNoUsedTagsPage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getNoUsedTagsPage(HttpServletRequest request,
                                       @RequestParam(defaultValue = "1") Integer pageIndex,
                                       @RequestParam(defaultValue = "10") Integer pageSize){
@@ -469,6 +475,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getNoUsedTags",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getNoUsedTags(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -499,6 +506,7 @@ public class TagController {
 
     @RequestMapping(value = "AddTagType",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("tag_add")
     public ResultBean AddPersonType(@Valid TagType tagType, BindingResult result,
                                     HttpServletRequest request, MultipartFile file){
 
@@ -615,6 +623,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getTagTypesPage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTagTypesPage(HttpServletRequest request,
                                          @RequestParam(defaultValue = "1") Integer pageIndex,
                                          @RequestParam(defaultValue = "10") Integer pageSize){
@@ -649,6 +658,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getTagTypes",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTagTypes(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -678,6 +688,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getTagsByTypePage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTagsByTypePage(HttpServletRequest request,
                                              @RequestParam("tag_typeid") Integer typeid,
                                              @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -713,6 +724,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getTagsByType",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTagsByType(HttpServletRequest request,
                                         @RequestParam("tag_typeid") Integer typeid){
         ResultBean resultBean;
@@ -742,6 +754,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getAllTagLocation",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public AllTagLocationResult getAllTagLocation(HttpServletRequest request
                                   ){
         AllTagLocationResult allTag;
@@ -858,6 +871,7 @@ public class TagController {
     * */
     @RequestMapping(value = "getOnlineTag",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public AllTagLocationResult getOnlineTag(HttpServletRequest request){
         AllTagLocationResult allTag;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -965,6 +979,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getOfflineTag",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public AllTagLocationResult getOfflineTag(HttpServletRequest request){
         AllTagLocationResult allTag;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1075,6 +1090,7 @@ public class TagController {
     * */
     @RequestMapping(value = "getTagByCondition",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTagByCondition(HttpServletRequest request,
                                         QueryTagCondition queryTagCondition){
         ResultBean resultBean;
@@ -1106,6 +1122,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getTagByConditionPage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getTagByConditionPage(HttpServletRequest request,
                                             @RequestParam(defaultValue = "1") Integer pageIndex,
                                             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -1208,6 +1225,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getAllTagLocationByMap",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public AllTagLocationResult getAllTagLocationByMap(HttpServletRequest request,
                                                        @RequestParam(defaultValue = "",required = false) String MapUUID
     ){
@@ -1403,6 +1421,7 @@ public class TagController {
      * */
     @RequestMapping(value = "getLongTimeTagTop10",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("tag_select")
     public ResultBean getLongTimeTagTop10(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1425,6 +1444,7 @@ public class TagController {
             tagVO2.setIsonline(tempTag.getIsonline());
             tagVO2.setMapKey(tempTag.getMapKey());
             tagVO2.setUserId(tempTag.getUserId());
+            //时间非空处理
             tagVO2.setOnlineTime(tempTag.getLastonline().getTime() - tempTag.getLastoffline().getTime());
             tagVO2List.add(tagVO2);
         }

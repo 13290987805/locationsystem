@@ -12,6 +12,7 @@ import com.tg.locationsystem.service.IMapService;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -53,6 +54,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "AddFrence", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("frence_add")
     public ResultBean AddFrence(@Valid Frence frence, BindingResult result,
                                 HttpServletRequest request) {
         ResultBean resultBean;
@@ -142,6 +144,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "QueryFrence", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("frence_select")
     public ResultBean QueryFrence(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer pageIndex,
                                   @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -216,6 +219,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "deleteFrence", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("frence_delete")
     public ResultBean deleteFrence(HttpServletRequest request,
                                    @RequestParam("frenceid") Integer frenceid) {
         ResultBean resultBean;
@@ -286,6 +290,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "getFrenceHistoryPage", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_frence_select")
     public ResultBean getFrenceHistoryPage(HttpServletRequest request,
                                            @RequestParam(defaultValue = "1") Integer pageIndex,
                                            @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -388,6 +393,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "getFrenceHistory", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_frence_select")
     public ResultBean getFrenceHistory(HttpServletRequest request,
                                        @RequestParam("frenceid") Integer frenceid) {
 
@@ -502,6 +508,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "getFrenceByConditionPage", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("frence_select")
     public ResultBean getFrenceByConditionPage(HttpServletRequest request,
                                                @RequestParam(defaultValue = "1") Integer pageIndex,
                                                @RequestParam(defaultValue = "10") Integer pageSize,
@@ -639,6 +646,7 @@ public class FrenceController {
 
     @RequestMapping(value = "dealFrenceHistory", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("alert_frence_update")
     public ResultBean dealFrenceHistory(@Param("") Integer frenceHistoryid,
                                         HttpServletRequest request
     ) {
@@ -704,6 +712,7 @@ public class FrenceController {
 
     @RequestMapping(value = "deleteFrenceHistory", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("alert_frence_delete")
     public ResultBean deleteFrenceHistory(@Param("") Integer frenceHistoryid,
                                           HttpServletRequest request) {
         ResultBean resultBean;
@@ -752,6 +761,7 @@ public class FrenceController {
     * */
     @RequestMapping(value = "getFrenceHistoryByConditionPage", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_frence_select")
     public ResultBean getFrenceHistoryByConditionPage(HttpServletRequest request,
                                                QueryFrenceHistoryCondition frenceHistoryCondition,
                                                @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -1173,6 +1183,7 @@ public class FrenceController {
 
     @RequestMapping(value = "dealFrenceHistoryBatch", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("alert_frence_update")
     public ResultBean dealFrenceHistoryBatch(@Param("") String frenceHistoryIds,
                                         HttpServletRequest request
     ) {
@@ -1240,6 +1251,7 @@ public class FrenceController {
 
     @RequestMapping(value = "getAllFrenceHistoryByIsDeal",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_frence_select")
     public ResultBean getAllFrenceHistoryByIsDeal(HttpServletRequest request,
                                               @RequestParam(defaultValue = "") String isdeal,
                                               @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -1361,6 +1373,7 @@ public class FrenceController {
     * */
     @RequestMapping(value = "setAllFrenceHistoryDeal",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("alert_frence_update")
     public ResultBean setAllFrenceHistoryDeal(HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1391,6 +1404,7 @@ public class FrenceController {
     * */
     @RequestMapping(value = "setFrenceSwitch",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("frence_switch")
     public ResultBean setFrenceSwitch(HttpServletRequest request,
                                       @RequestParam(defaultValue = "") Integer frenceId,
                                        @RequestParam(defaultValue = "") String setSwitch) {

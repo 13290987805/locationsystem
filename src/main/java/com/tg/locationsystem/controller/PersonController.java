@@ -60,9 +60,10 @@ public class PersonController {
     * */
     @RequestMapping(value = "AddPerson",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("peson_add")
     public ResultBean AddPerson(@Valid Person person, BindingResult result,
                                 HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
-        //System.out.println("添加人员:"+person.getPersonName());
+//        System.out.println("添加人员:"+person.getPersonName());
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
         //未登录
@@ -97,9 +98,11 @@ public class PersonController {
             return resultBean;
         }
 
-        //System.out.println(person.toString());
+        System.out.println(person.toString());
+
         //人员已经存在
         Person myperson=personService.getPersonByIdCard(person.getIdCard());
+
         if (myperson!=null){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -110,6 +113,7 @@ public class PersonController {
             return resultBean;
         }
         Tag usetag = tagService.getTagByAddress(person.getTagAddress());
+        System.out.println(usetag);
         if ("1".equals(usetag.getUsed())){
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -126,6 +130,7 @@ public class PersonController {
             person.setTagAddress("");
         }
         Tag tag = tagService.getTagByAddress(person.getTagAddress());
+        System.out.println(tag);
         if (tag!=null){
             tag.setUsed("1");
             //更新标签表
@@ -168,7 +173,9 @@ public class PersonController {
                 return resultBean;
             }
         }
+        System.out.println("1111");
         int insert = personService.insertSelective(person);
+        System.out.println("22222");
         if (insert>0){
             //把该标签放到缓存中
             Map<String, Integer> usermap = SystemMap.getUsermap();
@@ -203,6 +210,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersonsByNoTag",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("person_select")
     public ResultBean getPersonsByNoTag(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -269,7 +277,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersons",method = RequestMethod.GET)
     @ResponseBody
-   // @RequiresPermissions("query")
+    @RequiresPermissions("person_select")
     public ResultBean getPersons(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer pageIndex,
                                   @RequestParam(defaultValue = "1000") Integer pageSize){
@@ -393,6 +401,7 @@ public class PersonController {
     * */
     @RequestMapping(value = "AddPersonType",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("person_update")
     public ResultBean AddPersonType(@Valid PersonType personType, BindingResult result,
                                     HttpServletRequest request,@RequestParam(value="image",required=false)MultipartFile file){
 
@@ -514,6 +523,7 @@ public class PersonController {
     * */
     @RequestMapping(value = "getPersonTypesPage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("person_select")
     public ResultBean getPersonTypesPage(HttpServletRequest request,
                                  @RequestParam(defaultValue = "1") Integer pageIndex,
                                  @RequestParam(defaultValue = "10") Integer pageSize){
@@ -547,6 +557,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersonTypes",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("person_select")
     public ResultBean getPersonTypes(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -575,6 +586,7 @@ public class PersonController {
     * */
     @RequestMapping(value = "getPersonsByTypePage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("person_select")
     public ResultBean getPersonsByteTypePage(HttpServletRequest request,
                                          @RequestParam("person_typeid") Integer typeid,
                                          @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -660,6 +672,7 @@ public class PersonController {
      * */
     @RequestMapping(value = "getPersonsByType",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("person_select")
     public ResultBean getPersonsByType(HttpServletRequest request,
                                              @RequestParam("person_typeid") Integer typeid){
         ResultBean resultBean;
@@ -725,6 +738,7 @@ public class PersonController {
 * */
 @RequestMapping(value = "deletePerson",method = RequestMethod.POST)
 @ResponseBody
+@RequiresPermissions("peson_delete")
 public ResultBean deletePerson(HttpServletRequest request,
                                @RequestParam("personid") Integer personid){
     ResultBean resultBean;
@@ -919,7 +933,8 @@ public ResultBean deletePerson(HttpServletRequest request,
     * */
     @RequestMapping(value = "UpdatePerson",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public ResultBean UpdatePerson(@Valid Person person, BindingResult result,
+    @RequiresPermissions("person_update")
+    public ResultBean UpdatePerson(Person person, BindingResult result,
                                 HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
 
         ResultBean resultBean;
@@ -1049,7 +1064,9 @@ public ResultBean deletePerson(HttpServletRequest request,
                 }
             }
         }
+        System.out.println(person.toString());
         int update = personService.updateByPrimaryKeySelective(person);
+        System.out.println(update);
         if (update>0){
             //把该标签放到缓存中
             Map<String, Integer> usermap = SystemMap.getUsermap();
@@ -1081,6 +1098,7 @@ public ResultBean deletePerson(HttpServletRequest request,
 * */
 @RequestMapping(value = "UpdatePersonType",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
+@RequiresPermissions("person_update")
 public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult result,
                                 HttpServletRequest request,@RequestParam(value="image",required=false)MultipartFile file){
     ResultBean resultBean;
@@ -1191,6 +1209,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
      * */
     @RequestMapping(value = "getPersonsByMsg",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("person_select")
     public ResultBean getPersonsByMsg(HttpServletRequest request,
                                       @RequestParam(defaultValue = "1") Integer pageIndex,
                                       @RequestParam(defaultValue = "10") Integer pageSize,
@@ -1333,6 +1352,7 @@ public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult r
 * */
 @RequestMapping(value = "getPersonsByTagTypeId",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("person_select")
 public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
                                   @RequestParam(defaultValue = "") String tagTypeId){
     ResultBean resultBean;
@@ -1402,6 +1422,7 @@ public ResultBean getPersonsByTagTypeId(HttpServletRequest request,
 * */
 @RequestMapping(value = "getPersonsByDepId",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("person_select")
 public ResultBean getPersonsByDepId(HttpServletRequest request,
                                     @RequestParam(defaultValue = "1") Integer pageIndex,
                                     @RequestParam(defaultValue = "10") Integer pageSize,
