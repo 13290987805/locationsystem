@@ -9,6 +9,7 @@ import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.test.BuildTree;
 import com.tg.locationsystem.utils.test.Test;
 import com.tg.locationsystem.utils.test.Tree;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -40,6 +41,7 @@ public class DepController {
     * */
     @RequestMapping(value = "AddDep", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("dep_add")
     public ResultBean AddDep(@Valid Dep dep, BindingResult result,
                                 HttpServletRequest request) {
         ResultBean resultBean;
@@ -119,6 +121,7 @@ public class DepController {
     * */
     @RequestMapping(value = "getDep", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("dep_select")
     public ResultBean getDep(HttpServletRequest request) {
 
         ResultBean resultBean;
@@ -180,6 +183,7 @@ public class DepController {
 * */
 @RequestMapping(value = "deleteDep",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
+@RequiresPermissions("dep_delete")
 public ResultBean deleteDep(@RequestParam("") Integer DepId, HttpServletRequest request
 ){
     ResultBean resultBean;
@@ -258,6 +262,7 @@ public ResultBean deleteDep(@RequestParam("") Integer DepId, HttpServletRequest 
 * */
 @RequestMapping(value = "updateDep",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
+@RequiresPermissions("dep_update")
 public ResultBean updateDep(@Valid Dep dep, BindingResult result, HttpServletRequest request
 ) {
     ResultBean resultBean;

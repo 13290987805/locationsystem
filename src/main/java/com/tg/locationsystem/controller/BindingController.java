@@ -9,6 +9,7 @@ import com.tg.locationsystem.service.IGoodsService;
 import com.tg.locationsystem.service.IPersonService;
 import com.tg.locationsystem.service.ITagService;
 import com.tg.locationsystem.utils.SystemMap;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("binding")
+@RequiresPermissions("tag_binding")
 public class BindingController {
     @Autowired
     private IPersonService personService;

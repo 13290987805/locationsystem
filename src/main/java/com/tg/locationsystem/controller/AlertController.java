@@ -8,6 +8,7 @@ import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,7 @@ private IEleCallSetService eleCallSetService;
      * */
     @RequestMapping(value = "getTagStatus",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_tag_select")
     public ResultBean getTagStatus(HttpServletRequest request,
                                @RequestParam(defaultValue = "1") Integer pageIndex,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -165,6 +167,7 @@ private IEleCallSetService eleCallSetService;
      * */
     @RequestMapping(value = "getTagStatusNoPg",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_tag_select")
     public ResultBean getTagStatusNoPg(HttpServletRequest request) {
         //System.out.println(System.currentTimeMillis());
         ResultBean resultBean;
@@ -254,6 +257,7 @@ private IEleCallSetService eleCallSetService;
      * */
     @RequestMapping(value = "getTagStatusByType",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("alert_tag_select")
     public ResultBean getTagStatusByType(HttpServletRequest request,
                                          @RequestParam(defaultValue = "") String typeid,
                                    @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -426,6 +430,7 @@ private IEleCallSetService eleCallSetService;
     * */
     @RequestMapping(value = "setHeartRate",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("systemSet_heartRange")
     public ResultBean setHeartRate(@Valid HeartRateSet heartRateSet , BindingResult result,HttpServletRequest request
                                    ) {
         ResultBean resultBean;
@@ -526,6 +531,7 @@ private IEleCallSetService eleCallSetService;
 * */
 @RequestMapping(value = "getHeartRateHistoryByAddAndTime",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("date_heart")
 public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
                                      @Valid HeartRateHistoryCondition historyCondition,BindingResult result,
                                      @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -608,6 +614,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
 
     @RequestMapping(value = "getHeartRateHistoryByAddData",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("date_heart")
     public ResultBean getHeartRateHistoryByAddAndTimeData(HttpServletRequest request,
                                                           @RequestParam(value = "personIdcards[]",required=true) List<String> personIdcards) {
 
@@ -660,6 +667,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
 * */
 @RequestMapping(value = "dealTagStatus",method = RequestMethod.POST)
 @ResponseBody
+@RequiresPermissions("alert_tag_update")
 public ResultBean dealTagStatus(HttpServletRequest request,
                                 @Param("") Integer tagStatusid) {
 
@@ -720,6 +728,7 @@ public ResultBean dealTagStatus(HttpServletRequest request,
 * */
 @RequestMapping(value = "getTagStatusByCondition",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("alert_tag_select")
 public ResultBean getTagStatusByCondition(HttpServletRequest request,
                                 @RequestParam(defaultValue = "") String msg,
                                 @RequestParam(defaultValue = "") String typeid,
@@ -909,6 +918,7 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
 * */
 @RequestMapping(value = "deleteTagStatus",method = RequestMethod.POST)
 @ResponseBody
+@RequiresPermissions("alert_tag_delete")
 public ResultBean deleteTagStatus(HttpServletRequest request,
                                @RequestParam("") Integer tagStatusid){
     ResultBean resultBean;
@@ -957,6 +967,7 @@ public ResultBean deleteTagStatus(HttpServletRequest request,
 * */
 @RequestMapping(value = "getAllTagStatusByDeal",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("alert_tag_select")
 public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
                                         @RequestParam(defaultValue = "") String typeid,
                                         @RequestParam(defaultValue = "") String isdeal,
@@ -1079,6 +1090,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
 * */
 @RequestMapping(value = "setSoS",method = RequestMethod.POST)
 @ResponseBody
+@RequiresPermissions("systemSet_sos")
 public ResultBean setSoS(HttpServletRequest request,
                                         @RequestParam(defaultValue = "") String setSoS) {
 
@@ -1192,6 +1204,7 @@ public ResultBean setSoS(HttpServletRequest request,
      * */
     @RequestMapping(value = "setHeart",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("systemSet_heart")
     public ResultBean setHeart(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String setHeart) {
         ResultBean resultBean;
@@ -1302,6 +1315,7 @@ public ResultBean setSoS(HttpServletRequest request,
      * */
     @RequestMapping(value = "setCut",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("systemSet_cut")
     public ResultBean setCut(HttpServletRequest request,
                                @RequestParam(defaultValue = "") String setCut) {
         ResultBean resultBean;
@@ -1413,6 +1427,7 @@ public ResultBean setSoS(HttpServletRequest request,
      * */
     @RequestMapping(value = "setBattery",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("systemSet_ele")
     public ResultBean setBattery(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String setBattery) {
         ResultBean resultBean;
@@ -1526,6 +1541,7 @@ public ResultBean setSoS(HttpServletRequest request,
     * */
     @RequestMapping(value = "setDealBatch",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("alert_tag_update")
     public ResultBean setDealBatch(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String TagStatusIds) {
         ResultBean resultBean;
@@ -1589,6 +1605,7 @@ public ResultBean setSoS(HttpServletRequest request,
 * */
 @RequestMapping(value = "getAllAlertSet",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("systemSet_seeSwitch")
 public ResultBean getAllAlertSet(HttpServletRequest request) {
     ResultBean resultBean;
     Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1674,6 +1691,7 @@ public ResultBean getAllAlertSet(HttpServletRequest request) {
 * */
 @RequestMapping(value = "getTagStatusBySomeCondition",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("alert_tag_select")
 public ResultBean getTagStatusBySomeCondition(HttpServletRequest request,
                                           QueryTagStatusVO queryTagStatusVO,
                                           @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -1866,6 +1884,7 @@ public ResultBean getTagStatusBySomeCondition(HttpServletRequest request,
 * */
 @RequestMapping(value = "getAllTagStatusByIsDeal",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("alert_tag_select")
 public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
                                         @RequestParam(defaultValue = "") String isdeal,
                                         @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -1978,6 +1997,7 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
      * */
     @RequestMapping(value = "setAllAlertDeal",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("alert_tag_update")
     public ResultBean setAllAlertDeal(HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");

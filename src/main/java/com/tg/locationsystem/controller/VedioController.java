@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +33,7 @@ public class VedioController {
     *
     * */
     @RequestMapping(value = "downVedio",method = RequestMethod.GET)
+    @RequiresPermissions("camera_select")
     public void   querygoodsTypeImg(@RequestParam("VedioUrl") String url, HttpServletResponse response,
                                   HttpServletRequest request) throws IOException {
 

@@ -943,9 +943,9 @@ public class MyUserController {
         List<MyuserRole> myuserRoles = myuserRoleService.getmyuserRoleByUserId(UserId);
         for (MyuserRole myuserRole : myuserRoles) {
             //删除角色
-            roleService.deleteByPrimaryKey(Integer.parseInt(myuserRole.getRoleId()));
+           // roleService.deleteByPrimaryKey(Integer.parseInt(myuserRole.getRoleId()));
             //删除权限
-            rolePermissionService.deleteByRoleId(Integer.parseInt(myuserRole.getRoleId()));
+           // rolePermissionService.deleteByRoleId(Integer.parseInt(myuserRole.getRoleId()));
             //删除角色,权限
             myuserRoleService.deleteByPrimaryKey(myuserRole.getId());
         }

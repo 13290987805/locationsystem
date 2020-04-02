@@ -15,6 +15,7 @@ import com.tg.locationsystem.pojo.StationVO;
 import com.tg.locationsystem.service.IMapService;
 import com.tg.locationsystem.service.IStationService;
 import com.tg.locationsystem.utils.SystemMap;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -289,6 +290,7 @@ public class StationController {
    * */
    @RequestMapping(value = "SetStations",method = RequestMethod.GET)
    @ResponseBody
+   @RequiresPermissions("ststion_update")
    public ResultBean SetStations(HttpServletRequest request,
                                  @RequestParam("") String StationIds){
        ResultBean resultBean;
@@ -349,6 +351,7 @@ public class StationController {
    * */
    @RequestMapping(value = "getStationsByMapKey",method = RequestMethod.GET)
    @ResponseBody
+   @RequiresPermissions("station_select")
    public ResultBean getStationsByMapKey(HttpServletRequest request,
                                  @RequestParam("") String mapkey,
                                          @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -447,6 +450,7 @@ public class StationController {
      * */
     @RequestMapping(value = "SetStationsByPOST",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("ststion_update")
     public ResultBean SetStationsByPOST(HttpServletRequest request,
                                   @RequestParam("") String stationJson, @RequestParam("") String MapUUID){
         ResultBean resultBean;
@@ -581,6 +585,7 @@ public class StationController {
     * */
     @RequestMapping(value = "locationOrder",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("cle_location")
     public ResultBean locationOrder(HttpServletRequest request,
                                         @RequestParam("") String locationOrder,@RequestParam("") String MapUUID){
 
@@ -659,6 +664,7 @@ public class StationController {
      * */
     @RequestMapping(value = "delStation",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("ststion_delete")
     public ResultBean delStation(HttpServletRequest request,
                                  @RequestParam("") Integer stationId){
         ResultBean resultBean;

@@ -10,6 +10,7 @@ import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.StringUtils;
 import com.tg.locationsystem.utils.SystemMap;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -53,6 +54,7 @@ public class CallController {
      * */
     @RequestMapping(value = "setTime", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("systemSet_heartTime")
     public ResultBean setTime(@Valid EleCallSet eleCallSet, BindingResult result,
                               HttpServletRequest request) {
         ResultBean resultBean;
@@ -452,6 +454,7 @@ public class CallController {
      * */
     @RequestMapping(value = "setSwitch", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("systemSet_call")
     public ResultBean setSwitch(@RequestParam(defaultValue = "") String setSwitch,
                                 HttpServletRequest request) {
         ResultBean resultBean;
@@ -675,6 +678,7 @@ public class CallController {
      * */
     @RequestMapping(value = "getStatisticsPage", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("date_call")
     public ResultBean getStatisticsPage(HttpServletRequest request,
                                         @RequestParam(defaultValue = "1") Integer pageIndex,
                                         @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -708,6 +712,7 @@ public class CallController {
      * */
     @RequestMapping(value = "getStatistics", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("date_call")
     public ResultBean getStatistics(HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -764,6 +769,7 @@ public class CallController {
      * */
     @RequestMapping(value = "getEleCallByKeyPage", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("date_call")
     public ResultBean getEleCallByKeyPage(HttpServletRequest request,
                                           @RequestParam(defaultValue = "") String timeuser,
                                           @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -809,6 +815,7 @@ public class CallController {
      * */
     @RequestMapping(value = "getEleCallByKey", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("date_call")
     public ResultBean getEleCallByKey(HttpServletRequest request,
                                       @RequestParam(defaultValue = "") String timeuser) {
         ResultBean resultBean;
@@ -847,6 +854,7 @@ public class CallController {
      * */
     @RequestMapping(value = "getEleCallByArea", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("date_startCall")
     public ResultBean getEleCallByArea(HttpServletRequest request,
                                        @RequestParam(defaultValue = "") String area,
                                        @RequestParam(defaultValue = "") String MapKey) {

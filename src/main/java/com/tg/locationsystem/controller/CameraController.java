@@ -8,6 +8,7 @@ import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.ICameraService;
 import com.tg.locationsystem.utils.IPUtil;
 import com.tg.locationsystem.utils.SystemMap;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "addCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("camera_add")
     public ResultBean addCamera(@Valid Camera camera, BindingResult result,
                                 HttpServletRequest request) throws UnknownHostException {
 
@@ -137,6 +139,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "updateCamera", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("camera_update")
     public ResultBean updateCamera(@Valid Camera camera, BindingResult result,
                                    HttpServletRequest request) {
 
@@ -219,6 +222,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "startCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("camera_select")
     public ResultBean startCamera(@RequestParam("") Integer cameraId, HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -297,6 +301,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "stopCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("camera_select")
     public ResultBean stopCamera(@RequestParam("") Integer cameraId, HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -361,6 +366,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "stopAllCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("camera_select")
     public ResultBean stopAllCamera(HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -406,6 +412,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "getCameraByMapKeyPage", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("camera_select")
     public ResultBean getCameraByMapKeyPage(@RequestParam("") String mapKey, HttpServletRequest request,
                                             @RequestParam(defaultValue = "1") Integer pageIndex,
                                             @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -450,6 +457,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "getCameraByMapKey", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
+    @RequiresPermissions("camera_select")
     public ResultBean getCameraByMapKey(@RequestParam("") String mapKey, HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -489,6 +497,7 @@ public class CameraController {
      * */
     @RequestMapping(value = "delCamera", method = {RequestMethod.POST})
     @ResponseBody
+    @RequiresPermissions("camera_delete")
     public ResultBean deleteCamera(@RequestParam("") Integer cameraId, HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");

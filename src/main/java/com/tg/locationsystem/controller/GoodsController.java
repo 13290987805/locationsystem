@@ -9,6 +9,7 @@ import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.UploadFileUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -55,6 +56,7 @@ public class GoodsController {
     * */
     @RequestMapping(value = "AddGoods",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("goods_add")
     public ResultBean AddGoods(@Valid Goods goods, BindingResult result,
                                HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
 
@@ -194,6 +196,7 @@ public class GoodsController {
 * */
 @RequestMapping(value = "getGoods",method = RequestMethod.GET)
 @ResponseBody
+@RequiresPermissions("goods_select")
 public ResultBean getGoods(HttpServletRequest request,
                              @RequestParam(defaultValue = "1") Integer pageIndex,
                              @RequestParam(defaultValue = "10") Integer pageSize){
@@ -264,6 +267,7 @@ public ResultBean getGoods(HttpServletRequest request,
 
     @RequestMapping(value = "getLocation",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public AllTagLocationResult getLocation(HttpServletRequest request,
                                             @RequestParam("goodsids") String goodsids){
 
@@ -313,6 +317,7 @@ public ResultBean getGoods(HttpServletRequest request,
     * */
     @RequestMapping(value = "AddGoodsType",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("goods_add")
     public ResultBean AddGoodsType(@Valid GoodsType goodsType, BindingResult result,
                                     HttpServletRequest request,@RequestParam(value="image",required=false) MultipartFile file){
 
@@ -428,6 +433,7 @@ public ResultBean getGoods(HttpServletRequest request,
      * */
     @RequestMapping(value = "getGoodsTypesPage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public ResultBean getGoodsTypesPage(HttpServletRequest request,
                                          @RequestParam(defaultValue = "1") Integer pageIndex,
                                          @RequestParam(defaultValue = "10") Integer pageSize){
@@ -460,6 +466,7 @@ public ResultBean getGoods(HttpServletRequest request,
      * */
     @RequestMapping(value = "getGoodsTypes",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public ResultBean getGoodsTypes(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -488,6 +495,7 @@ public ResultBean getGoods(HttpServletRequest request,
      * */
     @RequestMapping(value = "getGoodsByTypePage",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public ResultBean getGoodsByTypePage(HttpServletRequest request,
                                              @RequestParam("goods_typeid") Integer typeid,
                                              @RequestParam(defaultValue = "1") Integer pageIndex,
@@ -523,6 +531,7 @@ public ResultBean getGoods(HttpServletRequest request,
      * */
     @RequestMapping(value = "getGoodsByType",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public ResultBean getGoodsByType(HttpServletRequest request,
                                        @RequestParam("goods_typeid") Integer typeid){
 
@@ -553,6 +562,7 @@ public ResultBean getGoods(HttpServletRequest request,
 * */
 @RequestMapping(value = "deleteGoods",method = RequestMethod.POST)
 @ResponseBody
+@RequiresPermissions("goods_delete")
 public ResultBean deleteGoods(HttpServletRequest request,
                                @RequestParam("goodsid") Integer goodsid){
     ResultBean resultBean;
@@ -742,6 +752,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
 * */
 @RequestMapping(value = "UpdateGoods",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
+@RequiresPermissions("goods_update")
 public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
                                HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
     ResultBean resultBean;
@@ -907,6 +918,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
 * */
 @RequestMapping(value = "UpdateGoodsType",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
+@RequiresPermissions("goods_update")
 public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult result,
                                    HttpServletRequest request,@RequestParam(value="image",required=false)MultipartFile file){
     ResultBean resultBean;
@@ -1017,6 +1029,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
      * */
     @RequestMapping(value = "getGoodsByMsg",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public ResultBean getPersonsByMsg(HttpServletRequest request,
                                       @RequestParam(defaultValue = "1") Integer pageIndex,
                                       @RequestParam(defaultValue = "10") Integer pageSize,
@@ -1140,6 +1153,7 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
      * */
     @RequestMapping(value = "getGoodsByNoTag",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("goods_select")
     public ResultBean getGoodsByNoTag(HttpServletRequest request){
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
