@@ -34,7 +34,7 @@ public class ShiroException {
     @ExceptionHandler(AuthorizationException.class)
     public ResultBean AuthorizationException(Exception ex) {
         ResultBean resultBean = new ResultBean();
-        resultBean.setCode(-1);
+        resultBean.setCode(5);
         resultBean.setMsg("未进行登录认证！");
         List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);

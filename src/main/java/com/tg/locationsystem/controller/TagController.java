@@ -1467,7 +1467,7 @@ public class TagController {
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
-        resultBean.setData(tagVO2List.subList(0,10));
+        resultBean.setData(tagVO2List.subList(0,tagVO2List.size() >= 10 ? 10 : tagVO2List.size()));
         resultBean.setSize( 10);
         return resultBean;
     }

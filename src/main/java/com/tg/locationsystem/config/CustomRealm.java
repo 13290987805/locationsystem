@@ -36,6 +36,9 @@ public class CustomRealm extends AuthorizingRealm {
         String name = (String) principalCollection.getPrimaryPrincipal();
         //根据用户名去数据库查询用户信息
         Myuser user = myUserService.getUserByName(name);
+        if (user==null){
+            return null;
+        }
         //System.out.println("用户:"+user);
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();

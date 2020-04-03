@@ -41,6 +41,9 @@ public class SysAspect {
 
     @AfterReturning("logPointCut()")
     public void saveSysLog(JoinPoint joinPoint) {
+        try {
+
+
         //保存日志
         SysLog sysLog = new SysLog();
 
@@ -85,5 +88,9 @@ public class SysAspect {
 
         //调用service保存SysLog实体类到数据库
         sysLogService.insertSelective(sysLog);
+        }catch (Exception e){
+            System.out.println("异常:"+e.getMessage());
+            return;
+        }
     }
 }
