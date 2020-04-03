@@ -2,6 +2,7 @@ package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.ICleConfigService;
@@ -51,6 +52,7 @@ public class MapController {
     @RequestMapping(value = "AddMap",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("map_add")
+    @Operation("导入地图")
     public ResultBean AddMap(@Valid AddMapVO addMapVO, BindingResult result,
                              HttpServletRequest request, @RequestParam(value="map",required=false)MultipartFile file){
         ResultBean resultBean;
@@ -520,6 +522,7 @@ public class MapController {
     @RequestMapping(value = "deleteMap",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("map_delete")
+    @Operation("删除地图")
     public ResultBean deleteMap(@RequestParam("") String MapKey,HttpServletRequest request
                                 ){
 

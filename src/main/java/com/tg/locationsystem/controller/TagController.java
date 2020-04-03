@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.GoodsMapper;
 import com.tg.locationsystem.mapper.PersonMapper;
@@ -64,6 +65,7 @@ public class TagController {
     @RequestMapping(value = "AddTag",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("tag_add")
+    @Operation("添加标签")
     public ResultBean AddTag(@Valid Tag tag, BindingResult result,
                              HttpServletRequest request){
         ResultBean resultBean;
@@ -507,6 +509,7 @@ public class TagController {
     @RequestMapping(value = "AddTagType",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("tag_add")
+    @Operation("新增标签类型")
     public ResultBean AddPersonType(@Valid TagType tagType, BindingResult result,
                                     HttpServletRequest request, MultipartFile file){
 
@@ -1351,6 +1354,7 @@ public class TagController {
     * */
     @RequestMapping(value = "delTag",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("删除标签")
     public ResultBean delTag(HttpServletRequest request,
                              @RequestParam("") String tagAddress){
         ResultBean resultBean;
@@ -1463,8 +1467,8 @@ public class TagController {
         resultBean = new ResultBean();
         resultBean.setCode(1);
         resultBean.setMsg("操作成功");
-        resultBean.setData(tagVO2List.subList(0,10));
-        resultBean.setSize( 10);
+        resultBean.setData(tagVO2List.subList(0,tagVO2List.size() >= 10 ? 10 : tagVO2List.size()));
+        resultBean.setSize(tagVO2List.size() >= 10 ? 10 : tagVO2List.size());
         return resultBean;
     }
 

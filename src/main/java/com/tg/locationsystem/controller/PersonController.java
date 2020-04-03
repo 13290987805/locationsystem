@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.PersonTypeMapper;
@@ -61,6 +62,7 @@ public class PersonController {
     @RequestMapping(value = "AddPerson",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("peson_add")
+    @Operation("添加人员")
     public ResultBean AddPerson(@Valid Person person, BindingResult result,
                                 HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
 //        System.out.println("添加人员:"+person.getPersonName());
@@ -402,6 +404,7 @@ public class PersonController {
     @RequestMapping(value = "AddPersonType",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("person_update")
+    @Operation("新增人员类型")
     public ResultBean AddPersonType(@Valid PersonType personType, BindingResult result,
                                     HttpServletRequest request,@RequestParam(value="image",required=false)MultipartFile file){
 
@@ -739,6 +742,7 @@ public class PersonController {
 @RequestMapping(value = "deletePerson",method = RequestMethod.POST)
 @ResponseBody
 @RequiresPermissions("peson_delete")
+@Operation("删除人员")
 public ResultBean deletePerson(HttpServletRequest request,
                                @RequestParam("personid") Integer personid){
     ResultBean resultBean;
@@ -934,6 +938,7 @@ public ResultBean deletePerson(HttpServletRequest request,
     @RequestMapping(value = "UpdatePerson",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("person_update")
+    @Operation("修改人员信息")
     public ResultBean UpdatePerson(Person person, BindingResult result,
                                 HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
 
@@ -1099,6 +1104,7 @@ public ResultBean deletePerson(HttpServletRequest request,
 @RequestMapping(value = "UpdatePersonType",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
 @RequiresPermissions("person_update")
+@Operation("修改人员类型")
 public ResultBean UpdatePersonType(@Valid PersonType personType, BindingResult result,
                                 HttpServletRequest request,@RequestParam(value="image",required=false)MultipartFile file){
     ResultBean resultBean;

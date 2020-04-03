@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.tg.locationsystem.LocationsystemApplication;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.Map;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.Station;
@@ -47,6 +48,7 @@ public class StationController {
 * */
     @RequestMapping(value = "AddStation",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("添加网关设备")
     public ResultBean AddStation(@Valid Station station, BindingResult result,
                                  HttpServletRequest request){
         ResultBean resultBean;
@@ -291,6 +293,7 @@ public class StationController {
    @RequestMapping(value = "SetStations",method = RequestMethod.GET)
    @ResponseBody
    @RequiresPermissions("ststion_update")
+   @Operation("配置基站")
    public ResultBean SetStations(HttpServletRequest request,
                                  @RequestParam("") String StationIds){
        ResultBean resultBean;
@@ -451,6 +454,7 @@ public class StationController {
     @RequestMapping(value = "SetStationsByPOST",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("ststion_update")
+    @Operation("配置基站")
     public ResultBean SetStationsByPOST(HttpServletRequest request,
                                   @RequestParam("") String stationJson, @RequestParam("") String MapUUID){
         ResultBean resultBean;
@@ -665,6 +669,7 @@ public class StationController {
     @RequestMapping(value = "delStation",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("ststion_delete")
+    @Operation("删除基站")
     public ResultBean delStation(HttpServletRequest request,
                                  @RequestParam("") Integer stationId){
         ResultBean resultBean;

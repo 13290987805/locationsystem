@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.GoodsMapper;
 import com.tg.locationsystem.mapper.GoodsTypeMapper;
@@ -57,6 +58,7 @@ public class GoodsController {
     @RequestMapping(value = "AddGoods",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("goods_add")
+    @Operation("添加物品")
     public ResultBean AddGoods(@Valid Goods goods, BindingResult result,
                                HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
 
@@ -318,6 +320,7 @@ public ResultBean getGoods(HttpServletRequest request,
     @RequestMapping(value = "AddGoodsType",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("goods_add")
+    @Operation("添加物品类型")
     public ResultBean AddGoodsType(@Valid GoodsType goodsType, BindingResult result,
                                     HttpServletRequest request,@RequestParam(value="image",required=false) MultipartFile file){
 
@@ -563,6 +566,7 @@ public ResultBean getGoods(HttpServletRequest request,
 @RequestMapping(value = "deleteGoods",method = RequestMethod.POST)
 @ResponseBody
 @RequiresPermissions("goods_delete")
+@Operation("删除物品信息")
 public ResultBean deleteGoods(HttpServletRequest request,
                                @RequestParam("goodsid") Integer goodsid){
     ResultBean resultBean;
@@ -753,6 +757,7 @@ public ResultBean deleteGoods(HttpServletRequest request,
 @RequestMapping(value = "UpdateGoods",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
 @RequiresPermissions("goods_update")
+@Operation("修改物品信息")
 public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
                                HttpServletRequest request, @RequestParam(value="image",required=false)MultipartFile file){
     ResultBean resultBean;
@@ -919,6 +924,7 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
 @RequestMapping(value = "UpdateGoodsType",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
 @RequiresPermissions("goods_update")
+@Operation("修改物品类型信息")
 public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult result,
                                    HttpServletRequest request,@RequestParam(value="image",required=false)MultipartFile file){
     ResultBean resultBean;

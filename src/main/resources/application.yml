@@ -1,4 +1,7 @@
 spring:
+  aop:
+    proxy-target-class: true
+    auto: true
   influx:
     url: http://localhost:8086
     user: admin

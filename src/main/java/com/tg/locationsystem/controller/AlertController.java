@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.*;
 import com.tg.locationsystem.pojo.*;
@@ -431,6 +432,7 @@ private IEleCallSetService eleCallSetService;
     @RequestMapping(value = "setHeartRate",method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("systemSet_heartRange")
+    @Operation("设置心率范围")
     public ResultBean setHeartRate(@Valid HeartRateSet heartRateSet , BindingResult result,HttpServletRequest request
                                    ) {
         ResultBean resultBean;
@@ -668,6 +670,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
 @RequestMapping(value = "dealTagStatus",method = RequestMethod.POST)
 @ResponseBody
 @RequiresPermissions("alert_tag_update")
+@Operation("处理告警")
 public ResultBean dealTagStatus(HttpServletRequest request,
                                 @Param("") Integer tagStatusid) {
 
@@ -919,6 +922,7 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
 @RequestMapping(value = "deleteTagStatus",method = RequestMethod.POST)
 @ResponseBody
 @RequiresPermissions("alert_tag_delete")
+@Operation("删除告警信息")
 public ResultBean deleteTagStatus(HttpServletRequest request,
                                @RequestParam("") Integer tagStatusid){
     ResultBean resultBean;
@@ -1091,6 +1095,7 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
 @RequestMapping(value = "setSoS",method = RequestMethod.POST)
 @ResponseBody
 @RequiresPermissions("systemSet_sos")
+@Operation("设置sos报警开关")
 public ResultBean setSoS(HttpServletRequest request,
                                         @RequestParam(defaultValue = "") String setSoS) {
 
@@ -1205,6 +1210,7 @@ public ResultBean setSoS(HttpServletRequest request,
     @RequestMapping(value = "setHeart",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("systemSet_heart")
+    @Operation("设置心率报警开关")
     public ResultBean setHeart(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String setHeart) {
         ResultBean resultBean;
@@ -1316,6 +1322,7 @@ public ResultBean setSoS(HttpServletRequest request,
     @RequestMapping(value = "setCut",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("systemSet_cut")
+    @Operation("设置剪断报警开关")
     public ResultBean setCut(HttpServletRequest request,
                                @RequestParam(defaultValue = "") String setCut) {
         ResultBean resultBean;
@@ -1428,6 +1435,7 @@ public ResultBean setSoS(HttpServletRequest request,
     @RequestMapping(value = "setBattery",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("systemSet_ele")
+    @Operation("设置低电量报警开关")
     public ResultBean setBattery(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String setBattery) {
         ResultBean resultBean;
@@ -1542,6 +1550,7 @@ public ResultBean setSoS(HttpServletRequest request,
     @RequestMapping(value = "setDealBatch",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("alert_tag_update")
+    @Operation("批量将未处理告警转为已处理")
     public ResultBean setDealBatch(HttpServletRequest request,
                              @RequestParam(defaultValue = "") String TagStatusIds) {
         ResultBean resultBean;
@@ -1998,6 +2007,7 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
     @RequestMapping(value = "setAllAlertDeal",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("alert_tag_update")
+    @Operation("将所有未处理围栏告警设成已处理")
     public ResultBean setAllAlertDeal(HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");

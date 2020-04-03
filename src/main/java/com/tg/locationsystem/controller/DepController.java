@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.google.gson.Gson;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.service.IDepService;
@@ -42,6 +43,7 @@ public class DepController {
     @RequestMapping(value = "AddDep", method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("dep_add")
+    @Operation("添加组织部门")
     public ResultBean AddDep(@Valid Dep dep, BindingResult result,
                                 HttpServletRequest request) {
         ResultBean resultBean;
@@ -184,6 +186,7 @@ public class DepController {
 @RequestMapping(value = "deleteDep",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
 @RequiresPermissions("dep_delete")
+@Operation("删除组织部门")
 public ResultBean deleteDep(@RequestParam("") Integer DepId, HttpServletRequest request
 ){
     ResultBean resultBean;
@@ -263,6 +266,7 @@ public ResultBean deleteDep(@RequestParam("") Integer DepId, HttpServletRequest 
 @RequestMapping(value = "updateDep",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
 @RequiresPermissions("dep_update")
+@Operation("修改组织部门")
 public ResultBean updateDep(@Valid Dep dep, BindingResult result, HttpServletRequest request
 ) {
     ResultBean resultBean;
