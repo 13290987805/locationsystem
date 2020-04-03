@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.FrenceMapper;
 import com.tg.locationsystem.mapper.GoodsMapper;
@@ -55,6 +56,7 @@ public class FrenceController {
     @RequestMapping(value = "AddFrence", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("frence_add")
+    @Operation("添加电子围栏")
     public ResultBean AddFrence(@Valid Frence frence, BindingResult result,
                                 HttpServletRequest request) {
         ResultBean resultBean;
@@ -220,6 +222,7 @@ public class FrenceController {
     @RequestMapping(value = "deleteFrence", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("frence_delete")
+    @Operation("删除电子围栏")
     public ResultBean deleteFrence(HttpServletRequest request,
                                    @RequestParam("frenceid") Integer frenceid) {
         ResultBean resultBean;
@@ -423,6 +426,7 @@ public class FrenceController {
      * */
     @RequestMapping(value = "UpdateFrence", method = RequestMethod.POST)
     @ResponseBody
+    @Operation("修改围栏信息")
     public ResultBean UpdateFrence(@Valid Frence frence, BindingResult result,
                                    HttpServletRequest request) {
         ResultBean resultBean;
@@ -647,6 +651,7 @@ public class FrenceController {
     @RequestMapping(value = "dealFrenceHistory", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("alert_frence_update")
+    @Operation("将围栏警报设为已处理")
     public ResultBean dealFrenceHistory(@Param("") Integer frenceHistoryid,
                                         HttpServletRequest request
     ) {
@@ -713,6 +718,7 @@ public class FrenceController {
     @RequestMapping(value = "deleteFrenceHistory", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("alert_frence_delete")
+    @Operation("删除围栏警报")
     public ResultBean deleteFrenceHistory(@Param("") Integer frenceHistoryid,
                                           HttpServletRequest request) {
         ResultBean resultBean;
@@ -1184,6 +1190,7 @@ public class FrenceController {
     @RequestMapping(value = "dealFrenceHistoryBatch", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("alert_frence_update")
+    @Operation("批量将围栏警报设为已处理")
     public ResultBean dealFrenceHistoryBatch(@Param("") String frenceHistoryIds,
                                         HttpServletRequest request
     ) {
@@ -1374,6 +1381,7 @@ public class FrenceController {
     @RequestMapping(value = "setAllFrenceHistoryDeal",method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("alert_frence_update")
+    @Operation("将所有未处理围栏告警设成已处理")
     public ResultBean setAllFrenceHistoryDeal(HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
@@ -1405,6 +1413,7 @@ public class FrenceController {
     @RequestMapping(value = "setFrenceSwitch",method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("frence_switch")
+    @Operation("设置围栏开关")
     public ResultBean setFrenceSwitch(HttpServletRequest request,
                                       @RequestParam(defaultValue = "") Integer frenceId,
                                        @RequestParam(defaultValue = "") String setSwitch) {

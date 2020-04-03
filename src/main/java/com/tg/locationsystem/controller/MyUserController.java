@@ -194,6 +194,7 @@ public class MyUserController {
     * */
     @RequestMapping(value = "updateUser",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @Operation("修改用户资料")
     public ResultBean updateUser(@Valid Myuser myuser, BindingResult result,
                                      HttpServletRequest request,@RequestParam(value="logoData",required=false)MultipartFile file){
         ResultBean resultBean;
@@ -299,6 +300,7 @@ public class MyUserController {
      * */
     @RequestMapping(value = "uploadLogo",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @Operation("上传logo")
     public ResultBean uploadLogo(HttpServletRequest request,
                                  @RequestParam(value="logo",required=false)MultipartFile file){
         ResultBean resultBean;
@@ -381,6 +383,7 @@ public class MyUserController {
     * */
     @RequestMapping(value = "updatePassword",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @Operation("修改账号密码")
     public ResultBean updatePassword(@Valid UpdatePassword updatePassword, BindingResult result,
                                      HttpServletRequest request){
 
@@ -457,6 +460,7 @@ public class MyUserController {
     * */
     @RequestMapping(value = "AddUser",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("添加用户")
     public ResultBean AddUser(@Valid Myuser myuser, BindingResult result,
                                 HttpServletRequest request){
 
@@ -658,6 +662,7 @@ public class MyUserController {
     * */
     @RequestMapping(value = "AddUserbByRole",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("添加账号")
     public ResultBean AddUserbByRole(@Valid AddUser addUser, BindingResult result,
                                      HttpServletRequest request) {
 
@@ -894,6 +899,7 @@ public class MyUserController {
     * */
     @RequestMapping(value = "deleteUser",method = {RequestMethod.POST})
     @ResponseBody
+    @Operation("删除账号")
     public ResultBean deleteUser(@RequestParam("") Integer UserId, HttpServletRequest request
     ) {
         ResultBean resultBean;
@@ -969,8 +975,9 @@ public class MyUserController {
     @RequestMapping(value = "uodataUser",method = {RequestMethod.POST})
     @ResponseBody
     @Transactional
-    public ResultBean uodataUser(@RequestParam(value = "roleIds[]",required=true) List<String> roleIds, Integer userId , BindingResult result,
-                                 HttpServletRequest request) {
+    @Operation("修改账号")
+    public ResultBean uodataUser(HttpServletRequest request,@RequestParam(value = "roleIds[]",required=true) List<String> roleIds, Integer userId
+    ) {
 
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");

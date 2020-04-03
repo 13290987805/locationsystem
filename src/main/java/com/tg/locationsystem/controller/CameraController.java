@@ -2,6 +2,7 @@ package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.locationsystem.LocationsystemApplication;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.Camera;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.pojo.ResultBean;
@@ -41,6 +42,7 @@ public class CameraController {
     @RequestMapping(value = "addCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     @RequiresPermissions("camera_add")
+    @Operation("新增摄像头")
     public ResultBean addCamera(@Valid Camera camera, BindingResult result,
                                 HttpServletRequest request) throws UnknownHostException {
 
@@ -140,6 +142,7 @@ public class CameraController {
     @RequestMapping(value = "updateCamera", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("camera_update")
+    @Operation("编辑修改摄像头")
     public ResultBean updateCamera(@Valid Camera camera, BindingResult result,
                                    HttpServletRequest request) {
 
@@ -498,6 +501,7 @@ public class CameraController {
     @RequestMapping(value = "delCamera", method = {RequestMethod.POST})
     @ResponseBody
     @RequiresPermissions("camera_delete")
+    @Operation("删除摄像头信息")
     public ResultBean deleteCamera(@RequestParam("") Integer cameraId, HttpServletRequest request) {
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");

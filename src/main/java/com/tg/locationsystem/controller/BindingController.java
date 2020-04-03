@@ -1,5 +1,6 @@
 package com.tg.locationsystem.controller;
 
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.Goods;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.Person;
@@ -41,6 +42,7 @@ public class BindingController {
     * */
     @RequestMapping(value = "AddBindingByPerAndTag",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("人员与标签绑定")
     public ResultBean AddBindingByPerAndTag(HttpServletRequest request,
                                             @RequestParam("person_idCard") String idCard,
                                             @RequestParam("tag_address") String address){
@@ -147,6 +149,7 @@ public class BindingController {
     * */
     @RequestMapping(value = "DeleteBindingByPerAndTag",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("解除人员标签绑定")
     public ResultBean DeleteBindingByPerAndTag(HttpServletRequest request,
                                             @RequestParam("person_idCard") String idCard) {
         ResultBean resultBean;
@@ -239,6 +242,7 @@ public class BindingController {
     * */
     @RequestMapping(value = "AddBindingByGoodsAndTag",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("物品与标签绑定")
     public ResultBean AddBindingByGoodsAndTag(HttpServletRequest request,
                                             @RequestParam("goods_idCard") String idCard,
                                             @RequestParam("tag_address") String address){
@@ -341,6 +345,7 @@ public class BindingController {
      * */
     @RequestMapping(value = "DeleteBindingByGoodsAndTag",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("解除物品与标签绑定")
     public ResultBean DeleteBindingByGoodsAndTag(HttpServletRequest request,
                                                @RequestParam("goods_idCard") String idCard) {
         ResultBean resultBean;
@@ -417,6 +422,7 @@ public class BindingController {
 * */
 @RequestMapping(value = "DeleteBindingTag",method = RequestMethod.POST)
 @ResponseBody
+@Operation("解除绑定")
 public ResultBean DeleteBindingTag(HttpServletRequest request,
                                              @RequestParam("tagadd") String address) {
     ResultBean resultBean;

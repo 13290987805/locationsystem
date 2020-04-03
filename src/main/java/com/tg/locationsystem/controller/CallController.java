@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.Map;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.mapper.PersonTypeMapper;
@@ -455,6 +456,7 @@ public class CallController {
     @RequestMapping(value = "setSwitch", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("systemSet_call")
+    @Operation("设置开关,打开关闭")
     public ResultBean setSwitch(@RequestParam(defaultValue = "") String setSwitch,
                                 HttpServletRequest request) {
         ResultBean resultBean;
@@ -855,6 +857,7 @@ public class CallController {
     @RequestMapping(value = "getEleCallByArea", method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("date_startCall")
+    @Operation("区域电子点名")
     public ResultBean getEleCallByArea(HttpServletRequest request,
                                        @RequestParam(defaultValue = "") String area,
                                        @RequestParam(defaultValue = "") String MapKey) {

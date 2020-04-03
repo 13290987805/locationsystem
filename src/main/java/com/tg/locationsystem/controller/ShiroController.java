@@ -1,5 +1,6 @@
 package com.tg.locationsystem.controller;
 
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.pojo.ResultBean;
 import com.tg.locationsystem.pojo.ShiroVO;
@@ -96,6 +97,7 @@ public class ShiroController {
     * */
     @RequestMapping(value = "AddRole",method = RequestMethod.POST)
     @ResponseBody
+    @Operation("添加角色")
     public ResultBean AddTag(@Valid ShiroVO shiroVO, BindingResult result,
                              HttpServletRequest request) {
         ResultBean resultBean;
@@ -197,6 +199,7 @@ public class ShiroController {
 * */
 @RequestMapping(value = "deleteRole",method = {RequestMethod.POST})
 @ResponseBody
+@Operation("删除角色")
 public ResultBean deleteRole(@RequestParam("") Integer RoleId, HttpServletRequest request
 ) {
     ResultBean resultBean;
@@ -340,6 +343,7 @@ public ResultBean getPermissionsByRoleId(@RequestParam("") Integer RoleId, HttpS
 
 @RequestMapping(value = "UpdateRole",method = RequestMethod.POST)
 @ResponseBody
+@Operation("修改角色信息")
 public ResultBean UpdateRole(@Valid ShiroVO shiroVO, BindingResult result,
                          HttpServletRequest request) {
     ResultBean resultBean;
