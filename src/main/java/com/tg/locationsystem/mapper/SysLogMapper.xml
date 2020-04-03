@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.locationsystem.mapper.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.tg.locationsystem.entity.SysLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userName" jdbcType="VARCHAR" property="username" />
+    <result column="userIp" jdbcType="VARCHAR" property="userip" />
+    <result column="requestMethod" jdbcType="VARCHAR" property="requestmethod" />
+    <result column="requestDesc" jdbcType="VARCHAR" property="requestdesc" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userName, userIp, requestMethod, requestDesc, createTime, parent_id
+  </sql>
+
+
+  <!--根据用户名和关键字查询记录-->
+  <select id="getSyslogByUsernameAndMsgPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_log
+    WHERE userName=#{username}
+    AND requestDesc LIKE CONCAT(CONCAT('%',#{msg},'%'))
+    ORDER BY createTime DESC
+  </select>
+
+  <!--根据pid和关键字查询记录-->
+  <select id="getSyslogByPidAndMsgPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_log
+    WHERE parent_id=#{pid}
+    AND requestDesc LIKE CONCAT(CONCAT('%',#{msg},'%'))
+    ORDER BY createTime DESC
+  </select>
+
+  <!--根据用户名查询记录-->
+  <select id="getSyslogByUsernamePage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_log
+    WHERE userName=#{username}
+    ORDER BY createTime DESC
+  </select>
+
+  <!--根据pid查询记录-->
+  <select id="getSyslogByPidPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_log
+    WHERE parent_id=#{pid}
+    ORDER BY createTime DESC
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tg.locationsystem.entity.SysLog">
+    insert into sys_log (id, userName, userIp, 
+      requestMethod, requestDesc, createTime, 
+      parent_id)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{userip,jdbcType=VARCHAR}, 
+      #{requestmethod,jdbcType=VARCHAR}, #{requestdesc,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{parentId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.SysLog">
+    insert into sys_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        userName,
+      </if>
+      <if test="userip != null">
+        userIp,
+      </if>
+      <if test="requestmethod != null">
+        requestMethod,
+      </if>
+      <if test="requestdesc != null">
+        requestDesc,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userip != null">
+        #{userip,jdbcType=VARCHAR},
+      </if>
+      <if test="requestmethod != null">
+        #{requestmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="requestdesc != null">
+        #{requestdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.locationsystem.entity.SysLog">
+    update sys_log
+    <set>
+      <if test="username != null">
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userip != null">
+        userIp = #{userip,jdbcType=VARCHAR},
+      </if>
+      <if test="requestmethod != null">
+        requestMethod = #{requestmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="requestdesc != null">
+        requestDesc = #{requestdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.locationsystem.entity.SysLog">
+    update sys_log
+    set userName = #{username,jdbcType=VARCHAR},
+      userIp = #{userip,jdbcType=VARCHAR},
+      requestMethod = #{requestmethod,jdbcType=VARCHAR},
+      requestDesc = #{requestdesc,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      parent_id = #{parentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

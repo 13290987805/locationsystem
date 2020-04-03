@@ -2,6 +2,7 @@ package com.tg.locationsystem.controller;
 
 
 import com.github.pagehelper.PageInfo;
+import com.tg.locationsystem.config.Operation;
 import com.tg.locationsystem.entity.EleCallSet;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.MyuserRole;
@@ -54,6 +55,7 @@ public class MyUserController {
     * */
     @RequestMapping(value = "Login",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @Operation("账号登录")
     public ResultBean shopuser(@Valid User user, BindingResult result,
                                HttpServletRequest request){
         ResultBean resultBean;

@@ -29,9 +29,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -89,8 +87,12 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test19(){
-
-	}
+		Tag tag=new Tag();
+		tag.setId(18);
+		tag.setLastonline(new Date());
+        int i = tagService.updateByPrimaryKeySelective(tag);
+        System.out.println("结果:"+i);
+    }
 	@Test
 	public void test18(){
 

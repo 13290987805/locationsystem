@@ -10,17 +10,18 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="tag_typeId" jdbcType="INTEGER" property="tagTypeid" />
     <result column="lastOnline" jdbcType="TIMESTAMP" property="lastonline" />
-    <result column="lastOffline" jdbcType="TIMESTAMP" property="lastoffline" />
     <result column="isOnline" jdbcType="VARCHAR" property="isonline" />
     <result column="z" jdbcType="DOUBLE" property="z" />
     <result column="electric" jdbcType="VARCHAR" property="electric" />
     <result column="address_broadcast" jdbcType="VARCHAR" property="addressBroadcast" />
     <result column="map_key" jdbcType="VARCHAR" property="mapKey" />
+    <result column="lastOffline" jdbcType="TIMESTAMP" property="lastoffline" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, address, x, y, used, user_id, tag_typeId, lastOffline, lastOnline, isOnline, z, electric,
-    address_broadcast, map_key
+    id, address, x, y, used, user_id, tag_typeId, lastOnline, isOnline, z, electric, 
+    address_broadcast, map_key, lastOffline
   </sql>
+
   <!--//得到地图下所有已使用的标签-->
   <select id="getTagsByMapUUIDAndUsed"  resultMap="BaseResultMap">
     select
@@ -149,7 +150,6 @@
     WHERE   user_id=#{userid} AND tag_typeId=#{typeid}
   </select>
 
-
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -164,13 +164,13 @@
     insert into tag (id, address, x, 
       y, used, user_id, tag_typeId, 
       lastOnline, isOnline, z, 
-      electric, address_broadcast, map_key
-      )
+      electric, address_broadcast, map_key, 
+      lastOffline)
     values (#{id,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, 
       #{y,jdbcType=DOUBLE}, #{used,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{tagTypeid,jdbcType=INTEGER}, 
       #{lastonline,jdbcType=TIMESTAMP}, #{isonline,jdbcType=VARCHAR}, #{z,jdbcType=DOUBLE}, 
-      #{electric,jdbcType=VARCHAR}, #{addressBroadcast,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}
-      )
+      #{electric,jdbcType=VARCHAR}, #{addressBroadcast,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, 
+      #{lastoffline,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Tag">
     insert into tag
@@ -214,6 +214,9 @@
       <if test="mapKey != null">
         map_key,
       </if>
+      <if test="lastoffline != null">
+        lastOffline,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -254,6 +257,9 @@
       </if>
       <if test="mapKey != null">
         #{mapKey,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoffline != null">
+        #{lastoffline,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -296,6 +302,9 @@
       <if test="mapKey != null">
         map_key = #{mapKey,jdbcType=VARCHAR},
       </if>
+      <if test="lastoffline != null">
+        lastOffline = #{lastoffline,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -312,7 +321,8 @@
       z = #{z,jdbcType=DOUBLE},
       electric = #{electric,jdbcType=VARCHAR},
       address_broadcast = #{addressBroadcast,jdbcType=VARCHAR},
-      map_key = #{mapKey,jdbcType=VARCHAR}
+      map_key = #{mapKey,jdbcType=VARCHAR},
+      lastOffline = #{lastoffline,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
