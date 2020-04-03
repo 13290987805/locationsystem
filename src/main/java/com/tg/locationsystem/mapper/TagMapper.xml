@@ -9,8 +9,8 @@
     <result column="used" jdbcType="VARCHAR" property="used" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="tag_typeId" jdbcType="INTEGER" property="tagTypeid" />
-    <result column="lastOnline" jdbcType="TIMESTAMP" property="lastonline" />
     <result column="lastOffline" jdbcType="TIMESTAMP" property="lastoffline" />
+    <result column="lastOnline" jdbcType="TIMESTAMP" property="lastonline" />
     <result column="isOnline" jdbcType="VARCHAR" property="isonline" />
     <result column="z" jdbcType="DOUBLE" property="z" />
     <result column="electric" jdbcType="VARCHAR" property="electric" />
@@ -163,12 +163,12 @@
   <insert id="insert" parameterType="com.tg.locationsystem.entity.Tag">
     insert into tag (id, address, x, 
       y, used, user_id, tag_typeId, 
-      lastOnline, isOnline, z, 
+      lastOffline,lastOnline, isOnline, z,
       electric, address_broadcast, map_key
       )
     values (#{id,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{x,jdbcType=DOUBLE}, 
       #{y,jdbcType=DOUBLE}, #{used,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{tagTypeid,jdbcType=INTEGER}, 
-      #{lastonline,jdbcType=TIMESTAMP}, #{isonline,jdbcType=VARCHAR}, #{z,jdbcType=DOUBLE}, 
+      #{lastoffline,jdbcType=TIMESTAMP},#{lastonline,jdbcType=TIMESTAMP}, #{isonline,jdbcType=VARCHAR}, #{z,jdbcType=DOUBLE},
       #{electric,jdbcType=VARCHAR}, #{addressBroadcast,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}
       )
   </insert>
@@ -195,6 +195,9 @@
       </if>
       <if test="tagTypeid != null">
         tag_typeId,
+      </if>
+      <if test="lastoffline != null">
+        lastOffline,
       </if>
       <if test="lastonline != null">
         lastOnline,
@@ -237,6 +240,9 @@
       <if test="tagTypeid != null">
         #{tagTypeid,jdbcType=INTEGER},
       </if>
+      <if test="lastoffline != null">
+        #{lastoffline,jdbcType=TIMESTAMP},
+      </if>
       <if test="lastonline != null">
         #{lastonline,jdbcType=TIMESTAMP},
       </if>
@@ -278,6 +284,9 @@
       <if test="tagTypeid != null">
         tag_typeId = #{tagTypeid,jdbcType=INTEGER},
       </if>
+      <if test="lastoffline != null">
+        lastOffline = #{lastoffline,jdbcType=TIMESTAMP},
+      </if>
       <if test="lastonline != null">
         lastOnline = #{lastonline,jdbcType=TIMESTAMP},
       </if>
@@ -307,6 +316,7 @@
       used = #{used,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
       tag_typeId = #{tagTypeid,jdbcType=INTEGER},
+      lastOffline = #{lastoffline,jdbcType=TIMESTAMP},
       lastOnline = #{lastonline,jdbcType=TIMESTAMP},
       isOnline = #{isonline,jdbcType=VARCHAR},
       z = #{z,jdbcType=DOUBLE},

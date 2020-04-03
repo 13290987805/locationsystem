@@ -967,8 +967,7 @@ public class MyUserController {
     @RequestMapping(value = "uodataUser",method = {RequestMethod.POST})
     @ResponseBody
     @Transactional
-    public ResultBean uodataUser(@RequestParam(value = "roleIds[]",required=true) List<String> roleIds, Integer userId , BindingResult result,
-                                 HttpServletRequest request) {
+    public ResultBean uodataUser(HttpServletRequest request,@RequestParam(value = "roleIds[]",required=true) List<String> roleIds, Integer userId ) {
 
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");

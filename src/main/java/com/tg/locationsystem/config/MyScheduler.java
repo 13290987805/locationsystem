@@ -142,7 +142,7 @@ public class MyScheduler {
                     //System.out.println("into insert and x = " + Double.parseDouble(split[0]));
                     try {
                         //将标签的数据存到历史记录表
-                        TagHistoryVO tagHistory = new TagHistoryVO();
+                        TagHistory tagHistory = new TagHistory();
                         String peridcard = SystemMap.getTagAndPersonMap().get(key);
                         tagHistory.setPersonIdcard(peridcard);
                         tagHistory.setX(Double.parseDouble(split[0]));
@@ -152,6 +152,24 @@ public class MyScheduler {
                         if (split[4]!=null&&!"".equals(split[4])){
                             tagHistory.setMapKey(split[4]);
                         }
+
+                        //选择要插入的表格,不存在就创建
+                        String format2 = dateFormat.format(new Date());
+                        format2 = "tag_history_" + format2;
+                        int existTable = tagHistoryService.existTable(format2);
+                        if (existTable == 0) {
+                            System.out.println(sdf2.format(new Date()) + format2 + "表不存在...");
+                            int create = tagHistoryService.createNewTable(format2);
+                            if (create == 0) {
+                                System.out.println("新建了一张表:" + format2);
+                            }
+                        }
+                        //往记录表插入数据
+                        inserttagHistory(format2, tagHistory);
+
+
+
+
                         //往记录表插入数据
                         //inserttagHistory(format2, tagHistory);
                         String measurement = "tagHistory" + key;
@@ -183,7 +201,7 @@ public class MyScheduler {
 
 
     //每秒执行一次 从缓存中把标签更新到数据库
-    @Scheduled(cron ="0/1 * * * * ?" )
+    //@Scheduled(cron ="0/1 * * * * ?" )
     public void testTasks2() throws ParseException, IOException {
         //System.out.println(sdf2.format(new Date()));
         Map<String, String> map = SystemMap.getMap();
