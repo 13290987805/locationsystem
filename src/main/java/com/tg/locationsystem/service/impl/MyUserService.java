@@ -40,6 +40,9 @@ public class MyUserService extends BaseServiceImpl<Myuser> implements IMyUserSer
 
     @Override
     public Myuser getUserByName(String username) {
+        try {
+
+
         Myuser user = myuserMapper.getUserByName(username);
         Set<MyuserRole> roles=myuserRoleMapper.getMyuserRoleSet(user.getId());
         Set<MyuserRoleVO> roleVOS=new TreeSet<>();
@@ -77,6 +80,9 @@ public class MyUserService extends BaseServiceImpl<Myuser> implements IMyUserSer
         user.setRoles(roleVOS);
        // System.out.println("用户:"+user);
         return user;
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override

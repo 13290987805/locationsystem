@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
@@ -88,7 +89,8 @@ public class SysAspect {
         //调用service保存SysLog实体类到数据库
         sysLogService.insertSelective(sysLog);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("异常:"+e.getMessage());
+            return;
         }
     }
 }

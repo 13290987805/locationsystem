@@ -88,6 +88,7 @@ public class MyUserController {
             resultBean.setSize(list.size());
             return resultBean;
         }
+
         try {
             String pass = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
             //System.out.println(pass+":"+pass.length());
@@ -126,6 +127,7 @@ public class MyUserController {
                     user.getUsername(),
                     user.getPassword()
             );
+
             try {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 subject.login(usernamePasswordToken);
@@ -727,6 +729,9 @@ public class MyUserController {
             myuser.setUsername(addUser.getUsername());
             myuser.setPassword(pass);
             myuser.setParentId(user.getId());
+            myuser.setLogo(user.getLogo());
+            myuser.setSystemName(user.getSystemName());
+            myuser.setCompanyName(user.getCompanyName());
             myuser.setCreateUser("1");
 
             int insert = myUserService.insertSelective(myuser);

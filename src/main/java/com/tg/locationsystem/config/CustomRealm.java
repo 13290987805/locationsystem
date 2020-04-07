@@ -1,12 +1,9 @@
 package com.tg.locationsystem.config;
 
 import com.tg.locationsystem.entity.Myuser;
-import com.tg.locationsystem.entity.MyuserRole;
-import com.tg.locationsystem.entity.RolePermission;
 import com.tg.locationsystem.pojo.MyuserRoleVO;
 import com.tg.locationsystem.pojo.RolePermissionVO;
 import com.tg.locationsystem.service.IMyUserService;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -16,8 +13,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.security.Permissions;
 
 /**
  * @author hyy
@@ -36,6 +31,9 @@ public class CustomRealm extends AuthorizingRealm {
         String name = (String) principalCollection.getPrimaryPrincipal();
         //根据用户名去数据库查询用户信息
         Myuser user = myUserService.getUserByName(name);
+        if (user==null){
+            return null;
+        }
         //System.out.println("用户:"+user);
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();

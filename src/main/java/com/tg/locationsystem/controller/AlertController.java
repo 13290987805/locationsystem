@@ -618,7 +618,7 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
     @ResponseBody
     @RequiresPermissions("date_heart")
     public ResultBean getHeartRateHistoryByAddAndTimeData(HttpServletRequest request,
-                                                          @RequestParam(value = "personIdcards[]",required=true) List<String> personIdcards) {
+                                                          @RequestParam(value = "personIdcards[]",defaultValue = "[\"\"]") List<String> personIdcards) {
 
         ResultBean resultBean;
         Myuser user = (Myuser) request.getSession().getAttribute("user");
