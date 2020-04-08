@@ -67,7 +67,16 @@ public class SystemMap {
 
     //缓存推过流的摄像头
     private static Map<Integer,String> StreamCameramap = new ConcurrentHashMap();
+    //缓存系统启动时间
+    private static Map<String,Long> timeMap = new ConcurrentHashMap();
 
+    public static Map<String, Long> getTimeMap() {
+        return timeMap;
+    }
+
+    public static void setTimeMap(Map<String, Long> timeMap) {
+        SystemMap.timeMap = timeMap;
+    }
 
     public static Map<Integer, String> getStreamCameramap() {
         return StreamCameramap;

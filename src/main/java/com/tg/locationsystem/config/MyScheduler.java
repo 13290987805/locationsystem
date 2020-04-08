@@ -181,7 +181,7 @@ public class MyScheduler {
                         fields.put("x",Double.parseDouble(split[0]));
                         fields.put("y",Double.parseDouble(split[1]));
                         fields.put("z",Double.parseDouble(split[2]));
-                        System.err.println(System.currentTimeMillis());
+                        //System.err.println(System.currentTimeMillis());
                         influxDBConnection.insert(measurement,tags,fields, DateUtil.utcToLocal(tagDate).getTime(), TimeUnit.MILLISECONDS);
                     } catch (Exception e){
                         e.printStackTrace();

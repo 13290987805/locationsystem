@@ -1,6 +1,7 @@
 package com.tg.locationsystem.controller;
 
 import com.tg.locationsystem.service.IHeartRateHistoryService;
+import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,18 @@ public class testController {
         /*String ip = TestUtil.getIP(request);
         return ip;*/
         return TestUtil.getGoP(request);
+
+    }/*
+     * 得到系统启动时间
+     * */
+    @GetMapping(value = "/getTime")
+    @ResponseBody
+    public Long getTime(HttpServletRequest request){
+        Long startTime = SystemMap.getTimeMap().get("startTime");
+        if (startTime == null){
+            startTime = System.currentTimeMillis();
+        }
+        return startTime;
 
     }
     /*
