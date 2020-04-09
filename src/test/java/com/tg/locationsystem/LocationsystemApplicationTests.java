@@ -87,11 +87,13 @@ public class LocationsystemApplicationTests {
 
 	@Test
 	public void test19(){
-		Tag tag=new Tag();
+		System.out.println("111111");
+		System.out.println("222222");
+		/*Tag tag=new Tag();
 		tag.setId(18);
 		tag.setLastonline(new Date());
         int i = tagService.updateByPrimaryKeySelective(tag);
-        System.out.println("结果:"+i);
+        System.out.println("结果:"+i);*/
     }
 	@Test
 	public void test18(){
