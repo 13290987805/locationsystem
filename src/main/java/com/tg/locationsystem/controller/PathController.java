@@ -469,10 +469,10 @@ public class PathController {
             resultBean.setSize(list.size());
             return resultBean;
         }
-        //System.out.println("date1"+sdf.format(new Date()));
+        //System.out.println("date1"+ new  Date().getTime());
         //根据标签address得到历史轨迹集合
         List<TagHistory> tagHistories=tagHistoryService.getTagHistoryByAddAndMap(tableName,dayPathMap.getPersonidcard(),dayPathMap.getMapkey());
-        //System.out.println("date2"+sdf.format(new Date()));
+        //System.out.println("date2"+new Date().getTime());
         if (tagHistories.size()==0) {
             resultBean = new ResultBean();
             resultBean.setCode(-1);
@@ -517,7 +517,7 @@ public class PathController {
         List<TagHistory> offLine = new ArrayList<>();
         offLine.add(startPosition);
         historyList.add(offLine);
-        //System.out.println("date3"+sdf.format(new Date()));
+        //System.out.println("date3"+new Date().getTime());
         for (TagHistory thisTag: tagHistories) {
             if (((thisTag.getTime().getTime()-startPosition.getTime().getTime())/1000) > 30){
                 offLine = new ArrayList<>();

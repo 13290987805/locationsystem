@@ -31,6 +31,7 @@ public class ImageController {
             try {
                 response.setContentType("text/html;charset=UTF-8");
                 response.getWriter().write("暂无图片");
+                response.reset();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -43,6 +44,7 @@ public class ImageController {
         }
 
                FileInputStream hFile = null;      //得到文件大小
+               OutputStream toClient=null;
         try {
             hFile = new FileInputStream(url);
             int i=hFile.available();
@@ -50,7 +52,7 @@ public class ImageController {
 
             hFile.read(data);         //得到向客户端输出二进制数据的对象
 
-            OutputStream toClient=response.getOutputStream();         //输出数据
+            toClient=response.getOutputStream();  //输出数据
 
             toClient.write(data);
 
@@ -63,9 +65,12 @@ public class ImageController {
             System.out.println(e.getMessage());
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().write(e.getMessage());
+            response.reset();
         } finally {
             //重新设置session存活时间
             //request.getSession().setMaxInactiveInterval(30*60);
+            //关流
+
         }
 
     }
