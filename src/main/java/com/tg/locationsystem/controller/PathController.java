@@ -50,6 +50,8 @@ public class PathController {
     private DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     /*
     * 查看人员或物品轨迹
+    *
+    * View person or goods tracks
     * */
     @RequestMapping(value = "queryPath",method = RequestMethod.GET)
     @ResponseBody
@@ -227,6 +229,8 @@ public class PathController {
 
     /* 
      * 查看人员或物品在某个地图的轨迹
+     *
+     * View the track of a person or item on a map
      * */
     @RequestMapping(value = "queryPathByMap",method = RequestMethod.GET)
     @ResponseBody
@@ -404,6 +408,8 @@ public class PathController {
 
     /*
      * 查看人员或物品在某个地图的轨迹
+     *
+     * View the track of a person or item on a map
      * */
     @RequestMapping(value = "queryPathByMap1",method = RequestMethod.GET)
     @ResponseBody

@@ -1,16 +1,20 @@
 package com.tg.locationsystem.config;
 
 
+import com.tg.locationsystem.utils.SystemMap;
+
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author hyy
  * @ Date2019/11/7
  */
 //{"/alert/*","/binding/*","/call/*","/frence/*","/goods/*","/image/*","/map/*","/myuser/*","/path/*","/person/*","/station/*","/tag/*"}
-//@WebFilter(filterName = "UrlFilter ", urlPatterns ="/*" )
+@WebFilter(filterName = "UrlFilter ", urlPatterns ="/*" )
 public class UrlFilter implements Filter {
 
     @Override
@@ -19,21 +23,22 @@ public class UrlFilter implements Filter {
         System.out.println("----------------------->过滤器被创建");
     }
 
+    /*
+    * 拦截使用期限过期的全部url
+    * */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         String requestURI = req.getRequestURI();
         //System.out.println("--------------------->过滤器：请求地址"+requestURI);
-        Object user = req.getSession().getAttribute("user");
-        if (user!=null||requestURI.contains("Login")||
-                requestURI.contains("toLogin")||requestURI.contains("Login2")){
-
+        Object user_secret = req.getSession().getAttribute("user_secret");
+        List<String> secretList = SystemMap.getSecretList();
+        if (secretList==null||secretList.size()==0){
             filterChain.doFilter(servletRequest, servletResponse);
 
-
         }else {
-            servletRequest.getRequestDispatcher("/myuser/toLogin").forward(servletRequest, servletResponse);
+            servletRequest.getRequestDispatcher("/myuser/secret").forward(servletRequest, servletResponse);
         }
     }
 

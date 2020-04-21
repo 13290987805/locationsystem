@@ -39,6 +39,8 @@ public class DepController {
 
     /*
     * 添加组织部门
+    *
+    * Add the department
     * */
     @RequestMapping(value = "AddDep", method = RequestMethod.GET)
     @ResponseBody
@@ -120,6 +122,8 @@ public class DepController {
 
     /*
     *查看组织部门
+    *
+    * Look at the organizational department
     * */
     @RequestMapping(value = "getDep", method = RequestMethod.GET)
     @ResponseBody
@@ -182,6 +186,8 @@ public class DepController {
 /*
 *
 * 删除组织部门
+*
+* Delete organizational departments
 * */
 @RequestMapping(value = "deleteDep",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
@@ -261,7 +267,9 @@ public ResultBean deleteDep(@RequestParam("") Integer DepId, HttpServletRequest 
 }
 
 /*
-* 修改组织部门每次
+* 修改组织部门信息
+*
+* Update departments information
 * */
 @RequestMapping(value = "updateDep",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody

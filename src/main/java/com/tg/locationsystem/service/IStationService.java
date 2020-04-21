@@ -25,4 +25,6 @@ public interface IStationService extends IBaseService<Station> {
     PageInfo<Station> getOnlineStationsByMapKey(Integer pageIndex, Integer pageSize, Integer id);
 
     List<StationVO> getStationsByUserIdNoPage(Integer id);
+
+    List<Station> getAllStationList();
 }

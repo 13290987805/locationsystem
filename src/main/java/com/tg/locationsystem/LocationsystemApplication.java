@@ -26,12 +26,14 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.ResourceLeakDetector;
+import org.apache.catalina.connector.Connector;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -45,7 +47,7 @@ import java.util.*;
 @SpringBootApplication
 @MapperScan("com.tg.locationsystem.mapper")
 @EnableScheduling
-//@ServletComponentScan("com.tg.locationsystem")
+@ServletComponentScan("com.tg.locationsystem")
 public class LocationsystemApplication  {
 	private static ITagService tagService;//Service层类
 	private static IFrenceService frenceService;//Service层类
@@ -1041,6 +1043,10 @@ public class LocationsystemApplication  {
 					//System.out.println(station.getAddr());
                     if (station!=null){
                         station.setStationStatus(status.getStatus());
+                        if (status.getStatus()==1){
+                            station.setLastonline(new Date());
+                        }
+
                         //更新状态
                         stationService.updateByPrimaryKeySelective(station);
                     }
@@ -1179,6 +1185,8 @@ public class LocationsystemApplication  {
 						station.setMasteranchoraddress(null);
 						station.setDimension(String.valueOf(bean.getDimension()));
                         station.setRfdistance(bean.getRfdistance());
+                        //最后在线时间
+                        station.setLastonline(new Date());
                         if (map.getId()!=null){
                             station.setMapId(map.getId());
                         }
@@ -1430,12 +1438,15 @@ public class LocationsystemApplication  {
 	}
 
 	@Bean
-	public ConfigurableServletWebServerFactory webServerFactory() {
+	public TomcatServletWebServerFactory webServerFactory() {
 		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-		factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector ->
-				connector.setProperty("relaxedQueryChars", "|{}[]\\%"));
+		factory.addConnectorCustomizers((Connector connector) -> {
+			connector.setProperty("relaxedPathChars", "\"<>[\\]^`{|}");
+			connector.setProperty("relaxedQueryChars", "\"<>[\\]^`{|}");
+		});
 		return factory;
 	}
-	}
+
+}
 
 

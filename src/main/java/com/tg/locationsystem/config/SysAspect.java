@@ -4,6 +4,7 @@ package com.tg.locationsystem.config;
 import com.tg.locationsystem.entity.Myuser;
 import com.tg.locationsystem.entity.SysLog;
 import com.tg.locationsystem.service.ISysLogService;
+import com.tg.locationsystem.utils.TestUtil;
 import com.xiaoleilu.hutool.system.SystemUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -74,7 +75,13 @@ public class SysAspect {
         Myuser user = (Myuser) session.getAttribute("user");
         sysLog.setUsername(user.getUsername());
 
-        sysLog.setUserip(SystemUtil.getHostInfo().getAddress());
+        //本机ip
+       // sysLog.setUserip(SystemUtil.getHostInfo().getAddress());
+
+        //请求ip nix
+        sysLog.setUserip(TestUtil.getIP(request));
+        //System.out.println("SysAspect切面ip:"+TestUtil.getIP(request));
+
         sysLog.setRequestmethod(className + "." + methodName);
         //创建时间
         sysLog.setCreatetime(new Date());
@@ -89,7 +96,7 @@ public class SysAspect {
         //调用service保存SysLog实体类到数据库
         sysLogService.insertSelective(sysLog);
         }catch (Exception e){
-            System.out.println("异常:"+e.getMessage());
+            System.out.println("SysAspect切面异常:"+e.getMessage());
             return;
         }
     }

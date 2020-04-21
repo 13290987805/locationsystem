@@ -11,6 +11,14 @@ import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.*;
 import com.tg.locationsystem.utils.test.BuildTree;
 import com.tg.locationsystem.utils.test.Tree;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -26,11 +34,13 @@ import ws.schild.jave.*;
 
 import javax.sql.DataSource;
 import java.io.*;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -86,18 +96,57 @@ public class LocationsystemApplicationTests {
 	private DataSource dataSource;
 
 	@Test
-	public void test19(){
-		System.out.println("111111");
-		System.out.println("222222");
-		/*Tag tag=new Tag();
-		tag.setId(18);
-		tag.setLastonline(new Date());
-        int i = tagService.updateByPrimaryKeySelective(tag);
-        System.out.println("结果:"+i);*/
-    }
+	public void test21(){
+
+
+	}
+	@Test
+	public void test20() throws SQLException, IOException {
+		String path="C:\\Users\\zhourongchun\\Desktop\\1.xls";
+		File file=new File(path);
+		InputStream inp = new FileInputStream(file);
+		//获得上传的excel文件
+		HSSFWorkbook workbook =
+				new HSSFWorkbook(new POIFSFileSystem(inp));
+		//获取第一个sheet
+		HSSFSheet sheet=workbook.getSheetAt( 0);
+		//获取行数
+		int rowNums=sheet.getPhysicalNumberOfRows();
+		//遍历行数
+		for (int i = 1; i < rowNums; i++) {
+			HSSFRow row = sheet.getRow(i);
+			for (int j = 0; j < row.getLastCellNum(); j++) {
+				HSSFCell cell = row.getCell(j);
+				System.out.println(cell);
+			}
+		}
+	}
+	@Test
+	public void test19() throws SQLException, IOException {
+		String path="C:\\Users\\zhourongchun\\Desktop\\新建 Microsoft Excel 工作表.xlsx";
+		File file=new File(path);
+		InputStream inp = new FileInputStream(file);
+		XSSFWorkbook workbook = new XSSFWorkbook(inp);
+		//获得上传的excel文件
+		/*XSSFWorkbook workbook =
+				new XSSFWorkbook(path);*/
+		//获取第一个sheet
+		XSSFSheet sheet=workbook.getSheetAt( 0);
+		//获取行数
+		int rowNums=sheet.getPhysicalNumberOfRows();
+		//遍历行数
+		for(int i= 1;i<rowNums;i++) {
+			//得到该行的数据
+			XSSFRow row = sheet.getRow(i);
+			for (int j=0;j<row.getLastCellNum();j++){
+				XSSFCell cell = row.getCell(j);
+				System.out.println(cell);
+			}
+
+		}
+	}
 	@Test
 	public void test18(){
-
 		List<Permission> permissionList=permissionMapper.getAllPermission();
 		List<Tree<com.tg.locationsystem.utils.test.Test>> trees = new ArrayList<Tree<com.tg.locationsystem.utils.test.Test>>();
 		for (Permission permission : permissionList) {

@@ -28,4 +28,32 @@ public interface StationMapper extends IBaseDao<Station>{
     List<Station> getStationsByMapKey(String mapkey);
 
     List<Station> getOnlineStationsByMapKey(Integer id);
+
+    List<Station> getAllStationList();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

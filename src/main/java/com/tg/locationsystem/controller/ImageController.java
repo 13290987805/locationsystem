@@ -22,6 +22,8 @@ import java.io.OutputStream;
 public class ImageController {
     /*
     * 根据图片地址读出图片
+    *
+    * Read the picture according to its address
     * */
     @RequestMapping(value = "queryImg",method = RequestMethod.GET)
     public void querygoodsTypeImg(@RequestParam("imageUrl") String url, HttpServletResponse response,

@@ -3,19 +3,24 @@ package com.tg.locationsystem.config;
 import com.tg.locationsystem.entity.*;
 import com.tg.locationsystem.service.*;
 import com.tg.locationsystem.utils.DateUtil;
+import com.tg.locationsystem.utils.MD5Tools;
 import com.tg.locationsystem.utils.SystemMap;
 import com.tg.locationsystem.utils.influxDBUtil.InfluxDBConnection;
+import org.apache.shiro.session.mgt.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -39,11 +44,22 @@ public class MyScheduler {
     @Autowired
     private IGoodsTypeService goodsTypeService;
     @Autowired
+    private IStationService stationService;
+    @Autowired
     private InfluxDBConnection influxDBConnection;
+
+
     public static final int UP_TIME=15;
+    public static final int STATION_TIME=15;
     private  SimpleDateFormat dateFormat =
             new SimpleDateFormat("YYYYMMdd");
     DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static final int DAY_TIME=60*60*24;
+
+    //系统运行时常配置文件
+    public  static String path="C:\\data\\time.txt";
+
 
     @PostConstruct
     public void init(){
@@ -372,4 +388,115 @@ public class MyScheduler {
         }
 
     }*/
+
+     //todo 定时更新基站状态
+    //每秒执行一次 从缓存中把标签更新到数据库
+     @Scheduled(cron ="0/10 * * * * ?" )
+     public void StationTasks(){
+         List<Station> stationList=stationService.getAllStationList();
+         for (Station station : stationList) {
+            if (station.getLastonline()==null){
+                station.setStationStatus(0);
+                //更新基站状态
+                stationService.updateByPrimaryKeySelective(station);
+                continue;
+            }
+             long Station_time = station.getLastonline().getTime();
+             long now_time = System.currentTimeMillis();
+             if ((now_time-Station_time)<STATION_TIME){
+                 station.setStationStatus(1);
+                 //更新基站状态
+                 stationService.updateByPrimaryKeySelective(station);
+             }else {
+                 station.setStationStatus(0);
+                 //更新基站状态
+                 stationService.updateByPrimaryKeySelective(station);
+             }
+         }
+     }
+
+    @Scheduled(cron ="0/3 * * * * ?" )
+    //0 0 0/1 * * ?
+    public void SystemTasks() throws IOException {
+       /* File file=new File(path);
+        if (!file.exists()){
+            //退出
+            System.exit(0);
+        }*/
+
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader
+                    (new FileReader(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            //文件异常,退出
+            System.out.println("密钥文件异常...");
+            List<String> secretList = SystemMap.getSecretList();
+            if (secretList==null||secretList.size()==0){
+                SystemMap.getSecretList().add("user_secret");
+            }
+
+        }
+
+        String read;
+        List<String> list=new ArrayList<>();
+        //4. 循环读取, 只要条件满足就一直读, 并将读取到的内容赋值给变量.
+        while((read=br.readLine())!=null) {
+            //System.out.println(read);
+
+            list.add(read);
+        }
+        MD5Tools md5=new MD5Tools();
+
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        for (int i = 0; i < list.size(); i++) {
+            try {
+               /* String s = list.get(i);
+                String time = MD5Tools.ees3DecodeECB(s);*/
+                //System.out.println(time);
+                //String day = MD5Tools.ees3DecodeECB(list.get(1));
+               // String StartTime = MD5Tools.ees3DecodeECB(list.get(0));
+                String msg = MD5Tools.ees3DecodeECB(list.get(0));
+               // System.out.println("msg:"+msg);
+                String[] split = msg.split("#");
+                String day =split[1];
+                String StartTime =split[0];
+
+                //long now = System.currentTimeMillis()/1000;
+                String format = sdf.format(new Date());
+                long now =sdf.parse(format).getTime()/1000;
+                long Starttime = sdf.parse(StartTime).getTime()/1000;
+
+               // System.out.println((now-Starttime));
+                //System.out.println(Integer.parseInt(day)*DAY_TIME);
+                if ((now-Starttime)>(Integer.parseInt(day)*DAY_TIME)||((now-Starttime)<0)){
+                    //超时
+                    System.out.println("密钥过时...");
+                    //退出
+                    List<String> secretList = SystemMap.getSecretList();
+                    if (secretList==null||secretList.size()==0){
+                        SystemMap.getSecretList().add("user_secret");
+                    }
+
+
+                }else {
+                    SystemMap.getSecretList().clear();
+                }
+
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                //解密异常,退出
+                System.out.println("密钥解析异常...");
+                List<String> secretList = SystemMap.getSecretList();
+                if (secretList==null||secretList.size()==0){
+                    SystemMap.getSecretList().add("user_secret");
+                }
+            }
+        }
+    }
+
 }

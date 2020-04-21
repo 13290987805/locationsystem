@@ -52,6 +52,8 @@ public class FrenceController {
 
     /*
      * 添加电子围栏
+     *
+     * Add a fence
      * */
     @RequestMapping(value = "AddFrence", method = RequestMethod.POST)
     @ResponseBody
@@ -143,6 +145,8 @@ public class FrenceController {
 
     /*
      * 查看已存在的电子围栏
+     *
+     * View the existing electronic fence
      * */
     @RequestMapping(value = "QueryFrence", method = RequestMethod.GET)
     @ResponseBody
@@ -218,6 +222,8 @@ public class FrenceController {
 
     /*
      * 删除电子围栏
+     *
+     * Delete electronic fence
      * */
     @RequestMapping(value = "deleteFrence", method = RequestMethod.POST)
     @ResponseBody
@@ -290,6 +296,8 @@ public class FrenceController {
 
     /*
      *查看电子围栏警报记录
+     *
+     * View the electronic fence alarm log
      * */
     @RequestMapping(value = "getFrenceHistoryPage", method = RequestMethod.GET)
     @ResponseBody
@@ -393,6 +401,8 @@ public class FrenceController {
 
     /*
      * 查看具体某个电子围栏警报记录
+     *
+     * View the specific electronic fence alarm record
      * */
     @RequestMapping(value = "getFrenceHistory", method = RequestMethod.GET)
     @ResponseBody
@@ -423,6 +433,8 @@ public class FrenceController {
 
     /*
      * 修改单个围栏信息
+     *
+     * Modify individual fence information
      * */
     @RequestMapping(value = "UpdateFrence", method = RequestMethod.POST)
     @ResponseBody
@@ -509,6 +521,9 @@ public class FrenceController {
      * 模糊查询
      * 关键字搜索围栏
      * 分页
+     *
+     * Key to the fence
+     * Paging
      * */
     @RequestMapping(value = "getFrenceByConditionPage", method = RequestMethod.GET)
     @ResponseBody
@@ -645,7 +660,7 @@ public class FrenceController {
     /*
      * 将围栏警报设为已处理
      *
-     *
+     *Set the fence alarm as processed
      * */
 
     @RequestMapping(value = "dealFrenceHistory", method = {RequestMethod.POST, RequestMethod.GET})
@@ -712,7 +727,7 @@ public class FrenceController {
     /*
      * 删除围栏警报
      *
-     *
+     *Remove fence alarm
      * */
 
     @RequestMapping(value = "deleteFrenceHistory", method = {RequestMethod.POST, RequestMethod.GET})
@@ -764,6 +779,8 @@ public class FrenceController {
     }
     /*
     * 根据条件搜索相关围栏报警记录
+    *
+    * Search related fence alarm records according to the conditions
     * */
     @RequestMapping(value = "getFrenceHistoryByConditionPage", method = RequestMethod.GET)
     @ResponseBody
@@ -1184,7 +1201,7 @@ public class FrenceController {
     /*
      * 批量将围栏警报设为已处理
      *
-     *
+     *Batch fence alarms set to processed
      * */
 
     @RequestMapping(value = "dealFrenceHistoryBatch", method = {RequestMethod.POST, RequestMethod.GET})
@@ -1254,6 +1271,8 @@ public class FrenceController {
 
     /*
     * 查看所有已处理或未处理的围栏告警
+    *
+    * Check all handled or unhandled fence alarms
     * */
 
     @RequestMapping(value = "getAllFrenceHistoryByIsDeal",method = RequestMethod.GET)
@@ -1377,6 +1396,8 @@ public class FrenceController {
 
     /*
     *将所有未处理围栏告警设成已处理
+    *
+    * Set all pending fence alarms to processed
     * */
     @RequestMapping(value = "setAllFrenceHistoryDeal",method = RequestMethod.POST)
     @ResponseBody
@@ -1409,6 +1430,8 @@ public class FrenceController {
 
     /*
     * 设置围栏开关
+    *
+    * Set fence switch
     * */
     @RequestMapping(value = "setFrenceSwitch",method = RequestMethod.GET)
     @ResponseBody

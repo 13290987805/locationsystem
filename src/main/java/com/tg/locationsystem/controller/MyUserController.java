@@ -52,6 +52,8 @@ public class MyUserController {
 
     /*
     * 登录
+    *
+    * login
     * */
     @RequestMapping(value = "Login",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -193,6 +195,8 @@ public class MyUserController {
 
     /*
     * 编辑登录用户资料
+    *
+    * Edit login user profile
     * */
     @RequestMapping(value = "updateUser",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -299,6 +303,10 @@ public class MyUserController {
     /*
      * 编辑登录用户资料
      * 只上传logo
+     *
+     * Edit login user profile
+     * Only upload logo
+     *
      * */
     @RequestMapping(value = "uploadLogo",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -382,6 +390,8 @@ public class MyUserController {
     }
     /*
     * 修改账号密码
+    *
+    * Change your password
     * */
     @RequestMapping(value = "updatePassword",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -457,8 +467,9 @@ public class MyUserController {
     }
 
     /*
-    * 管理员添加用户
+    * 管理员添加账号
     *
+    * Administrator adds account
     * */
     @RequestMapping(value = "AddUser",method = RequestMethod.POST)
     @ResponseBody
@@ -616,6 +627,8 @@ public class MyUserController {
 
     /*
     * 退出登录
+    *
+    * log out
     * */
     @RequestMapping(value = "LoginOut",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -660,7 +673,7 @@ public class MyUserController {
     /*
     * 账号,密码.角色 添加账号
     *
-    *
+    *Account, password. Role add account
     * */
     @RequestMapping(value = "AddUserbByRole",method = RequestMethod.POST)
     @ResponseBody
@@ -784,6 +797,7 @@ public class MyUserController {
     /*
      * 查看子账号
      *
+     * View the subaccount
      * */
     @RequestMapping(value = "getSonUser",method = RequestMethod.GET)
     @ResponseBody
@@ -824,6 +838,8 @@ public class MyUserController {
     /*
     * 搜索账号
     * 账号,角色模糊搜索
+    *
+    * Search account
     * */
     @RequestMapping(value = "getSonUserByMsg",method = RequestMethod.GET)
     @ResponseBody
@@ -901,6 +917,8 @@ public class MyUserController {
 
     /*
     * 删除账号
+    *
+    * Delete the account
     * */
     @RequestMapping(value = "deleteUser",method = {RequestMethod.POST})
     @ResponseBody
@@ -1040,6 +1058,17 @@ public class MyUserController {
         resultBean.setMsg("用户修改成功");
         List<Myuser> list = new ArrayList<>();
         list.add(userById);
+        resultBean.setData(list);
+        resultBean.setSize(list.size());
+        return resultBean;
+    }
+    @RequestMapping(value = "secret",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean secret(){
+        ResultBean resultBean = new ResultBean();
+        resultBean.setCode(-1);
+        resultBean.setMsg("密钥有误");
+        List<Myuser> list = new ArrayList<>();
         resultBean.setData(list);
         resultBean.setSize(list.size());
         return resultBean;

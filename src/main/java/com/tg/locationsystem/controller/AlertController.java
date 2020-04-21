@@ -68,6 +68,8 @@ private IEleCallSetService eleCallSetService;
 
     /*
      * 查看所有报警信息
+     *
+     * View all alarm information
      * */
     @RequestMapping(value = "getTagStatus",method = RequestMethod.GET)
     @ResponseBody
@@ -165,6 +167,9 @@ private IEleCallSetService eleCallSetService;
     /*
      * 查看所有报警信息
      * 不分页
+     *
+     * View all alarm information
+     *No paging
      * */
     @RequestMapping(value = "getTagStatusNoPg",method = RequestMethod.GET)
     @ResponseBody
@@ -255,6 +260,8 @@ private IEleCallSetService eleCallSetService;
 
     /*
      * 根据报警类型查看相关报警信息
+     *
+     * View the relevant alarm information according to the alarm type
      * */
     @RequestMapping(value = "getTagStatusByType",method = RequestMethod.GET)
     @ResponseBody
@@ -428,6 +435,7 @@ private IEleCallSetService eleCallSetService;
     /*
     * 设置心率
     *
+    * Set up the heart rate
     * */
     @RequestMapping(value = "setHeartRate",method = RequestMethod.GET)
     @ResponseBody
@@ -528,8 +536,13 @@ private IEleCallSetService eleCallSetService;
             }
         }
     }
+
+
 /*
 * 根据标人员唯一标识 ,开始时间,结束时间查看心率记录
+*
+* Check the heart rate record according to the start time and
+* end time according to the unique mark of the marker
 * */
 @RequestMapping(value = "getHeartRateHistoryByAddAndTime",method = RequestMethod.GET)
 @ResponseBody
@@ -666,6 +679,8 @@ public ResultBean getHeartRateHistoryByAddAndTime(HttpServletRequest request,
 
 /*
 * 将报警类型转为已处理
+*
+* Converts the alarm type to processed
 * */
 @RequestMapping(value = "dealTagStatus",method = RequestMethod.POST)
 @ResponseBody
@@ -728,6 +743,8 @@ public ResultBean dealTagStatus(HttpServletRequest request,
 }
 /*
 * 关键字搜索报警记录
+*
+* Keyword search alarm record
 * */
 @RequestMapping(value = "getTagStatusByCondition",method = RequestMethod.GET)
 @ResponseBody
@@ -918,6 +935,8 @@ public ResultBean getTagStatusByCondition(HttpServletRequest request,
 }
 /*
 * 删除告警信息
+*
+* Delete warning information
 * */
 @RequestMapping(value = "deleteTagStatus",method = RequestMethod.POST)
 @ResponseBody
@@ -968,6 +987,8 @@ public ResultBean deleteTagStatus(HttpServletRequest request,
 }
 /*
 * 查看所有已处理的报警
+*
+* View all processed alarms
 * */
 @RequestMapping(value = "getAllTagStatusByDeal",method = RequestMethod.GET)
 @ResponseBody
@@ -1091,6 +1112,8 @@ public ResultBean getAllTagStatusByDeal(HttpServletRequest request,
 
 /*
 * 设置sos报警开关
+*
+* Set the SOS alarm switch
 * */
 @RequestMapping(value = "setSoS",method = RequestMethod.POST)
 @ResponseBody
@@ -1206,6 +1229,8 @@ public ResultBean setSoS(HttpServletRequest request,
 }
     /*
      * 设置心率报警开关
+     *
+     * Set the heart rate alarm switch
      * */
     @RequestMapping(value = "setHeart",method = RequestMethod.POST)
     @ResponseBody
@@ -1318,6 +1343,7 @@ public ResultBean setSoS(HttpServletRequest request,
     }
     /*
      * 设置剪断报警开关
+     * Set the clipping alarm switch
      * */
     @RequestMapping(value = "setCut",method = RequestMethod.POST)
     @ResponseBody
@@ -1431,6 +1457,8 @@ public ResultBean setSoS(HttpServletRequest request,
 
     /*
      * 设置低电量报警开关
+     *
+     * Set low power alarm switch
      * */
     @RequestMapping(value = "setBattery",method = RequestMethod.POST)
     @ResponseBody
@@ -1546,6 +1574,10 @@ public ResultBean setSoS(HttpServletRequest request,
     * 批量将未处理告警转为已处理
     * 1 已处理
     * 0 未处理
+    *
+    * Batch to unprocessed alarm to processed
+    * 1  processed
+    * 0  untreated
     * */
     @RequestMapping(value = "setDealBatch",method = RequestMethod.POST)
     @ResponseBody
@@ -1611,6 +1643,8 @@ public ResultBean setSoS(HttpServletRequest request,
     }
 /*
 * 查看所有的开关信息
+*
+* View all switch information
 * */
 @RequestMapping(value = "getAllAlertSet",method = RequestMethod.GET)
 @ResponseBody
@@ -1697,6 +1731,9 @@ public ResultBean getAllAlertSet(HttpServletRequest request) {
 
 /*
 * 根据人员名称,处理情况,报警类型搜索报警记录
+*
+* Search the alarm record according to the name of the person,
+* the processing situation and the alarm type
 * */
 @RequestMapping(value = "getTagStatusBySomeCondition",method = RequestMethod.GET)
 @ResponseBody
@@ -1890,6 +1927,8 @@ public ResultBean getTagStatusBySomeCondition(HttpServletRequest request,
 /*
 * 查看用户所有的已处理或者未处理的报警
 *
+* View all of the user's processed or unprocessed alarms
+*
 * */
 @RequestMapping(value = "getAllTagStatusByIsDeal",method = RequestMethod.GET)
 @ResponseBody
@@ -2003,6 +2042,8 @@ public ResultBean getAllTagStatusByIsDeal(HttpServletRequest request,
 
     /*
      *将所有未处理围栏告警设成已处理
+     *
+     * Set all pending fence alarms to processed
      * */
     @RequestMapping(value = "setAllAlertDeal",method = RequestMethod.POST)
     @ResponseBody

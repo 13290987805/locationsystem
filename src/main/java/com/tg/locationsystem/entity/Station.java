@@ -18,7 +18,7 @@ public class Station implements Serializable{
 @NotBlank(message = "基站唯一标识")
     private String addr;
 
-    private Date reserved2Date;
+    private Date lastonline;
 
     private Integer userId;
 
@@ -92,12 +92,12 @@ public class Station implements Serializable{
         this.addr = addr == null ? null : addr.trim();
     }
 
-    public Date getReserved2Date() {
-        return reserved2Date;
+    public Date getLastonline() {
+        return lastonline;
     }
 
-    public void setReserved2Date(Date reserved2Date) {
-        this.reserved2Date = reserved2Date;
+    public void setLastonline(Date lastonline) {
+        this.lastonline = lastonline;
     }
 
     public Integer getUserId() {
@@ -205,7 +205,7 @@ public class Station implements Serializable{
                 ", y=" + y +
                 ", z=" + z +
                 ", addr='" + addr + '\'' +
-                ", reserved2Date=" + reserved2Date +
+                ", lastonline=" + lastonline +
                 ", userId=" + userId +
                 ", masterLagDelay='" + masterLagDelay + '\'' +
                 ", antDelayRx='" + antDelayRx + '\'' +

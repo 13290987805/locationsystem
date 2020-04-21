@@ -8,6 +8,7 @@ import com.tg.locationsystem.mapper.PersonMapper;
 import com.tg.locationsystem.mapper.TagTypeMapper;
 import com.tg.locationsystem.pojo.*;
 import com.tg.locationsystem.service.*;
+import com.tg.locationsystem.utils.PoiUtils;
 import com.tg.locationsystem.utils.SystemMap;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1380,6 +1381,8 @@ public class TagController {
         }
         Tag tag = tagService.getTagByOnlyAddress(tagAddress);
         if (tag==null){
+
+
             resultBean = new ResultBean();
             resultBean.setCode(-1);
             resultBean.setMsg("标签不存在");
@@ -1399,6 +1402,12 @@ public class TagController {
         }
         int del = tagService.deleteByPrimaryKey(tag.getId());
         if (del>0){
+            //把该标签在缓存中的记录清掉
+            SystemMap.getUsermap().remove(tag.getAddress());
+            SystemMap.getTagAndPersonMap().remove(tag.getAddress());
+            SystemMap.getCountmap().remove(tag.getAddress());
+
+
             resultBean = new ResultBean();
             resultBean.setCode(1);
             resultBean.setMsg("操作成功");
@@ -1472,5 +1481,90 @@ public class TagController {
         return resultBean;
     }
 
+    /*
+    * 批量添加标签
+    *
+    * */
+    @RequestMapping(value = "AddTagBatch",method = RequestMethod.POST)
+    @ResponseBody
+    @RequiresPermissions("tag_addBatch")
+    @Operation("批量添加标签")
+    public ResultBean importEmployee(@RequestParam(value="AddTagBatch",required=false) MultipartFile file,
+                                     HttpServletRequest request) throws IOException {
+        ResultBean resultBean;
+        Myuser user = (Myuser) request.getSession().getAttribute("user");
+        //未登录
+        if (user==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(5);
+            resultBean.setMsg("还未登录");
+            List<Myuser> list = new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        if (file==null){
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("上传文件不能为空");
+            List<Tag> list=new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
 
+        if (!file.getOriginalFilename().endsWith(".xls") && !file.getOriginalFilename().endsWith(".xlsx")) {
+            resultBean = new ResultBean();
+            resultBean.setCode(-1);
+            resultBean.setMsg("上传文件格式不正确");
+            List<Tag> list=new ArrayList<>();
+            resultBean.setData(list);
+            resultBean.setSize(list.size());
+            return resultBean;
+        }
+        List<Tag> tags =
+                PoiUtils.importTagByExcel
+                        (file);//解析上传的excel，并获取到里面单元格的值
+            if (tags==null||tags.size()==0){
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("批量添加失敗");
+                List<Tag> list=new ArrayList<>();
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+            List<Tag> tagList=new ArrayList<>();
+        for (Tag tag : tags) {
+            //标签已经存在
+            Tag mytag=tagService.getTagByAddress(tag.getAddress());
+            if (mytag!=null){
+                resultBean = new ResultBean();
+                resultBean.setCode(-1);
+                resultBean.setMsg("该标签已经存在");
+                List<String> list = new ArrayList<>();
+                list.add(tag.getAddress());
+                resultBean.setData(list);
+                resultBean.setSize(list.size());
+                return resultBean;
+            }
+           tagList.add(tag);
+        }
+        for (Tag tag : tagList) {
+            //设置标签所属以及使用状态 0:未使用,未绑定 1:使用,绑定
+            tag.setUsed("0");
+            tag.setUserId(user.getId());
+            tag.setLastonline(new Date());
+            tag.setLastoffline(new Date());
+            //添加
+            tagService.insertSelective(tag);
+        }
+
+        resultBean = new ResultBean();
+        resultBean.setCode(1);
+        resultBean.setMsg("添加标签成功");
+        resultBean.setData(tagList);
+        resultBean.setSize(tagList.size());
+        return resultBean;
+    }
 }

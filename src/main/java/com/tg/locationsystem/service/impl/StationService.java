@@ -103,5 +103,10 @@ public class StationService  extends BaseServiceImpl<Station> implements IStatio
         return stationVOList;
     }
 
+    @Override
+    public List<Station> getAllStationList() {
+        return stationMapper.getAllStationList();
+    }
+
 
 }

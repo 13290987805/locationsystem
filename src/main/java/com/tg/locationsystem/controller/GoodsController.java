@@ -54,6 +54,8 @@ public class GoodsController {
 
     /*
     * 添加物品
+    *
+    * Add goods
     * */
     @RequestMapping(value = "AddGoods",method = RequestMethod.POST)
     @ResponseBody
@@ -195,6 +197,8 @@ public class GoodsController {
     }
 /*
 * 查看所有物品信息
+*
+* View all item information
 * */
 @RequestMapping(value = "getGoods",method = RequestMethod.GET)
 @ResponseBody
@@ -265,6 +269,8 @@ public ResultBean getGoods(HttpServletRequest request,
 
     /*
      * 查看物品位置
+     *
+     * Check the location of items
      * */
 
     @RequestMapping(value = "getLocation",method = RequestMethod.GET)
@@ -316,6 +322,8 @@ public ResultBean getGoods(HttpServletRequest request,
 
     /*
     * 添加物品类型
+    *
+    * Add goods type
     * */
     @RequestMapping(value = "AddGoodsType",method = RequestMethod.POST)
     @ResponseBody
@@ -433,6 +441,9 @@ public ResultBean getGoods(HttpServletRequest request,
     /*
      * 查询所有物品类型
      * 分页
+     *
+     * Query all goods types
+     * Paging
      * */
     @RequestMapping(value = "getGoodsTypesPage",method = RequestMethod.GET)
     @ResponseBody
@@ -466,6 +477,10 @@ public ResultBean getGoods(HttpServletRequest request,
     /*
      * 查询所有物品类型
      * 不分页
+     *
+     * Query all goods types
+     * No Paging
+     *
      * */
     @RequestMapping(value = "getGoodsTypes",method = RequestMethod.GET)
     @ResponseBody
@@ -495,6 +510,9 @@ public ResultBean getGoods(HttpServletRequest request,
     /*
      * 根据类型查询相关物品
      * 分页
+     *
+     * Query related goods by type
+     * Paging
      * */
     @RequestMapping(value = "getGoodsByTypePage",method = RequestMethod.GET)
     @ResponseBody
@@ -531,6 +549,9 @@ public ResultBean getGoods(HttpServletRequest request,
     /*
      * 根据类型查询相关物品
      * 不分页
+     *
+     * Query related goods by type
+     * No Paging
      * */
     @RequestMapping(value = "getGoodsByType",method = RequestMethod.GET)
     @ResponseBody
@@ -562,6 +583,8 @@ public ResultBean getGoods(HttpServletRequest request,
 
 /*
 * 删除物品信息
+*
+* Delete goods information
 * */
 @RequestMapping(value = "deleteGoods",method = RequestMethod.POST)
 @ResponseBody
@@ -753,6 +776,8 @@ public ResultBean deleteGoods(HttpServletRequest request,
     }
 /*
 * 修改物品信息
+*
+* Modify goods information
 * */
 @RequestMapping(value = "UpdateGoods",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
@@ -920,6 +945,8 @@ public ResultBean UpdateGoods(@Valid Goods goods, BindingResult result,
 
 /*
 * 修改物品类型信息
+*
+* Modify goods type information
 * */
 @RequestMapping(value = "UpdateGoodsType",method = {RequestMethod.POST,RequestMethod.GET})
 @ResponseBody
@@ -1032,6 +1059,8 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
 }
     /*
      * 模糊查询,根据输入信息查询相关物品
+     *
+     * Query the relevant goods according to the input information
      * */
     @RequestMapping(value = "getGoodsByMsg",method = RequestMethod.GET)
     @ResponseBody
@@ -1156,6 +1185,9 @@ public ResultBean UpdateGoodsType(@Valid GoodsType goodsType, BindingResult resu
 
     /*
      * 得到物品下没有绑定标签的物品
+     *
+     * Gets goods that have no tag attached to them
+     *
      * */
     @RequestMapping(value = "getGoodsByNoTag",method = RequestMethod.GET)
     @ResponseBody

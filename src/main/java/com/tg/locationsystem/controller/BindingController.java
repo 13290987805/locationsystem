@@ -39,6 +39,8 @@ public class BindingController {
 
     /*
     * 人员与标签绑定
+    *
+    * People bind to tags
     * */
     @RequestMapping(value = "AddBindingByPerAndTag",method = RequestMethod.POST)
     @ResponseBody
@@ -146,6 +148,8 @@ public class BindingController {
 
     /*
     * 解除人员标签绑定
+    *
+    * Unbind the people tag
     * */
     @RequestMapping(value = "DeleteBindingByPerAndTag",method = RequestMethod.POST)
     @ResponseBody
@@ -239,6 +243,8 @@ public class BindingController {
 
     /*
     * 物品与标签绑定
+    *
+    * Items are bound to labels
     * */
     @RequestMapping(value = "AddBindingByGoodsAndTag",method = RequestMethod.POST)
     @ResponseBody
@@ -342,6 +348,8 @@ public class BindingController {
 
     /*
      * 解除物品与标签绑定
+     *
+     * Unbind items to labels
      * */
     @RequestMapping(value = "DeleteBindingByGoodsAndTag",method = RequestMethod.POST)
     @ResponseBody
@@ -419,6 +427,8 @@ public class BindingController {
 /*
 * 解除绑定
 * 人,物与标签解绑
+*
+* remove binding
 * */
 @RequestMapping(value = "DeleteBindingTag",method = RequestMethod.POST)
 @ResponseBody

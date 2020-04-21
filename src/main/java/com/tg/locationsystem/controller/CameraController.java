@@ -38,6 +38,8 @@ public class CameraController {
 
     /*
      * 新增摄像头
+     *
+     * Add camera
      * */
     @RequestMapping(value = "addCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -138,6 +140,7 @@ public class CameraController {
     /*
      * 编辑修改摄像头
      *
+     *Update Camera
      * */
     @RequestMapping(value = "updateCamera", method = RequestMethod.POST)
     @ResponseBody
@@ -222,6 +225,8 @@ public class CameraController {
     /*
      *
      * 调用摄像头
+     *
+     * Start Camera
      * */
     @RequestMapping(value = "startCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -301,6 +306,9 @@ public class CameraController {
     /*
      * 停止摄像头
      *单个
+     *
+     * Stop Camera
+     * One
      * */
     @RequestMapping(value = "stopCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -366,6 +374,9 @@ public class CameraController {
     /*
      * 停止摄像头
      *全部
+     *
+     * Stop Camera
+     * All
      * */
     @RequestMapping(value = "stopAllCamera", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -412,6 +423,9 @@ public class CameraController {
     /*
      * 查看某地图下的所有摄像头
      * 分页
+     *
+     * View all the cameras under a map
+     * Paging
      * */
     @RequestMapping(value = "getCameraByMapKeyPage", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -457,6 +471,9 @@ public class CameraController {
     /*
      * 查看某地图下的所有摄像头
      * 不分页
+     *
+     * View all the cameras under a map
+     * No Paging
      * */
     @RequestMapping(value = "getCameraByMapKey", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -497,6 +514,8 @@ public class CameraController {
 
     /*
      * 删除摄像头信息
+     *
+     * Delete camera information
      * */
     @RequestMapping(value = "delCamera", method = {RequestMethod.POST})
     @ResponseBody

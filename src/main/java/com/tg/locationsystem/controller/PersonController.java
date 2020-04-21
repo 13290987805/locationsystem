@@ -58,6 +58,8 @@ public class PersonController {
 
     /*
     * 添加人员
+    *
+    * Add people
     * */
     @RequestMapping(value = "AddPerson",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -209,6 +211,8 @@ public class PersonController {
     }
     /*
      * 得到用户下没有绑定标签的人员
+     *
+     * Gets the person under the user without a binding tag
      * */
     @RequestMapping(value = "getPersonsByNoTag",method = RequestMethod.GET)
     @ResponseBody
@@ -276,6 +280,8 @@ public class PersonController {
     }
     /*
      * 查看所有人员信息
+     *
+     * View all personnel information
      * */
     @RequestMapping(value = "getPersons",method = RequestMethod.GET)
     @ResponseBody
@@ -352,6 +358,8 @@ public class PersonController {
 
     /*
     * 查看人员位置
+    *
+    * View people's locations
     * */
     @RequestMapping(value = "getLocation",method = RequestMethod.GET)
     @ResponseBody
@@ -400,6 +408,8 @@ public class PersonController {
 
     /*
     * 新增人员类型
+    *
+    * Add people type
     * */
     @RequestMapping(value = "AddPersonType",method = RequestMethod.POST)
     @ResponseBody

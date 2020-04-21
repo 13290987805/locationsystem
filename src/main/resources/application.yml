@@ -3,14 +3,14 @@ spring:
     proxy-target-class: true
     auto: true
   influx:
-    url: http://localhost:8086
+    url: http://127.0.0.1:8086
     user: admin
     password: admin
     database: historyData
   datasource:
-    url: jdbc:mysql://localhost:3306/location_system?useUnicode=trueuse&characterEncoding=UTF-8useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+    url: jdbc:mysql://127.0.0.1:3306/location_system?useUnicode=trueuse&characterEncoding=UTF-8useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
     username: root
-    password: root123456
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     #以下为连接池的相关参数配置

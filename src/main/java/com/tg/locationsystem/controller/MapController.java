@@ -48,6 +48,8 @@ public class MapController {
 
     /*
     * 导入地图
+    *
+    * Add map
     * */
     @RequestMapping(value = "AddMap",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -304,6 +306,8 @@ public class MapController {
 
     /*
     * 查看地图
+    *
+    * Look at the map
     * */
     @RequestMapping(value = "getMaps",method = RequestMethod.GET)
     @ResponseBody
@@ -396,6 +400,8 @@ public class MapController {
 
     /*
     * 根据地图id读取地图svg文件
+    *
+    * Read the map SVG file based on the map id
     * */
     @RequestMapping(value = "queryMap",method = RequestMethod.GET)
     @ResponseBody
@@ -453,6 +459,8 @@ public class MapController {
     }
     /*
      * 根据地图key读取地图svg文件
+     *
+     * Read the map SVG file according to the map key
      * */
     @RequestMapping(value = "queryMapByKey",method = RequestMethod.GET)
     @ResponseBody
@@ -518,6 +526,8 @@ public class MapController {
     }
     /*
      * 删除地图
+     *
+     * Delete the map
      * */
     @RequestMapping(value = "deleteMap",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -594,6 +604,8 @@ public class MapController {
 
     /*
     * cle下发指令
+    *
+    * cle Issued instructions
     * */
     @RequestMapping(value = "cleConfig",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -678,6 +690,8 @@ public class MapController {
     /*
     *
     * 查看地图cle配置
+    *
+    * View the map cle configuration
     * */
     @RequestMapping(value = "getConfigByMapKey",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody

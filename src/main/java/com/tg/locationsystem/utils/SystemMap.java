@@ -70,6 +70,9 @@ public class SystemMap {
     //缓存系统启动时间
     private static Map<String,Long> timeMap = new ConcurrentHashMap();
 
+    //缓存是否过期凭证
+    private static List<String> SecretList=new ArrayList<>();
+
     public static Map<String, Long> getTimeMap() {
         return timeMap;
     }
@@ -222,6 +225,13 @@ public class SystemMap {
         SystemMap.frenceTimemap = frenceTimemap;
     }
 
+    public static List<String> getSecretList() {
+        return SecretList;
+    }
+
+    public static void setSecretList(List<String> secretList) {
+        SecretList = secretList;
+    }
 
     public static Map<Integer, String> getCameramap() {
         return cameramap;

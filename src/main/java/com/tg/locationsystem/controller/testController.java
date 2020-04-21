@@ -34,7 +34,8 @@ public class testController {
         return ip;*/
         return TestUtil.getGoP(request);
 
-    }/*
+    }
+    /*
      * 得到系统启动时间
      * */
     @GetMapping(value = "/getTime")

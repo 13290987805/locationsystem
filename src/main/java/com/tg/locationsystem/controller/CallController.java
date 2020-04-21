@@ -52,6 +52,8 @@ public class CallController {
 
     /*
      * 设置定时点名
+     *
+     * Set timing roll call
      * */
     @RequestMapping(value = "setTime", method = RequestMethod.POST)
     @ResponseBody
@@ -452,6 +454,11 @@ public class CallController {
      * 设置开关,打开关闭
      * 1 打开
      * 0 关闭
+     *
+     * Set the switch to turn on and off
+     * 1  on
+     * 0  off
+     *
      * */
     @RequestMapping(value = "setSwitch", method = RequestMethod.POST)
     @ResponseBody
@@ -677,6 +684,10 @@ public class CallController {
     /*
      * 查看所有统计的数据
      * 分页
+     *
+     * View the data for all statistics
+     *paging
+     *
      * */
     @RequestMapping(value = "getStatisticsPage", method = RequestMethod.GET)
     @ResponseBody
@@ -711,6 +722,9 @@ public class CallController {
     /*
      * 查看所有统计的数据
      * 不分页
+     *
+     * View the data for all statistics
+     * No paging
      * */
     @RequestMapping(value = "getStatistics", method = RequestMethod.GET)
     @ResponseBody
@@ -740,6 +754,9 @@ public class CallController {
     /*
      * 查看近10次统计的数据
      * 不分页
+     *
+     * View the data from the last 10 statistics
+     * No Paging
      * */
     @RequestMapping(value = "getStatisticsFirst20", method = RequestMethod.GET)
     @ResponseBody
@@ -768,6 +785,9 @@ public class CallController {
     /*
      * 查看某次统计的具体数据
      * 分页
+     *
+     * Look at the specific data for a particular statistic
+     * Paging
      * */
     @RequestMapping(value = "getEleCallByKeyPage", method = RequestMethod.GET)
     @ResponseBody
@@ -814,6 +834,9 @@ public class CallController {
     /*
      * 查看某次统计的具体数据
      * 不分页
+     *
+     * Look at the specific data for a particular statistic
+     * No Paging
      * */
     @RequestMapping(value = "getEleCallByKey", method = RequestMethod.GET)
     @ResponseBody
@@ -853,6 +876,8 @@ public class CallController {
     /*
      *
      * 区域电子点名
+     *
+     * Area electronic roll call
      * */
     @RequestMapping(value = "getEleCallByArea", method = RequestMethod.GET)
     @ResponseBody

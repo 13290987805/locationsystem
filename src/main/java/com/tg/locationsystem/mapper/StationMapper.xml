@@ -8,7 +8,7 @@
     <result column="y" jdbcType="REAL" property="y" />
     <result column="z" jdbcType="REAL" property="z" />
     <result column="addr" jdbcType="VARCHAR" property="addr" />
-    <result column="reserved2_date" jdbcType="TIMESTAMP" property="reserved2Date" />
+    <result column="lastOnline" jdbcType="TIMESTAMP" property="lastonline" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="master_lag_delay" jdbcType="VARCHAR" property="masterLagDelay" />
     <result column="ant_delay_rx" jdbcType="VARCHAR" property="antDelayRx" />
@@ -23,10 +23,18 @@
     <result column="rfdistance" jdbcType="VARCHAR" property="rfdistance" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, sid, x, y, z, addr, reserved2_date, user_id, master_lag_delay, ant_delay_rx, 
-    ant_delay_tx, ismaster, master_addr, masteranchorAddress, masteranchor_address, station_status, 
+    id, sid, x, y, z, addr, lastOnline, user_id, master_lag_delay, ant_delay_rx, ant_delay_tx, 
+    ismaster, master_addr, masteranchorAddress, masteranchor_address, station_status, 
     dimension, map_id, rfdistance
   </sql>
+
+  <!--得到所有的基站-->
+  <select id="getAllStationList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from station
+  </select>
+
 
   <!--根据地图id得到该地图下的所有在线基站-->
   <select id="getOnlineStationsByMapKey"  resultMap="BaseResultMap">
@@ -74,21 +82,21 @@
   </delete>
   <insert id="insert" parameterType="com.tg.locationsystem.entity.Station">
     insert into station (id, sid, x, y, 
-      z, addr, reserved2_date, 
+      z, addr, lastOnline, 
       user_id, master_lag_delay, ant_delay_rx, 
       ant_delay_tx, ismaster, master_addr, 
       masteranchorAddress, masteranchor_address, 
       station_status, dimension, map_id, 
       rfdistance)
     values (#{id,jdbcType=INTEGER}, #{sid,jdbcType=INTEGER}, #{x,jdbcType=REAL}, #{y,jdbcType=REAL}, 
-      #{z,jdbcType=REAL}, #{addr,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, 
+      #{z,jdbcType=REAL}, #{addr,jdbcType=VARCHAR}, #{lastonline,jdbcType=TIMESTAMP}, 
       #{userId,jdbcType=INTEGER}, #{masterLagDelay,jdbcType=VARCHAR}, #{antDelayRx,jdbcType=VARCHAR}, 
       #{antDelayTx,jdbcType=VARCHAR}, #{ismaster,jdbcType=VARCHAR}, #{masterAddr,jdbcType=VARCHAR}, 
       #{masteranchoraddress,jdbcType=VARCHAR}, #{masteranchorAddress,jdbcType=VARCHAR}, 
       #{stationStatus,jdbcType=INTEGER}, #{dimension,jdbcType=VARCHAR}, #{mapId,jdbcType=INTEGER}, 
       #{rfdistance,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Station">
+  <insert id="insertSelective" parameterType="com.tg.locationsystem.entity.Station" useGeneratedKeys="true" keyProperty="id">
     insert into station
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -109,8 +117,8 @@
       <if test="addr != null">
         addr,
       </if>
-      <if test="reserved2Date != null">
-        reserved2_date,
+      <if test="lastonline != null">
+        lastOnline,
       </if>
       <if test="userId != null">
         user_id,
@@ -168,8 +176,8 @@
       <if test="addr != null">
         #{addr,jdbcType=VARCHAR},
       </if>
-      <if test="reserved2Date != null">
-        #{reserved2Date,jdbcType=TIMESTAMP},
+      <if test="lastonline != null">
+        #{lastonline,jdbcType=TIMESTAMP},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
@@ -227,8 +235,8 @@
       <if test="addr != null">
         addr = #{addr,jdbcType=VARCHAR},
       </if>
-      <if test="reserved2Date != null">
-        reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      <if test="lastonline != null">
+        lastOnline = #{lastonline,jdbcType=TIMESTAMP},
       </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
@@ -276,7 +284,7 @@
       y = #{y,jdbcType=REAL},
       z = #{z,jdbcType=REAL},
       addr = #{addr,jdbcType=VARCHAR},
-      reserved2_date = #{reserved2Date,jdbcType=TIMESTAMP},
+      lastOnline = #{lastonline,jdbcType=TIMESTAMP},
       user_id = #{userId,jdbcType=INTEGER},
       master_lag_delay = #{masterLagDelay,jdbcType=VARCHAR},
       ant_delay_rx = #{antDelayRx,jdbcType=VARCHAR},
