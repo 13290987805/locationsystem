@@ -166,14 +166,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.tg.locationsystem.entity.Person">
-    insert into person (id, person_name, person_sex, 
-      user_id, person_typeId, person_height, 
-      id_card, tag_address, img, 
+    insert into person (id, person_name, person_sex,
+      user_id, person_typeId, person_height,
+      id_card, tag_address, img,
       person_type, reserved2_date, person_phone,dep_id
       )
-    values (#{id,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR}, #{personSex,jdbcType=VARCHAR}, 
-      #{userId,jdbcType=INTEGER}, #{personTypeid,jdbcType=INTEGER}, #{personHeight,jdbcType=VARCHAR}, 
-      #{idCard,jdbcType=VARCHAR}, #{tagAddress,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR}, #{personSex,jdbcType=VARCHAR},
+      #{userId,jdbcType=INTEGER}, #{personTypeid,jdbcType=INTEGER}, #{personHeight,jdbcType=VARCHAR},
+      #{idCard,jdbcType=VARCHAR}, #{tagAddress,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR},
       #{personType,jdbcType=VARCHAR}, #{reserved2Date,jdbcType=TIMESTAMP}, #{personPhone,jdbcType=VARCHAR},#{depId,jdbcType=INTEGER}
       )
   </insert>
